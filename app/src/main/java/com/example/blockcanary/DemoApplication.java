@@ -15,18 +15,18 @@ public class DemoApplication extends Application {
         super.onCreate();
         sContext = this;
 
-        BlockCanaryContext.init(this, new AppBlockCanaryContext());
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
 
-        boolean shouldStart = true;
-        if (!BuildConfig.DEBUG) {
-            if (BlockCanary.get().isMonitorDurationEnd()) {
-                shouldStart = false;
-            }
-        }
-
-        if (shouldStart) {
-            BlockCanary.get().startMainLooperMonitor();
-        }
+//        boolean shouldStart = true;
+//        if (!BuildConfig.DEBUG) {
+//            if (BlockCanary.get().isMonitorDurationEnd()) {
+//                shouldStart = false;
+//            }
+//        }
+//
+//        if (shouldStart) {
+//            BlockCanary.get().start();
+//        }
     }
 
     public static Context getAppContext() {

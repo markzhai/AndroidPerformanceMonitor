@@ -30,10 +30,10 @@ public class BlockCanary {
 
     private static final int MIN_INTERVAL_MILLIS = 300;
     private static BlockCanary sInstance;
-    private LooperMonitorPrinter mMainLooperPrinter;
+    private LooperPrinter mMainLooperPrinter;
     private ThreadStackSampler mThreadStackSampler;
     private CpuSampler mCpuSampler;
-    private boolean mLooperMonitorStart = false;
+    private boolean mLooperLoggingStarted = false;
 
     private BlockCanary() {
         int blockThresholdMillis = BlockCanaryContext.get().getConfigBlockThreshold();
@@ -42,7 +42,7 @@ public class BlockCanary {
         mThreadStackSampler = new ThreadStackSampler(Looper.getMainLooper().getThread(), sampleIntervalMillis);
         mCpuSampler = new CpuSampler();
 
-        mMainLooperPrinter = new LooperMonitorPrinter(new BlockListener() {
+        mMainLooperPrinter = new LooperPrinter(new BlockListener() {
 
             @Override
             public void onBlockEvent(long realTimeStart, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
@@ -73,13 +73,15 @@ public class BlockCanary {
         LogWriter.cleanOldFiles();
     }
 
-    private long sampleInterval(int blockThresholdMillis) {
-        // 最小值保护
-        long sampleIntervalMillis = blockThresholdMillis / 2;
-        if (sampleIntervalMillis < MIN_INTERVAL_MILLIS) {
-            sampleIntervalMillis = MIN_INTERVAL_MILLIS;
-        }
-        return sampleIntervalMillis;
+    /**
+     * Install BlockCanary
+     * @param context application context
+     * @param blockCanaryContext implementation for {@link BlockCanaryContext}
+     * @return BlockCanary
+     */
+    public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
+        BlockCanaryContext.init(context, blockCanaryContext);
+        return get();
     }
 
     /**
@@ -101,13 +103,13 @@ public class BlockCanary {
     /**
      * 开始主进程的主线程监控
      */
-    public void startMainLooperMonitor() {
+    public void start() {
         if (BlockCanaryContext.get().isNeedDisplay()) {
             BlockCanaryInternals.setEnabled(
                     BlockCanaryContext.get().getContext(), DisplayBlockActivity.class, true);
         }
-        if (!mLooperMonitorStart) {
-            mLooperMonitorStart = true;
+        if (!mLooperLoggingStarted) {
+            mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);
             mThreadStackSampler.start();
             mCpuSampler.start();
@@ -137,9 +139,9 @@ public class BlockCanary {
     /**
      * 停止主进程的主线程监控
      */
-    public void stopMainLooperMonitor() {
-        if (mLooperMonitorStart) {
-            mLooperMonitorStart = false;
+    public void stop() {
+        if (mLooperLoggingStarted) {
+            mLooperLoggingStarted = false;
             Looper.getMainLooper().setMessageLogging(null);
             mThreadStackSampler.stop();
             mCpuSampler.stop();
@@ -151,6 +153,15 @@ public class BlockCanary {
      */
     public void uploadMonitorLogFile() {
         UploadMonitorLog.forceZipLogAndUpload();
+    }
+
+    private long sampleInterval(int blockThresholdMillis) {
+        // 最小值保护
+        long sampleIntervalMillis = blockThresholdMillis / 2;
+        if (sampleIntervalMillis < MIN_INTERVAL_MILLIS) {
+            sampleIntervalMillis = MIN_INTERVAL_MILLIS;
+        }
+        return sampleIntervalMillis;
     }
 
     @TargetApi(HONEYCOMB)

@@ -19,9 +19,9 @@ public abstract class BlockCanaryContext {
     public BlockCanaryContext() {
     }
 
-    public static void init(Context c, BlockCanaryContext g) {
-        sAppContext = c;
-        sInstance = g;
+    public static void init(Context context, BlockCanaryContext blockCanaryContext) {
+        sAppContext = context;
+        sInstance = blockCanaryContext;
     }
 
     public static BlockCanaryContext get() {

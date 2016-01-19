@@ -15,8 +15,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         ...
         // 在主进程初始化调用哈
-        BlockCanaryContext.init(this, new BlockCanaryContextImpl());
-        BlockCanary.get().startMainLooperMonitor();
+        BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }
 }
 ```

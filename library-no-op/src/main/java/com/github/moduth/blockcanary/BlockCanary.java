@@ -1,5 +1,7 @@
 package com.github.moduth.blockcanary;
 
+import android.content.Context;
+
 /**
  * <p>looper线程监控</p>
  * Created by markzhai on 2015/9/25.
@@ -9,6 +11,17 @@ public class BlockCanary {
     private static BlockCanary sInstance = null;
 
     private BlockCanary() {
+    }
+
+    /**
+     * Install BlockCanary
+     * @param context application context
+     * @param blockCanaryContext implementation for {@link BlockCanaryContext}
+     * @return BlockCanary
+     */
+    public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
+        BlockCanaryContext.init(context, blockCanaryContext);
+        return get();
     }
 
     /**

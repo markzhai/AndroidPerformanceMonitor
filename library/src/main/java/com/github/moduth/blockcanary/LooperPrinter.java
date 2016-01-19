@@ -9,7 +9,7 @@ import android.util.Printer;
  * <p>
  * Created by markzhai on 2015/9/25.
  */
-class LooperMonitorPrinter implements Printer {
+class LooperPrinter implements Printer {
 
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
     private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
@@ -19,7 +19,7 @@ class LooperMonitorPrinter implements Printer {
 
     private boolean mStartedPrinting = false;
 
-    public LooperMonitorPrinter(BlockListener blockListener, long blockThresholdMillis) {
+    public LooperPrinter(BlockListener blockListener, long blockThresholdMillis) {
         if (blockListener == null) {
             throw new IllegalArgumentException("blockListener should not be null.");
         }
