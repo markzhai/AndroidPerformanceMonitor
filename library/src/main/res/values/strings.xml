@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">BlockCanary</string>
+    <string name="display_activity_label">Blocks</string>
+    <string name="block_canary_share_leak">Share info</string>
+    <string name="block_canary_share_stack_dump">Share stack dump</string>
+    <string name="block_canary_share_with">Share with…</string>
+    <string name="block_canary_block_list_title">Blocks in %s</string>
+    <string name="block_canary_delete">Delete</string>
+    <string name="block_canary_delete_all">Delete all</string>
+    <string name="block_canary_class_has_blocked">blocked %s ms</string>
+    <string name="block_canary_notification_message">Click for more details</string>
+</resources>

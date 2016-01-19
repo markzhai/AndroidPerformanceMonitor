@@ -30,3 +30,9 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+# jetbrain project file
+.idea/
+*.iml
+gradle/
+gradlew*
