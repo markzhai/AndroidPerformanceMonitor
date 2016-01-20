@@ -2,7 +2,7 @@
 A transparent ui-block detection library for Android. App only needs one-line-code to setup and provide application context.
 
 # How it works
-See[BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
+See [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
 
 # Usage
 
