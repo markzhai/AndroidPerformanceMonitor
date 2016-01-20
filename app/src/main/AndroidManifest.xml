@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/CjjBaseTheme">
         <activity
-            android:name=".SplashActivity"
+            android:name=".DemoActivity"
             android:theme="@style/CjjBaseTheme.WhiteActivity"
             android:label="@string/app_name">
             <intent-filter>
@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DemoActivity"/>
     </application>
 
 </manifest>
