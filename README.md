@@ -1,6 +1,6 @@
 [English](https://github.com/moduth/blockcanary/blob/master/README_ENGLISH.md)
 
-[（まだなんです）](https://github.com/moduth/blockcanary/blob/master/README_JAPANESE.md)
+[まだなんです](https://github.com/moduth/blockcanary/blob/master/README_JAPANESE.md)
 
 
 # BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary)
