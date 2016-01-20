@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.blockcanary">
+          package="com.example.blockcanary">
 
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/ModuThreeHandsomeTheme">
+        android:theme="@style/CjjBaseTheme">
         <activity
             android:name=".DemoActivity"
-            android:theme="@style/CjjBaseTheme.WhiteActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
