@@ -34,3 +34,8 @@ dependencies {
     releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.0'
 }
 ```
+
+# Screenshot
+
+![Block detail](art/shot1.png "detail")
+![Block list](art/shot2.png "list")
