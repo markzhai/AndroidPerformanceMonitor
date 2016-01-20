@@ -44,7 +44,7 @@ public class DemoActivity extends Activity implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Tip");
         builder.setMessage(getResources().getString(R.string.hello_world));
-        builder.setNegativeButton("cancel",null);
+        builder.setNegativeButton("ok",null);
         builder.show();
     }
 
