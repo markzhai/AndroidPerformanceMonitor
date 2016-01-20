@@ -10,7 +10,6 @@
         android:theme="@style/CjjBaseTheme">
         <activity
             android:name=".DemoActivity"
-            android:theme="@style/CjjBaseTheme.WhiteActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

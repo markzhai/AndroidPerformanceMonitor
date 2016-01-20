@@ -11,9 +11,4 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
-    <style name="CjjBaseTheme.WhiteActivity">
-        <item name="android:windowBackground">@drawable/background_splash</item>
-        <item name="android:windowIsTranslucent">false</item>
-    </style>
-
 </resources>
