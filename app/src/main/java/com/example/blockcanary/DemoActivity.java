@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,23 +14,20 @@ import android.widget.Button;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class DemoActivity extends Activity implements View.OnClickListener {
+public class DemoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_demo);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("BlockCanary");
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setTitle("BlockCanary");
 
-        Button button1 = (Button) findViewById(R.id.button1);
-        Button button2 = (Button) findViewById(R.id.button2);
-        Button button3 = (Button) findViewById(R.id.button3);
 
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, DemoFragment.newInstance())
+                    .commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,52 +68,5 @@ public class DemoActivity extends Activity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button1:
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.button2:
-                for (int i = 0; i < 100; ++i) {
-                    readFile();
-                }
-                break;
-            case R.id.button3:
-                double result = compute();
-                System.out.println(result);
-                break;
-        }
-    }
 
-    private double compute() {
-        double result = 0;
-        for (int i = 0; i < 1000000; ++i) {
-            result += Math.acos(Math.cos(i));
-            result -= Math.asin(Math.sin(i));
-        }
-        return result;
-    }
-
-    private void readFile() {
-        FileInputStream reader = null;
-        try {
-            reader = new FileInputStream("/proc/stat");
-            while (reader.read() != -1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }
