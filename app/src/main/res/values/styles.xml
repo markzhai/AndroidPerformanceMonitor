@@ -11,10 +11,6 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
-    <style name="CjjBaseTheme.WhiteActivity">
-        <item name="android:windowIsTranslucent">false</item>
-    </style>
-
     <style name="ModuThreeHandsomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 </resources>
