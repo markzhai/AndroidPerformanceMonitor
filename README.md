@@ -1,14 +1,20 @@
 [English](https://github.com/moduth/blockcanary/blob/master/README_ENGLISH.md)
-[日本語（まだなんです）](https://github.com/moduth/blockcanary/blob/master/README_JAPANESE.md)
 
 # BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary)
 BlockCanary是一个Android平台的一个非侵入式的性能监控组件，应用只需要实现一个抽象类，提供一些该组件需要的上下文环境，就可以在平时使用应用的时候检测主线程上的各种卡慢问题，并通过组件提供的各种信息分析出原因并进行修复。
 
-# 功能及原理
-见[BlockCanary — 轻松找出Android App界面卡顿元凶](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
+# 引入
+```gradle
+dependencies {
+    // 如果希望在release包也开启监控可以直接用compile
+    // compile 'com.github.moduth:blockcanary:1.0.1'
+
+    debugCompile 'com.github.moduth:blockcanary:1.0.1'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
+}
+```
 
 # 使用方法
-
 在Application中：
 ```java
 public class DemoApplication extends Application {
@@ -28,20 +34,10 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 }
 ```
 
-# 引入
-
-```gradle
-dependencies {
-    // 如果希望在release包也开启监控可以直接用compile
-    // compile 'com.github.moduth:blockcanary:1.0.1'
-
-    debugCompile 'com.github.moduth:blockcanary:1.0.1'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
-}
-```
+# 功能及原理
+见[BlockCanary — 轻松找出Android App界面卡顿元凶](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
 
 # 如何分析log
-
 除了图形界面可以供开发、测试阶段直接看卡顿原因外，更多的使用场景其实在于大范围的log采集和分析：如线上环境和monkey，或者测试同学们在整个测试阶段的log收集和分析。
 
 对于分析，主要可以从以下维度
@@ -57,6 +53,5 @@ dependencies {
 
 # Demo工程
 **请参考本项目下的demo module，点击三个按钮会触发对应的耗时事件，消息栏则会弹出block的notification，点击可以进去查看详细信息。**
-
 ![Block detail](art/shot1.png "detail")
 ![Block list](art/shot2.png "list")

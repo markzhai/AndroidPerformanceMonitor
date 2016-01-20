@@ -35,6 +35,13 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 # How does it work?
 See [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
 
+1. `BlockCanary.install()` initializes context and internal data structures.
+2. `BlockCanary.start()` starts monitor by `Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);`
+3. `ThreadStackSampler` and `CpuSampler` start catching thread stack and cpu data.
+4. Each time a message dispatch costs time over that set by `BlockCanaryContext.getConfigBlockThreshold`, it triggers a block notify.
+5. Write log file with data for analysis.
+6. If `BlockCanaryContext.isNeedDisplay` is true, a notification is shown, developer can click and check directly.
+
 # Screenshot
 
 ![Block detail](art/shot1.png "detail")
