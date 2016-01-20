@@ -8,7 +8,6 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashActivity.this.setTheme(R.style.CjjBaseTheme_WhiteActivity);
         super.onCreate(savedInstanceState);
         startActivity(new Intent(this, DemoActivity.class));
         SplashActivity.this.finish();
