@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="ModuThreeHandsomeTheme" parent="Base.Theme.DesignDemo">
+    <style name="CjjBaseTheme" parent="Base.Theme.DesignDemo">
     </style>
 
-    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#2196F3</item>
         <item name="colorPrimaryDark">#1976D2</item>
         <item name="colorAccent">#F44336</item>
@@ -11,8 +11,8 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
-    <style name="ModuThreeHandsomeTheme.WhiteActivity">
-        <item name="android:windowBackground">@color/material_blue</item>
+    <style name="CjjBaseTheme.WhiteActivity">
+        <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:windowIsTranslucent">false</item>
     </style>
 

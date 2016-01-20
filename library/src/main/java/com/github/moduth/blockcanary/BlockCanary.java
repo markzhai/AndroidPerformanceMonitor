@@ -58,10 +58,9 @@ public class BlockCanary {
                             .flushString();
                     LogWriter.saveLooperLog(block.toString());
 
-                    Context context = BlockCanaryContext.get().getContext();
-
-                    PendingIntent pendingIntent = DisplayBlockActivity.createPendingIntent(context, block.timeStart);
                     if (BlockCanaryContext.get().isNeedDisplay()) {
+                        Context context = BlockCanaryContext.get().getContext();
+                        PendingIntent pendingIntent = DisplayBlockActivity.createPendingIntent(context, block.timeStart);
                         String contentTitle = context.getString(R.string.block_canary_class_has_blocked, block.timeStart);
                         String contentText = context.getString(R.string.block_canary_notification_message);
                         BlockCanary.this.notify(contentTitle, contentText, pendingIntent);

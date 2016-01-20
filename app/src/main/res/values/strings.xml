@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BlockCanary Demo</string>
+    <string name="app_name">BlockCanary</string>
 
     <string name="hello_world">点击按钮后，会触发主线程耗时时间，从而被BlockCanary，并记录卡慢日志，弹出notification，可以点击对应消息查看</string>
     <string name="thread_waiting">线程\n等待\n阻塞</string>
