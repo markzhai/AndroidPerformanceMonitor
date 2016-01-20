@@ -4,7 +4,7 @@
 
     <style name="ModuThreeHandsomeTheme" parent="Base.Theme.DesignDemo">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/material_blue_dark</item>
     </style>
 
 </resources>
