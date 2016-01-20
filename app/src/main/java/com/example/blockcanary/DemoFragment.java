@@ -12,12 +12,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-public class DemoFragment extends Fragment implements View.OnClickListener{
+public class DemoFragment extends Fragment implements View.OnClickListener {
 
-    public static DemoFragment newInstance()
-    {
+    public static DemoFragment newInstance() {
         DemoFragment f = new DemoFragment();
-        return  f;
+        return f;
     }
 
     @Override
@@ -28,8 +27,8 @@ public class DemoFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View  v = inflater.inflate(R.layout.activity_main,null);
-        return  v;
+        View v = inflater.inflate(R.layout.activity_main, null);
+        return v;
     }
 
     @Override
@@ -89,7 +88,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener{
         FileInputStream reader = null;
         try {
             reader = new FileInputStream("/proc/stat");
-            while (reader.read() != -1);
+            while (reader.read() != -1) ;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

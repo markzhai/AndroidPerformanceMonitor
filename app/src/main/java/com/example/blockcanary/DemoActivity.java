@@ -1,18 +1,12 @@
 package com.example.blockcanary;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class DemoActivity extends AppCompatActivity {
 
@@ -25,9 +19,9 @@ public class DemoActivity extends AppCompatActivity {
 //        toolbar.setTitle("BlockCanary");
 
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, DemoFragment.newInstance())
-                    .commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, DemoFragment.newInstance())
+                .commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +36,7 @@ public class DemoActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Tip");
         builder.setMessage(getResources().getString(R.string.hello_world));
-        builder.setNegativeButton("ok",null);
+        builder.setNegativeButton("ok", null);
         builder.show();
     }
 

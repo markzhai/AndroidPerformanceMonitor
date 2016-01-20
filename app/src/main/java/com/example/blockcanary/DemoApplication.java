@@ -3,7 +3,6 @@ package com.example.blockcanary;
 import android.app.Application;
 import android.content.Context;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanary;
 
 public class DemoApplication extends Application {
