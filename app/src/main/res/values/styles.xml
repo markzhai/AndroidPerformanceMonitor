@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="CjjBaseTheme" parent="Base.Theme.DesignDemo">
+    <style name="ModuThreeHandsomeTheme" parent="Base.Theme.DesignDemo">
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -11,7 +11,7 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
-    <style name="CjjBaseTheme.WhiteActivity">
+    <style name="ModuThreeHandsomeTheme.WhiteActivity">
         <item name="android:windowBackground">@color/material_blue</item>
         <item name="android:windowIsTranslucent">false</item>
     </style>
