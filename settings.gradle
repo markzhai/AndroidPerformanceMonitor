@@ -1,1 +1,1 @@
-include ':library', ':app', ':library-no-op'
+include ':library-core', ':app', ':library-no-op', ':library-log', ':library-ui', ':library-android'
