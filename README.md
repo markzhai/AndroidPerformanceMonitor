@@ -8,9 +8,9 @@ A transparent ui-block detection library for Android. App only needs one-line-co
 ```gradle
 dependencies {
     // or you can use compile directly if want to enable it in release package and upload log file to server
-    // compile 'com.github.moduth:blockcanary:1.0.0'
-    debugCompile 'com.github.moduth:blockcanary:1.0.0'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.0'
+    // compile 'com.github.moduth:blockcanary:1.0.1'
+    debugCompile 'com.github.moduth:blockcanary:1.0.1'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
 }
 ```
 
