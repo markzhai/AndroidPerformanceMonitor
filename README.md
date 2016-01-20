@@ -33,8 +33,10 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 ```gradle
 dependencies {
     // 如果希望在release包也开启监控可以直接用compile
-    debugCompile 'com.github.moduth:blockcanary:1.0.0'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.0'
+    // compile 'com.github.moduth:blockcanary:1.0.1'
+
+    debugCompile 'com.github.moduth:blockcanary:1.0.1'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
 }
 ```
 

@@ -150,7 +150,7 @@ public class BlockCanary {
     /**
      * 上传监控log文件
      */
-    public void uploadMonitorLogFile() {
+    public void upload() {
         UploadMonitorLog.forceZipLogAndUpload();
     }
 
