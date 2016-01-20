@@ -12,8 +12,9 @@
     </style>
 
     <style name="CjjBaseTheme.WhiteActivity">
-        <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
+    <style name="ModuThreeHandsomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
 </resources>

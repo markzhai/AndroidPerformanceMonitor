@@ -43,13 +43,13 @@ public class BlockCanary {
     /**
      * 开始主进程的主线程监控
      */
-    public void startMainLooperMonitor() {
+    public void start() {
     }
 
     /**
      * 停止主进程的主线程监控
      */
-    public void stopMainLooperMonitor() {
+    public void stop() {
     }
 
     /**
