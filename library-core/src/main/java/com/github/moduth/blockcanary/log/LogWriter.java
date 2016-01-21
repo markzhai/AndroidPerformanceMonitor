@@ -13,8 +13,6 @@
  */
 package com.github.moduth.blockcanary.log;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;

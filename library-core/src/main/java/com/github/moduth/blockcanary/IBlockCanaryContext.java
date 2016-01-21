@@ -7,6 +7,6 @@ import android.os.Handler;
  * Email nimengbo@gmail.com
  * github https://github.com/nimengbo
  */
-public interface IWriteLogFile {
-    Handler getWriteLogFileThreadHandler
+public interface IBlockCanaryContext {
+
 }

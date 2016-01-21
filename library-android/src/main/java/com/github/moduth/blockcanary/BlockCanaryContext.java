@@ -14,9 +14,16 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.HandlerThread;
 
 import java.io.File;
 
+/**
+ * 使用本库的应用实现该抽象类，提供运行环境给性能监控组件（包括使用配置和app相关的log如用户名和网络环境）
+ * <p>
+ * Created by markzhai on 2015/9/25.
+ */
 public abstract class BlockCanaryContext {
 
     private static Context sAppContext;
@@ -25,9 +32,9 @@ public abstract class BlockCanaryContext {
     public BlockCanaryContext() {
     }
 
-    public static void init(Context c, BlockCanaryContext g) {
-        sAppContext = c;
-        sInstance = g;
+    public static void init(Context context, BlockCanaryContext blockCanaryContext) {
+        sAppContext = context;
+        sInstance = blockCanaryContext;
     }
 
     public static BlockCanaryContext get() {
@@ -64,7 +71,7 @@ public abstract class BlockCanaryContext {
     public abstract String getNetworkType();
 
     /**
-     * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，暂时未实现该功能
+     * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，配合{@link BlockCanary}的isMonitorDurationEnd
      *
      * @return 监控持续时长（小时）
      */
@@ -106,4 +113,39 @@ public abstract class BlockCanaryContext {
      * @param zippedFile 压缩后的文件
      */
     public abstract void uploadLogFile(File zippedFile);
+
+    /**
+     * 获得loop线程的handler
+     *
+     * @return loop线程
+     */
+    public Handler getTimerThreadHandler() {
+        return sLoopThread.getHandler();
+    }
+
+    /**
+     * 获得写log线程的handler
+     *
+     * @return 写log线程的handler
+     */
+    public Handler getWriteLogFileThreadHandler() {
+        return sWriteLogThread.getHandler();
+    }
+
+    private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
+    private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writelog");
+
+    private static class HandlerThreadWrapper {
+        private Handler handler = null;
+
+        public HandlerThreadWrapper(String name) {
+            HandlerThread handlerThread = new HandlerThread("BlockCanaryThread_" + name);
+            handlerThread.start();
+            handler = new Handler(handlerThread.getLooper());
+        }
+
+        public Handler getHandler() {
+            return handler;
+        }
+    }
 }

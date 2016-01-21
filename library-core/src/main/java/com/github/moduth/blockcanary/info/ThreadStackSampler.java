@@ -13,7 +13,6 @@
  */
 package com.github.moduth.blockcanary.info;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.log.Block;
 
 import java.text.SimpleDateFormat;

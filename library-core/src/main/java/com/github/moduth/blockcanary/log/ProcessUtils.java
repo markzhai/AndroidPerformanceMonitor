@@ -16,8 +16,6 @@ package com.github.moduth.blockcanary.log;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
-
 import java.util.List;
 
 public class ProcessUtils {

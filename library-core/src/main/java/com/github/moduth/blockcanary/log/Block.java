@@ -19,8 +19,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

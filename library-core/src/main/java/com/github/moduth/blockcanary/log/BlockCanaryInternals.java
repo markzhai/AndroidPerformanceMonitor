@@ -17,8 +17,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.concurrent.Executor;

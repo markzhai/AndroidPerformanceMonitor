@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.github.moduth.blockcanary.BuildConfig;
 
 import java.io.File;
 
