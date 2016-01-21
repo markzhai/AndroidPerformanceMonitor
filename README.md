@@ -66,3 +66,27 @@ See [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerf
 
 ![Block detail](art/shot1.png "detail")
 ![Block list](art/shot2.png "list")
+
+# Contributors
+
+This library is initially created by [markzhai](https://github.com/markzhai), and is maintained under the group [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
+
+Special thanks to [android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu) to contribute when this library is still young.
+
+# Change Log
+Check [CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
+
+# Contribution
+
+If you would like to contribute code to BlockCanary you can do so through GitHub by
+forking the repository and sending a pull request.
+
+When submitting code, please make every effort to follow existing conventions
+and style in order to keep the code as readable as possible. Please also make
+sure your code compiles by running `./gradlew clean build`.
+
+Before your code can be accepted into the project you must also sign the
+[Individual Contributor License Agreement (CLA)][1].
+
+
+ [1]: https://spreadsheets.google.com/spreadsheet/viewform?formkey=dDViT2xzUHAwRkI3X3k5Z0lQM091OGc6MQ&ndplr=1

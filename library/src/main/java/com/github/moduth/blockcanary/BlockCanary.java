@@ -174,7 +174,7 @@ public class BlockCanary {
             notification.icon = R.drawable.block_canary_notification;
             notification.when = System.currentTimeMillis();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults=Notification.DEFAULT_SOUND;// add sound by chiahaolu
+            notification.defaults = Notification.DEFAULT_SOUND;// add sound by chiahaolu
             notification.setLatestEventInfo(BlockCanaryContext.get().getContext(), contentTitle, contentText, pendingIntent);
         } else {
             Notification.Builder builder = new Notification.Builder(BlockCanaryContext.get().getContext())

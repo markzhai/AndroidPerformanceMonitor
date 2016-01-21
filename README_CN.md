@@ -55,3 +55,12 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 **请参考本项目下的demo module，点击三个按钮会触发对应的耗时事件，消息栏则会弹出block的notification，点击可以进去查看详细信息。**
 ![Block detail](art/shot1.png "detail")
 ![Block list](art/shot2.png "list")
+
+# 贡献者
+
+该库最初由[markzhai](https://github.com/markzhai)创建, 并在[moduth](https://github.com/moduth)组下与[nimengbo](https://github.com/nimengbo)和[zzz40500](https://github.com/zzz40500)共同维护.
+
+特别鸣谢[android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu)在项目早期做出的贡献。
+
+# 修改日志
+见[CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
