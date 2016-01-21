@@ -3,6 +3,8 @@
 # BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary)
 BlockCanary是一个Android平台的一个非侵入式的性能监控组件，应用只需要实现一个抽象类，提供一些该组件需要的上下文环境，就可以在平时使用应用的时候检测主线程上的各种卡慢问题，并通过组件提供的各种信息分析出原因并进行修复。
 
+取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
+
 # 引入
 ```gradle
 dependencies {
@@ -13,6 +15,9 @@ dependencies {
     releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
 }
 ```
+
+PS: 由于该库使用了 `getMainLooper().setMessageLogging();`, 请确认是否与你的app冲突.
+
 
 # 使用方法
 在Application中：
@@ -64,3 +69,21 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 
 # 修改日志
 见[CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
+
+# 贡献
+
+如果你希望贡献代码到BlockCanary，你可以fork本repository然后发一个PR。
+
+# 协议
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
