@@ -58,9 +58,9 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 
 # 贡献者
 
-该库最初由[markzhai](https://github.com/markzhai)创建, 并在[moduth](https://github.com/moduth)组下与[nimengbo](https://github.com/nimengbo)和[zzz40500](https://github.com/zzz40500)共同维护.
+该库最初由 [markzhai](https://github.com/markzhai) 创建, 并在 [moduth](https://github.com/moduth) group下与 [nimengbo](https://github.com/nimengbo) 和 [zzz40500](https://github.com/zzz40500) 共同维护和更新.
 
-特别鸣谢[android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu)在项目早期做出的贡献。
+特别鸣谢[Mr.Bao](https://github.com/baoyongzhang), [android-cjj(Mr.Bao的弃徒)](https://github.com/android-cjj), [chiahaolu](https://github.com/chiahaolu)在项目早期做出的贡献。
 
 # 修改日志
 见[CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
