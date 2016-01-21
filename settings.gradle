@@ -1,1 +1,1 @@
-include ':library-core', ':app', ':library-no-op', ':library-log', ':library-ui', ':library-android'
+include ':library-core', ':blockcanary-demo', ':library-no-op', ':library-log', ':library-ui', ':library-android'
