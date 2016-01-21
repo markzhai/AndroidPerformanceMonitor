@@ -150,7 +150,7 @@ public class BlockCanary {
     /**
      * 上传监控log文件
      */
-    public void uploadMonitorLogFile() {
+    public void upload() {
         UploadMonitorLog.forceZipLogAndUpload();
     }
 
@@ -174,6 +174,7 @@ public class BlockCanary {
             notification.icon = R.drawable.block_canary_notification;
             notification.when = System.currentTimeMillis();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.defaults=Notification.DEFAULT_SOUND;// add sound by chiahaolu
             // TODO SUPPORT
             //notification.setLatestEventInfo(BlockCanaryContext.get().getContext(), contentTitle, contentText, pendingIntent);
         } else {
@@ -183,7 +184,8 @@ public class BlockCanary {
                     .setContentTitle(contentTitle)
                     .setContentText(contentText)
                     .setAutoCancel(true)
-                    .setContentIntent(pendingIntent);
+                    .setContentIntent(pendingIntent)
+                    .setDefaults(Notification.DEFAULT_SOUND);// add sound by chiahaolu
             if (SDK_INT < JELLY_BEAN) {
                 notification = builder.getNotification();
             } else {
