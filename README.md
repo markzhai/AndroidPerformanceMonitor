@@ -10,9 +10,9 @@ The naming is to pay respect to the great library [LeakCanary](https://github.co
 ```gradle
 dependencies {
     // or you can use compile directly if want to enable it in release package and upload log file to server
-    // compile 'com.github.moduth:blockcanary:1.0.1'
-    debugCompile 'com.github.moduth:blockcanary:1.0.1'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.1'
+    // compile 'com.github.moduth:blockcanary:1.0.2'
+    debugCompile 'com.github.moduth:blockcanary:1.0.2'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.2'
 }
 ```
 

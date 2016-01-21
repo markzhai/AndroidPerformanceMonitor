@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
+ * Describe a real block.
+ *
  * @author markzhai on 15/9/27.
  */
 public class Block {
@@ -128,36 +130,36 @@ public class Block {
             reader = new BufferedReader(in);
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.startsWith(KEY_QUA)) {
-                    block.qualifier = line.split(KV)[1];
+                    block.qualifier = getValue(line);
                 } else if (line.startsWith(KEY_MODEL)) {
-                    block.model = line.split(KV)[1];
+                    block.model = getValue(line);
                 } else if (line.startsWith(KEY_API)) {
-                    block.apiLevel = line.split(KV)[1];
+                    block.apiLevel = getValue(line);
                 } else if (line.startsWith(KEY_IMEI)) {
-                    block.imei = line.split(KV)[1];
+                    block.imei = getValue(line);
                 } else if (line.startsWith(KEY_UID)) {
-                    block.uid = line.split(KV)[1];
+                    block.uid = getValue(line);
                 } else if (line.startsWith(KEY_CPU_CORE)) {
-                    block.cpuCoreNum = Integer.valueOf(line.split(KV)[1]);
+                    block.cpuCoreNum = Integer.valueOf(getValue(line));
                 } else if (line.startsWith(KEY_PROCESS_NAME)) {
-                    block.processName = line.split(KV)[1];
+                    block.processName = getValue(line);
                 } else if (line.startsWith(KEY_VERSION_NAME)) {
-                    block.versionName = line.split(KV)[1];
+                    block.versionName = getValue(line);
                 } else if (line.startsWith(KEY_VERSION_CODE)) {
-                    block.versionCode = Integer.valueOf(line.split(KV)[1]);
+                    block.versionCode = Integer.valueOf(getValue(line));
                 } else if (line.startsWith(KEY_NETWORK)) {
-                    block.network = line.split(KV)[1];
+                    block.network = getValue(line);
                 } else if (line.startsWith(KEY_TOTAL_MEMORY)) {
-                    block.totalMemory = line.split(KV)[1];
+                    block.totalMemory = getValue(line);
                 } else if (line.startsWith(KEY_FREE_MEMORY)) {
-                    block.freeMemory = line.split(KV)[1];
+                    block.freeMemory = getValue(line);
                 } else if (line.startsWith(KEY_CPU_BUSY)) {
-                    block.cpuBusy = Boolean.valueOf(line.split(KV)[1]);
+                    block.cpuBusy = Boolean.valueOf(getValue(line));
                 } else if (line.startsWith(KEY_CPU_RATE)) {
                     String[] split = line.split(KV);
                     if (split.length > 1) {
                         StringBuilder cpuRateSb = new StringBuilder(split[1]);
-                        cpuRateSb.append(line.split(KV)[1]).append(SEPARATOR);
+                        cpuRateSb.append(split[1]).append(SEPARATOR);
                         line = reader.readLine();
 
                         // read until SEPARATOR appears
@@ -173,15 +175,15 @@ public class Block {
                     }
 
                 } else if (line.startsWith(KEY_TIME_COST_START)) {
-                    block.timeStart = line.split(KV)[1];
+                    block.timeStart = getValue(line);
                 } else if (line.startsWith(KEY_TIME_COST_END)) {
-                    block.timeEnd = line.split(KV)[1];
+                    block.timeEnd = getValue(line);
                 } else if (line.startsWith(KEY_TIME_COST)) {
-                    block.timeCost = Long.valueOf(line.split(KV)[1]);
+                    block.timeCost = Long.valueOf(getValue(line));
                 } else if (line.startsWith(KEY_THREAD_TIME_COST)) {
-                    block.threadTimeCost = Long.valueOf(line.split(KV)[1]);
+                    block.threadTimeCost = Long.valueOf(getValue(line));
                 } else if (line.startsWith(KEY_STACK)) {
-                    StringBuilder stackSb = new StringBuilder(line.split(KV)[1]);
+                    StringBuilder stackSb = new StringBuilder(getValue(line));
                     line = reader.readLine();
 
                     // read until file ends
@@ -198,14 +200,12 @@ public class Block {
                 }
             }
             reader.close();
-            reader = null;
         } catch (Throwable t) {
             t.printStackTrace();
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
-                    reader = null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -302,5 +302,13 @@ public class Block {
 
     public String toString() {
         return String.valueOf(basicSb) + timeSb + cpuSb + stackSb;
+    }
+
+    private static String getValue(String source) {
+        String[] splitList = source.split(KV);
+        if (splitList.length > 1) {
+            return source.split(KV)[1];
+        }
+        return "";
     }
 }
