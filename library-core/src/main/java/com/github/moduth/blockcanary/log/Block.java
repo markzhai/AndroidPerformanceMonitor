@@ -19,6 +19,8 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
 
+import com.github.moduth.blockcanary.BlockCanaryContextInner;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * Describe a real block.
- *
  * @author markzhai on 15/9/27.
  */
 public class Block {
@@ -87,7 +87,7 @@ public class Block {
 
     public static Block newInstance() {
         Block block = new Block();
-        Context context = BlockCanaryContext.get().getContext();
+        Context context = BlockCanaryContextInner.get().getContext();
         if (block.versionName == null || block.versionName.length() == 0) {
             try {
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -101,13 +101,13 @@ public class Block {
             TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             block.imei = mTManager.getDeviceId();
         }
-        block.qualifier = BlockCanaryContext.get().getQualifier();
+        block.qualifier = BlockCanaryContextInner.get().getQualifier();
         block.apiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
         block.model = Build.MODEL;
-        block.uid = BlockCanaryContext.get().getUid();
+        block.uid = BlockCanaryContextInner.get().getUid();
         block.cpuCoreNum = PerformanceUtils.getNumCores();
         block.processName = ProcessUtils.myProcessName();
-        block.network = BlockCanaryContext.get().getNetworkType();
+        block.network = BlockCanaryContextInner.get().getNetworkType();
         block.freeMemory = String.valueOf(PerformanceUtils.getFreeMemory());
         block.totalMemory = String.valueOf(PerformanceUtils.getTotalMemory());
         return block;
@@ -130,36 +130,36 @@ public class Block {
             reader = new BufferedReader(in);
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.startsWith(KEY_QUA)) {
-                    block.qualifier = getValue(line);
+                    block.qualifier = line.split(KV)[1];
                 } else if (line.startsWith(KEY_MODEL)) {
-                    block.model = getValue(line);
+                    block.model = line.split(KV)[1];
                 } else if (line.startsWith(KEY_API)) {
-                    block.apiLevel = getValue(line);
+                    block.apiLevel = line.split(KV)[1];
                 } else if (line.startsWith(KEY_IMEI)) {
-                    block.imei = getValue(line);
+                    block.imei = line.split(KV)[1];
                 } else if (line.startsWith(KEY_UID)) {
-                    block.uid = getValue(line);
+                    block.uid = line.split(KV)[1];
                 } else if (line.startsWith(KEY_CPU_CORE)) {
-                    block.cpuCoreNum = Integer.valueOf(getValue(line));
+                    block.cpuCoreNum = Integer.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_PROCESS_NAME)) {
-                    block.processName = getValue(line);
+                    block.processName = line.split(KV)[1];
                 } else if (line.startsWith(KEY_VERSION_NAME)) {
-                    block.versionName = getValue(line);
+                    block.versionName = line.split(KV)[1];
                 } else if (line.startsWith(KEY_VERSION_CODE)) {
-                    block.versionCode = Integer.valueOf(getValue(line));
+                    block.versionCode = Integer.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_NETWORK)) {
-                    block.network = getValue(line);
+                    block.network = line.split(KV)[1];
                 } else if (line.startsWith(KEY_TOTAL_MEMORY)) {
-                    block.totalMemory = getValue(line);
+                    block.totalMemory = line.split(KV)[1];
                 } else if (line.startsWith(KEY_FREE_MEMORY)) {
-                    block.freeMemory = getValue(line);
+                    block.freeMemory = line.split(KV)[1];
                 } else if (line.startsWith(KEY_CPU_BUSY)) {
-                    block.cpuBusy = Boolean.valueOf(getValue(line));
+                    block.cpuBusy = Boolean.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_CPU_RATE)) {
                     String[] split = line.split(KV);
                     if (split.length > 1) {
                         StringBuilder cpuRateSb = new StringBuilder(split[1]);
-                        cpuRateSb.append(split[1]).append(SEPARATOR);
+                        cpuRateSb.append(line.split(KV)[1]).append(SEPARATOR);
                         line = reader.readLine();
 
                         // read until SEPARATOR appears
@@ -175,15 +175,15 @@ public class Block {
                     }
 
                 } else if (line.startsWith(KEY_TIME_COST_START)) {
-                    block.timeStart = getValue(line);
+                    block.timeStart = line.split(KV)[1];
                 } else if (line.startsWith(KEY_TIME_COST_END)) {
-                    block.timeEnd = getValue(line);
+                    block.timeEnd = line.split(KV)[1];
                 } else if (line.startsWith(KEY_TIME_COST)) {
-                    block.timeCost = Long.valueOf(getValue(line));
+                    block.timeCost = Long.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_THREAD_TIME_COST)) {
-                    block.threadTimeCost = Long.valueOf(getValue(line));
+                    block.threadTimeCost = Long.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_STACK)) {
-                    StringBuilder stackSb = new StringBuilder(getValue(line));
+                    StringBuilder stackSb = new StringBuilder(line.split(KV)[1]);
                     line = reader.readLine();
 
                     // read until file ends
@@ -200,12 +200,14 @@ public class Block {
                 }
             }
             reader.close();
+            reader = null;
         } catch (Throwable t) {
             t.printStackTrace();
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
+                    reader = null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -302,13 +304,5 @@ public class Block {
 
     public String toString() {
         return String.valueOf(basicSb) + timeSb + cpuSb + stackSb;
-    }
-
-    private static String getValue(String source) {
-        String[] splitList = source.split(KV);
-        if (splitList.length > 1) {
-            return source.split(KV)[1];
-        }
-        return "";
     }
 }
