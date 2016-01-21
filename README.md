@@ -69,7 +69,7 @@ See [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerf
 
 # Contributors
 
-This library is initially created by [markzhai](https://github.com/markzhai), and is maintained under the group [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
+This library is initially created by [markzhai](https://github.com/markzhai), and is maintained under the organization [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
 
 Special thanks to [android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu) to contribute when this library is still young.
 
