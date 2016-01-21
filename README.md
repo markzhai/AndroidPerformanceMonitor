@@ -3,7 +3,7 @@
 # BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary)
 A transparent ui-block detection library for Android. App only needs one-line-code to setup and provide application context.
 
-The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary).
+The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
 # Getting started
 
