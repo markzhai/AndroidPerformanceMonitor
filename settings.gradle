@@ -1,1 +1,1 @@
-include ':library', ':app', ':library-no-op'
+include ':library', ':blockcanary-demo', ':library-no-op'
