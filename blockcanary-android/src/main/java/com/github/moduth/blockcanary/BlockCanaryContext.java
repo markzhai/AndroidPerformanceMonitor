@@ -96,7 +96,10 @@ public abstract class BlockCanaryContext  implements IBlockCanaryContext{
      *
      * @return Log文件保存的位置
      */
-    public abstract String getLogPath();
+    @Override
+    public String getLogPath() {
+        return "/blockcanary/performance";
+    }
 
     /**
      * 压缩文件
@@ -105,14 +108,20 @@ public abstract class BlockCanaryContext  implements IBlockCanaryContext{
      * @param dest 压缩后的文件
      * @return 压缩是否成功
      */
-    public abstract boolean zipLogFile(File[] src, File dest);
+    @Override
+    public boolean zipLogFile(File[] src, File dest){
+        return false;
+    }
 
     /**
      * 上传日志
      *
      * @param zippedFile 压缩后的文件
      */
-    public abstract void uploadLogFile(File zippedFile);
+    @Override
+    public void uploadLogFile(File zippedFile){
+
+    }
 
     /**
      * 获得loop线程的handler

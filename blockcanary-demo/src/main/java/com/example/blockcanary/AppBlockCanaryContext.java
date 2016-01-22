@@ -71,19 +71,4 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
     public boolean isNeedDisplay() {
         return BuildConfig.DEBUG;
     }
-
-    @Override
-    public String getLogPath() {
-        return "/blockcanary/performance";
-    }
-
-    @Override
-    public boolean zipLogFile(File[] src, File dest) {
-        return false;
-    }
-
-    @Override
-    public void uploadLogFile(File zippedFile) {
-
-    }
 }
