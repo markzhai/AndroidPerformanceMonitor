@@ -19,7 +19,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
 
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,7 +87,7 @@ public class Block {
 
     public static Block newInstance() {
         Block block = new Block();
-        Context context = BlockCanaryContextInner.get().getContext();
+        Context context = BlockCanaryCore.getContext().getContext();
         if (block.versionName == null || block.versionName.length() == 0) {
             try {
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -101,13 +101,13 @@ public class Block {
             TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             block.imei = mTManager.getDeviceId();
         }
-        block.qualifier = BlockCanaryContextInner.get().getQualifier();
+        block.qualifier = BlockCanaryCore.getContext().getQualifier();
         block.apiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
         block.model = Build.MODEL;
-        block.uid = BlockCanaryContextInner.get().getUid();
+        block.uid = BlockCanaryCore.getContext().getUid();
         block.cpuCoreNum = PerformanceUtils.getNumCores();
         block.processName = ProcessUtils.myProcessName();
-        block.network = BlockCanaryContextInner.get().getNetworkType();
+        block.network = BlockCanaryCore.getContext().getNetworkType();
         block.freeMemory = String.valueOf(PerformanceUtils.getFreeMemory());
         block.totalMemory = String.valueOf(PerformanceUtils.getTotalMemory());
         return block;

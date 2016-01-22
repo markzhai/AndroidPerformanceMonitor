@@ -16,7 +16,7 @@ package com.github.moduth.blockcanary.log;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ProcessUtils {
             if (sProcessName != null) {
                 return sProcessName;
             }
-            return sProcessName = obtainProcessName(BlockCanaryContextInner.get().getContext());
+            return sProcessName = obtainProcessName(BlockCanaryCore.getContext().getContext());
         }
     }
 

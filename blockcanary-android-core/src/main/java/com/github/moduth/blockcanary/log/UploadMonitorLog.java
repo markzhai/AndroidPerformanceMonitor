@@ -13,7 +13,7 @@
  */
 package com.github.moduth.blockcanary.log;
 
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -34,18 +34,18 @@ public class UploadMonitorLog {
             // 以防万一
         }
         File zippedFile = LogWriter.generateTempZipFile("Monitor_looper_" + timeString);
-        BlockCanaryContextInner.get().zipLogFile(BlockCanaryInternals.getLogFiles(), zippedFile);
+        BlockCanaryCore.getContext().zipLogFile(BlockCanaryInternals.getLogFiles(), zippedFile);
         LogWriter.deleteLogFiles();
         return zippedFile;
     }
 
     public static void forceZipLogAndUpload() {
-        BlockCanaryContextInner.get().getWriteLogFileThreadHandler().post(new Runnable() {
+        BlockCanaryCore.getContext().getWriteLogFileThreadHandler().post(new Runnable() {
             @Override
             public void run() {
                 final File file = zipFile();
                 if (file.exists()) {
-                    BlockCanaryContextInner.get().uploadLogFile(file);
+                    BlockCanaryCore.getContext().uploadLogFile(file);
                 }
             }
         });

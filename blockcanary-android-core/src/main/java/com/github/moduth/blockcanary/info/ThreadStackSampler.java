@@ -13,7 +13,7 @@
  */
 package com.github.moduth.blockcanary.info;
 
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 import com.github.moduth.blockcanary.log.Block;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +40,7 @@ public class ThreadStackSampler {
         public void run() {
             doSample();
 
-            BlockCanaryContextInner.get().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
+            BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
         }
     };
 
@@ -78,12 +78,12 @@ public class ThreadStackSampler {
     }
 
     public void start() {
-        BlockCanaryContextInner.get().getTimerThreadHandler().removeCallbacks(mRunnable);
-        BlockCanaryContextInner.get().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
+        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
+        BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
     }
 
     public void stop() {
-        BlockCanaryContextInner.get().getTimerThreadHandler().removeCallbacks(mRunnable);
+        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
     }
 
     public ArrayList<String> getThreadStackEntries(long startTime, long endTime) {

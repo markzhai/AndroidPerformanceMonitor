@@ -17,7 +17,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
 
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,7 +62,7 @@ public class PerformanceUtils {
     }
 
     public static long getFreeMemory() {
-        ActivityManager am = (ActivityManager) BlockCanaryContextInner.get().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) BlockCanaryCore.getContext().getContext().getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
         return mi.availMem / 1024;

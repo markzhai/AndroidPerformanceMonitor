@@ -19,12 +19,13 @@ import android.util.Printer;
 
 /**
  * 打印looper线程的message执行时间监控
- * <p>
+ * <p/>
  * Created by markzhai on 2015/9/25.
  */
 class LooperPrinter implements Printer {
 
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
+
     private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
     private long mStartTimeMillis = 0;
     private long mStartThreadTimeMillis = 0;
@@ -64,7 +65,7 @@ class LooperPrinter implements Printer {
         final long startTime = mStartTimeMillis;
         final long startThreadTime = mStartThreadTimeMillis;
         final long endThreadTime = SystemClock.currentThreadTimeMillis();
-        BlockCanaryContextInner.get().getWriteLogFileThreadHandler().post(new Runnable() {
+        BlockCanaryCore.getContext().getWriteLogFileThreadHandler().post(new Runnable() {
             @Override
             public void run() {
                 mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);

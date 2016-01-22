@@ -131,7 +131,7 @@ final class BlockDetailAdapter extends BaseAdapter {
             // Same data, nothing to change.
             return;
         }
-        this.mBlock = block;
+        mBlock = block;
         mFoldings = new boolean[POSITION_THREAD_STACK + mBlock.threadStackEntries.size()];
         Arrays.fill(mFoldings, true);
         notifyDataSetChanged();

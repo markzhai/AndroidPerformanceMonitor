@@ -13,40 +13,25 @@
  */
 package com.github.moduth.blockcanary.log;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.pm.PackageManager;
-
-import com.github.moduth.blockcanary.BlockCanaryContextInner;
+import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-import static android.content.pm.PackageManager.DONT_KILL_APP;
 
 /**
  * @author markzhai on 15/9/27.
  */
 public final class BlockCanaryInternals {
-    private static final Executor fileIoExecutor = Executors.newSingleThreadExecutor();
-
-    public static void executeOnFileIoThread(Runnable runnable) {
-        fileIoExecutor.execute(runnable);
-    }
 
     public static String getPath() {
         String state = android.os.Environment.getExternalStorageState();
         if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
             if (android.os.Environment.getExternalStorageDirectory().canWrite()) {
                 return android.os.Environment.getExternalStorageDirectory().getPath()
-                        + BlockCanaryContextInner.get().getLogPath();
+                        + BlockCanaryCore.getContext().getLogPath();
             }
         }
-        return android.os.Environment.getDataDirectory().getAbsolutePath() + BlockCanaryContextInner.get().getLogPath();
+        return android.os.Environment.getDataDirectory().getAbsolutePath() + BlockCanaryCore.getContext().getLogPath();
     }
 
     public static File detectedLeakDirectory() {
@@ -63,22 +48,6 @@ public final class BlockCanaryInternals {
             return f.listFiles(new BlockLogFileFilter());
         }
         return null;
-    }
-
-
-    public static void setEnabled(Context context, final Class<?> componentClass,
-                                  final boolean enabled) {
-        final Context appContext = context.getApplicationContext();
-        executeOnFileIoThread(new Runnable() {
-            @Override
-            public void run() {
-                ComponentName component = new ComponentName(appContext, componentClass);
-                PackageManager packageManager = appContext.getPackageManager();
-                int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
-                // Blocks on IPC.
-                packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
-            }
-        });
     }
 
     private BlockCanaryInternals() {

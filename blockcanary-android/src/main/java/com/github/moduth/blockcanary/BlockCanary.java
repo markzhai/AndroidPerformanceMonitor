@@ -13,29 +13,13 @@
  */
 package com.github.moduth.blockcanary;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import com.github.moduth.blockcanary.android.R;
-import com.github.moduth.blockcanary.info.CpuSampler;
-import com.github.moduth.blockcanary.info.ThreadStackSampler;
-import com.github.moduth.blockcanary.log.Block;
-import com.github.moduth.blockcanary.log.BlockCanaryInternals;
-import com.github.moduth.blockcanary.log.LogWriter;
 import com.github.moduth.blockcanary.log.UploadMonitorLog;
 
-import java.util.ArrayList;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
+import java.lang.reflect.Constructor;
 
 /**
  * <p>looper线程监控</p>
@@ -43,63 +27,22 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN;
  */
 public class BlockCanary {
 
-    private static final int MIN_INTERVAL_MILLIS = 300;
     private static BlockCanary sInstance;
     private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
-    private Class mDisplayBlockClass;
 
     private BlockCanary() {
-        BlockCanaryContextInner.setIBlockCanaryContext(BlockCanaryContext.get());
-        initDisplayBlockClass();
-        mBlockCanaryCore = new BlockCanaryCore();
-        mBlockCanaryCore.setMainLooperPrinter(new LooperPrinter(new BlockListener() {
-
-            @Override
-            public void onBlockEvent(long realTimeStart, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
-                // 查询这段时间内的线程堆栈调用情况，CPU使用情况
-                ArrayList<String> threadStackEntries = mBlockCanaryCore.threadStackSampler.getThreadStackEntries(realTimeStart, realTimeEnd);
-                // Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());
-                if (threadStackEntries.size() > 0) {
-                    Block block = Block.newInstance()
-                            .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
-                            .setCpuBusyFlag(mBlockCanaryCore.cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
-                            .setRecentCpuRate(mBlockCanaryCore.cpuSampler.getCpuRateInfo())
-                            .setThreadStackEntries(threadStackEntries)
-                            .flushString();
-                    LogWriter.saveLooperLog(block.toString());
-
-                    if (BlockCanaryContext.get().isNeedDisplay() && mDisplayBlockClass != null) {
-                        Context context = BlockCanaryContext.get().getContext();
-                        Intent intent = new Intent(context, mDisplayBlockClass);
-                        intent.putExtra("show_latest", block.timeStart);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, FLAG_UPDATE_CURRENT);
-                        String contentTitle = context.getString(R.string.block_canary_class_has_blocked, block.timeStart);
-                        String contentText = context.getString(R.string.block_canary_notification_message);
-                        BlockCanary.this.notify(contentTitle, contentText, pendingIntent);
-                    }
-                }
-            }
-        }, mBlockCanaryCore.blockThresholdMillis));
-        LogWriter.cleanOldFiles();
-    }
-
-
-    private void initDisplayBlockClass() {
-        try {
-            mDisplayBlockClass = Class.forName("com.github.moduth.blockcanary.ui.DisplayBlockActivity");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        BlockCanaryCore.setIBlockCanaryContext(BlockCanaryContext.get());
+        mBlockCanaryCore = BlockCanaryCore.get();
+        initNotification();
     }
 
     /**
-     * Install BlockCanary
+     * Install {@link BlockCanary}
      *
      * @param context            application context
      * @param blockCanaryContext implementation for {@link BlockCanaryContext}
-     * @return BlockCanary
+     * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
         BlockCanaryContext.init(context, blockCanaryContext);
@@ -107,9 +50,9 @@ public class BlockCanary {
     }
 
     /**
-     * 获得BlockCanary单例
+     * Get {@link BlockCanary} singleton.
      *
-     * @return BlockCanary实例
+     * @return {@link BlockCanary} instance
      */
     public static BlockCanary get() {
         if (sInstance == null) {
@@ -123,19 +66,34 @@ public class BlockCanary {
     }
 
     /**
-     * 开始主进程的主线程监控
+     * Start main-thread monitoring.
      */
     public void start() {
-        if (BlockCanaryContext.get().isNeedDisplay()) {
-            BlockCanaryInternals.setEnabled(
-                    BlockCanaryContext.get().getContext(), mDisplayBlockClass, true);
-        }
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.mainLooperPrinter);
             mBlockCanaryCore.threadStackSampler.start();
             mBlockCanaryCore.cpuSampler.start();
         }
+    }
+
+    /**
+     * Stop monitoring.
+     */
+    public void stop() {
+        if (mLooperLoggingStarted) {
+            mLooperLoggingStarted = false;
+            Looper.getMainLooper().setMessageLogging(null);
+            mBlockCanaryCore.threadStackSampler.stop();
+            mBlockCanaryCore.cpuSampler.stop();
+        }
+    }
+
+    /**
+     * Zip and upload log files.
+     */
+    public void upload() {
+        UploadMonitorLog.forceZipLogAndUpload();
     }
 
     /**
@@ -158,62 +116,20 @@ public class BlockCanary {
                 System.currentTimeMillis() - startTime > BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
     }
 
-    /**
-     * 停止主进程的主线程监控
-     */
-    public void stop() {
-        if (mLooperLoggingStarted) {
-            mLooperLoggingStarted = false;
-            Looper.getMainLooper().setMessageLogging(null);
-            mBlockCanaryCore.threadStackSampler.stop();
-            mBlockCanaryCore.cpuSampler.stop();
+    private void initNotification() {
+        if (!BlockCanaryContext.get().isNeedDisplay()) {
+            return;
         }
-    }
 
-    /**
-     * 上传监控log文件
-     */
-    public void upload() {
-        UploadMonitorLog.forceZipLogAndUpload();
-    }
-
-    private long sampleInterval(int blockThresholdMillis) {
-        // 最小值保护
-        long sampleIntervalMillis = blockThresholdMillis / 2;
-        if (sampleIntervalMillis < MIN_INTERVAL_MILLIS) {
-            sampleIntervalMillis = MIN_INTERVAL_MILLIS;
-        }
-        return sampleIntervalMillis;
-    }
-
-    @TargetApi(HONEYCOMB)
-    private void notify(String contentTitle, String contentText, PendingIntent pendingIntent) {
-        NotificationManager notificationManager = (NotificationManager)
-                BlockCanaryContext.get().getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Notification notification;
-        if (SDK_INT < HONEYCOMB) {
-            notification = new Notification();
-            notification.icon = R.drawable.block_canary_notification;
-            notification.when = System.currentTimeMillis();
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults = Notification.DEFAULT_SOUND;// add sound by chiahaolu
-            notification.setLatestEventInfo(BlockCanaryContext.get().getContext(), contentTitle, contentText, pendingIntent);
-        } else {
-            Notification.Builder builder = new Notification.Builder(BlockCanaryContext.get().getContext())
-                    .setSmallIcon(R.drawable.block_canary_notification)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle(contentTitle)
-                    .setContentText(contentText)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setDefaults(Notification.DEFAULT_SOUND);// add sound by chiahaolu
-            if (SDK_INT < JELLY_BEAN) {
-                notification = builder.getNotification();
-            } else {
-                notification = builder.build();
+        try {
+            Class notifier = Class.forName("com.github.moduth.blockcanary.ui.Notifier");
+            if (notifier != null) {
+                return;
             }
+            Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();
+            mBlockCanaryCore.setOnBlockEventInterceptor(constructor.newInstance());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        notificationManager.notify(0xDEAFBEEF, notification);
     }
 }

@@ -21,10 +21,10 @@ import java.io.File;
 
 /**
  * 使用本库的应用实现该抽象类，提供运行环境给性能监控组件（包括使用配置和app相关的log如用户名和网络环境）
- * <p>
+ * <p/>
  * Created by markzhai on 2015/9/25.
  */
-public abstract class BlockCanaryContext  implements IBlockCanaryContext{
+public abstract class BlockCanaryContext implements IBlockCanaryContext {
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;
@@ -109,7 +109,7 @@ public abstract class BlockCanaryContext  implements IBlockCanaryContext{
      * @return 压缩是否成功
      */
     @Override
-    public boolean zipLogFile(File[] src, File dest){
+    public boolean zipLogFile(File[] src, File dest) {
         return false;
     }
 
@@ -119,7 +119,7 @@ public abstract class BlockCanaryContext  implements IBlockCanaryContext{
      * @param zippedFile 压缩后的文件
      */
     @Override
-    public void uploadLogFile(File zippedFile){
+    public void uploadLogFile(File zippedFile) {
 
     }
 
