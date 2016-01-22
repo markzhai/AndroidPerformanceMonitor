@@ -13,14 +13,24 @@ import java.io.File;
 public interface IBlockCanaryContext {
 
 
+    int getConfigBlockThreshold();
+
     Handler getWriteLogFileThreadHandler();
+
     Handler getTimerThreadHandler();
+
     String getQualifier();
+
     String getUid();
+
     String getNetworkType();
+
     Context getContext();
+
     String getLogPath();
+
     boolean zipLogFile(File[] src, File dest);
+
     void uploadLogFile(File zippedFile);
 
 

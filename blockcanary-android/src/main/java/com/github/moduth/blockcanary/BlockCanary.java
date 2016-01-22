@@ -45,33 +45,26 @@ public class BlockCanary {
 
     private static final int MIN_INTERVAL_MILLIS = 300;
     private static BlockCanary sInstance;
-    private LooperPrinter mMainLooperPrinter;
-    private ThreadStackSampler mThreadStackSampler;
-    private CpuSampler mCpuSampler;
+    private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
     private Class mDisplayBlockClass;
 
     private BlockCanary() {
-        int blockThresholdMillis = BlockCanaryContext.get().getConfigBlockThreshold();
-
-        long sampleIntervalMillis = sampleInterval(blockThresholdMillis);
         BlockCanaryContextInner.setIBlockCanaryContext(BlockCanaryContext.get());
-        mThreadStackSampler = new ThreadStackSampler(Looper.getMainLooper().getThread(), sampleIntervalMillis);
-        mCpuSampler = new CpuSampler();
         initDisplayBlockClass();
-
-        mMainLooperPrinter = new LooperPrinter(new BlockListener() {
+        mBlockCanaryCore = new BlockCanaryCore();
+        mBlockCanaryCore.setMainLooperPrinter(new LooperPrinter(new BlockListener() {
 
             @Override
             public void onBlockEvent(long realTimeStart, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
                 // 查询这段时间内的线程堆栈调用情况，CPU使用情况
-                ArrayList<String> threadStackEntries = mThreadStackSampler.getThreadStackEntries(realTimeStart, realTimeEnd);
+                ArrayList<String> threadStackEntries = mBlockCanaryCore.threadStackSampler.getThreadStackEntries(realTimeStart, realTimeEnd);
                 // Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());
                 if (threadStackEntries.size() > 0) {
                     Block block = Block.newInstance()
                             .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
-                            .setCpuBusyFlag(mCpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
-                            .setRecentCpuRate(mCpuSampler.getCpuRateInfo())
+                            .setCpuBusyFlag(mBlockCanaryCore.cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
+                            .setRecentCpuRate(mBlockCanaryCore.cpuSampler.getCpuRateInfo())
                             .setThreadStackEntries(threadStackEntries)
                             .flushString();
                     LogWriter.saveLooperLog(block.toString());
@@ -88,8 +81,7 @@ public class BlockCanary {
                     }
                 }
             }
-        }, blockThresholdMillis);
-
+        }, mBlockCanaryCore.blockThresholdMillis));
         LogWriter.cleanOldFiles();
     }
 
@@ -140,9 +132,9 @@ public class BlockCanary {
         }
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
-            Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);
-            mThreadStackSampler.start();
-            mCpuSampler.start();
+            Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.mainLooperPrinter);
+            mBlockCanaryCore.threadStackSampler.start();
+            mBlockCanaryCore.cpuSampler.start();
         }
     }
 
@@ -173,8 +165,8 @@ public class BlockCanary {
         if (mLooperLoggingStarted) {
             mLooperLoggingStarted = false;
             Looper.getMainLooper().setMessageLogging(null);
-            mThreadStackSampler.stop();
-            mCpuSampler.stop();
+            mBlockCanaryCore.threadStackSampler.stop();
+            mBlockCanaryCore.cpuSampler.stop();
         }
     }
 
