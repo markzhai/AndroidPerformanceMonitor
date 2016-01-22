@@ -18,19 +18,20 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import com.github.moduth.blockcanary.android.R;
 import com.github.moduth.blockcanary.info.CpuSampler;
 import com.github.moduth.blockcanary.info.ThreadStackSampler;
 import com.github.moduth.blockcanary.log.Block;
-import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 import com.github.moduth.blockcanary.log.LogWriter;
 import com.github.moduth.blockcanary.log.UploadMonitorLog;
-import com.github.moduth.blockcanary.ui.DisplayBlockActivity;
 
 import java.util.ArrayList;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
@@ -47,13 +48,16 @@ public class BlockCanary {
     private ThreadStackSampler mThreadStackSampler;
     private CpuSampler mCpuSampler;
     private boolean mLooperLoggingStarted = false;
+    private Class mDisplayBlockClass;
 
     private BlockCanary() {
         int blockThresholdMillis = BlockCanaryContext.get().getConfigBlockThreshold();
 
         long sampleIntervalMillis = sampleInterval(blockThresholdMillis);
+        BlockCanaryContextInner.setIBlockCanaryContext(BlockCanaryContext.get());
         mThreadStackSampler = new ThreadStackSampler(Looper.getMainLooper().getThread(), sampleIntervalMillis);
         mCpuSampler = new CpuSampler();
+        initDisplayBlockClass();
 
         mMainLooperPrinter = new LooperPrinter(new BlockListener() {
 
@@ -71,9 +75,12 @@ public class BlockCanary {
                             .flushString();
                     LogWriter.saveLooperLog(block.toString());
 
-                    if (BlockCanaryContext.get().isNeedDisplay()) {
+                    if (BlockCanaryContext.get().isNeedDisplay() && mDisplayBlockClass != null) {
                         Context context = BlockCanaryContext.get().getContext();
-                        PendingIntent pendingIntent = DisplayBlockActivity.createPendingIntent(context, block.timeStart);
+                        Intent intent = new Intent(context, mDisplayBlockClass);
+                        intent.putExtra("show_latest", block.timeStart);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, FLAG_UPDATE_CURRENT);
                         String contentTitle = context.getString(R.string.block_canary_class_has_blocked, block.timeStart);
                         String contentText = context.getString(R.string.block_canary_notification_message);
                         BlockCanary.this.notify(contentTitle, contentText, pendingIntent);
@@ -85,9 +92,19 @@ public class BlockCanary {
         LogWriter.cleanOldFiles();
     }
 
+
+    private void initDisplayBlockClass() {
+        try {
+            mDisplayBlockClass = Class.forName("com.github.moduth.blockcanary.ui.DisplayBlockActivity");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Install BlockCanary
-     * @param context application context
+     *
+     * @param context            application context
      * @param blockCanaryContext implementation for {@link BlockCanaryContext}
      * @return BlockCanary
      */
@@ -116,10 +133,10 @@ public class BlockCanary {
      * 开始主进程的主线程监控
      */
     public void start() {
-        if (BlockCanaryContext.get().isNeedDisplay()) {
-            BlockCanaryInternals.setEnabled(
-                    BlockCanaryContext.get().getContext(), DisplayBlockActivity.class, true);
-        }
+//        if (BlockCanaryContext.get().isNeedDisplay()) {
+//            BlockCanaryInternals.setEnabled(
+//                    BlockCanaryContext.get().getContext(), DisplayBlockActivity.class, true);
+//        }
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);

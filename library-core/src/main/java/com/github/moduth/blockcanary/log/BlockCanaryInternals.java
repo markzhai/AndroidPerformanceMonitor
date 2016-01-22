@@ -17,6 +17,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import com.github.moduth.blockcanary.BlockCanaryContextInner;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.concurrent.Executor;
@@ -41,10 +43,10 @@ public final class BlockCanaryInternals {
         if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
             if (android.os.Environment.getExternalStorageDirectory().canWrite()) {
                 return android.os.Environment.getExternalStorageDirectory().getPath()
-                        + BlockCanaryContext.get().getLogPath();
+                        + BlockCanaryContextInner.get().getLogPath();
             }
         }
-        return android.os.Environment.getDataDirectory().getAbsolutePath() + BlockCanaryContext.get().getLogPath();
+        return android.os.Environment.getDataDirectory().getAbsolutePath() + BlockCanaryContextInner.get().getLogPath();
     }
 
     public static File detectedLeakDirectory() {

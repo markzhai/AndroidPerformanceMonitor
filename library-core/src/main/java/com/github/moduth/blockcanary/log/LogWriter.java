@@ -13,6 +13,8 @@
  */
 package com.github.moduth.blockcanary.log;
 
+import com.github.moduth.blockcanary.BlockCanaryContextInner;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +53,7 @@ public class LogWriter {
      * 清除所有过期的文件，see {@code OBSOLETE_DURATION}
      */
     public static void cleanOldFiles() {
-        BlockCanaryContext.get().getWriteLogFileThreadHandler().post(new Runnable() {
+        BlockCanaryContextInner.get().getWriteLogFileThreadHandler().post(new Runnable() {
             @Override
             public void run() {
                 long now = System.currentTimeMillis();

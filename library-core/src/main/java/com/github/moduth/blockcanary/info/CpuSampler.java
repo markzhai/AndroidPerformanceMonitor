@@ -13,6 +13,7 @@
  */
 package com.github.moduth.blockcanary.info;
 
+import com.github.moduth.blockcanary.BlockCanaryContextInner;
 import com.github.moduth.blockcanary.log.Block;
 
 import java.io.BufferedReader;
@@ -49,18 +50,18 @@ public class CpuSampler {
         public void run() {
             doSample();
 
-            BlockCanaryContext.get().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
+            BlockCanaryContextInner.get().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
         }
     };
 
     public void start() {
         reset();
-        BlockCanaryContext.get().getTimerThreadHandler().removeCallbacks(mRunnable);
-        BlockCanaryContext.get().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
+        BlockCanaryContextInner.get().getTimerThreadHandler().removeCallbacks(mRunnable);
+        BlockCanaryContextInner.get().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
     }
 
     public void stop() {
-        BlockCanaryContext.get().getTimerThreadHandler().removeCallbacks(mRunnable);
+        BlockCanaryContextInner.get().getTimerThreadHandler().removeCallbacks(mRunnable);
     }
 
     private void reset() {

@@ -17,7 +17,7 @@ import android.content.Context;
 
 import java.io.File;
 
-public abstract class BlockCanaryContext {
+public abstract class BlockCanaryContext   {
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;

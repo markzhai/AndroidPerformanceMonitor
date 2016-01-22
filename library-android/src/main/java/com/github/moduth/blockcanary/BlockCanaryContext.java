@@ -24,7 +24,7 @@ import java.io.File;
  * <p>
  * Created by markzhai on 2015/9/25.
  */
-public abstract class BlockCanaryContext {
+public abstract class BlockCanaryContext  implements IBlockCanaryContext{
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;
