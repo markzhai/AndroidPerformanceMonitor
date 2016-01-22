@@ -26,6 +26,7 @@ import com.github.moduth.blockcanary.android.R;
 import com.github.moduth.blockcanary.info.CpuSampler;
 import com.github.moduth.blockcanary.info.ThreadStackSampler;
 import com.github.moduth.blockcanary.log.Block;
+import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 import com.github.moduth.blockcanary.log.LogWriter;
 import com.github.moduth.blockcanary.log.UploadMonitorLog;
 
@@ -133,10 +134,10 @@ public class BlockCanary {
      * 开始主进程的主线程监控
      */
     public void start() {
-//        if (BlockCanaryContext.get().isNeedDisplay()) {
-//            BlockCanaryInternals.setEnabled(
-//                    BlockCanaryContext.get().getContext(), DisplayBlockActivity.class, true);
-//        }
+        if (BlockCanaryContext.get().isNeedDisplay()) {
+            BlockCanaryInternals.setEnabled(
+                    BlockCanaryContext.get().getContext(), mDisplayBlockClass, true);
+        }
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);
