@@ -13,4 +13,10 @@ allprojects {
     repositories {
         jcenter()
     }
+    ext {
+        LIBRARY_COMPILE_SDK_VERSION = 22
+        LIBRARY_BUILD_TOOLS_VERSION = "23.0.2"
+        LIBRARY_MIN_SDK_VERSION = 8
+        LIBRARY_TARGET_SDK_VERSION = 21
+    }
 }

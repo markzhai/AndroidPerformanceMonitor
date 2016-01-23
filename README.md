@@ -20,6 +20,11 @@ PS: As this library uses `getMainLooper().setMessageLogging();`, please check if
 
 # Usage
 
+Maximum log count is set to 100, you can rewrite it in your app `int.xml`.
+```xml
+<integer name="block_canary_max_stored_count">100</integer>
+```
+
 ```java
 public class DemoApplication extends Application {
     @Override

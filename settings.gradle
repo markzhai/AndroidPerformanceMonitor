@@ -1,1 +1,1 @@
-include ':library', ':blockcanary-demo', ':library-no-op'
+include ':blockcanary-android-core', ':blockcanary-demo', ':blockcanary-android-no-op', ':blockcanary-android-ui', ':blockcanary-android'

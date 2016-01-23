@@ -75,5 +75,4 @@ public class DemoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
 }
