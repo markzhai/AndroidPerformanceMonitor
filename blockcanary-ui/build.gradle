@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: 'gradle-mvn-push.gradle'
 
 android {
     compileSdkVersion LIBRARY_COMPILE_SDK_VERSION
@@ -21,5 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile project(':blockcanary-core')
+    compile 'com.github.moduth:blockcanary-core:1.1.0'
+    //compile project(':blockcanary-core')
 }

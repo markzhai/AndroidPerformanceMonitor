@@ -19,7 +19,7 @@ import java.io.File;
 
 /**
  * 使用本库的应用实现该抽象类，提供运行环境给性能监控组件（包括使用配置和app相关的log如用户名和网络环境）
- * <p/>
+ * <p>
  * Created by markzhai on 2015/9/25.
  */
 public class BlockCanaryContext implements IBlockCanaryContext {

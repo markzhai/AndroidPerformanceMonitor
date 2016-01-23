@@ -6,14 +6,18 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
 
 # 引入
+
 ```gradle
 dependencies {
-    // 如果希望在release包也开启监控可以直接用compile
-    // compile 'com.github.moduth:blockcanary:1.0.2'
+    compile 'com.github.moduth:blockcanary-android:1.1.0'
+    // 如果只想在debug包看到弹出notification
+    debugCompile 'com.github.moduth:blockcanary-ui:1.1.0'
 
-    debugCompile 'com.github.moduth:blockcanary:1.0.2'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.2'
+    // 如果只想在debug包开启监控
+    // debugCompile 'com.github.moduth:blockcanary-android:1.1.0'
+    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.0'
 }
+```
 ```
 
 PS: 由于该库使用了 `getMainLooper().setMessageLogging();`, 请确认是否与你的app冲突.

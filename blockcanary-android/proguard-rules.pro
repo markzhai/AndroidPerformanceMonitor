@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Need if enable display in proguarded package
+-keep class com.github.moduth.blockcanary.ui.Notifier
