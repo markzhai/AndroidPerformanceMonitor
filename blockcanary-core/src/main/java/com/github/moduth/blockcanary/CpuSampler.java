@@ -11,9 +11,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary.info;
+package com.github.moduth.blockcanary;
 
-import com.github.moduth.blockcanary.BlockCanaryCore;
 import com.github.moduth.blockcanary.log.Block;
 
 import java.io.BufferedReader;
@@ -49,19 +48,18 @@ public class CpuSampler {
         @Override
         public void run() {
             doSample();
-
-            BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
+            HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
         }
     };
 
     public void start() {
         reset();
-        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
-        BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
+        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
+        HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
     }
 
     public void stop() {
-        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
+        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
     }
 
     private void reset() {

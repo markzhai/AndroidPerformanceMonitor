@@ -17,8 +17,6 @@ import android.content.Context;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import com.github.moduth.blockcanary.log.UploadMonitorLog;
-
 import java.lang.reflect.Constructor;
 
 /**
@@ -123,7 +121,7 @@ public class BlockCanary {
 
         try {
             Class notifier = Class.forName("com.github.moduth.blockcanary.ui.Notifier");
-            if (notifier != null) {
+            if (notifier == null) {
                 return;
             }
             Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();

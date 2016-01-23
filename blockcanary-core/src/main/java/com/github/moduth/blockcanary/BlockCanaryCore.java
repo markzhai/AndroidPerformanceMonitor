@@ -15,10 +15,7 @@ package com.github.moduth.blockcanary;
 
 import android.os.Looper;
 
-import com.github.moduth.blockcanary.info.CpuSampler;
-import com.github.moduth.blockcanary.info.ThreadStackSampler;
 import com.github.moduth.blockcanary.log.Block;
-import com.github.moduth.blockcanary.log.LogWriter;
 
 import java.util.ArrayList;
 

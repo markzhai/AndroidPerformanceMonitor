@@ -14,8 +14,6 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.HandlerThread;
 
 import java.io.File;
 
@@ -24,7 +22,7 @@ import java.io.File;
  * <p/>
  * Created by markzhai on 2015/9/25.
  */
-public abstract class BlockCanaryContext implements IBlockCanaryContext {
+public class BlockCanaryContext implements IBlockCanaryContext {
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;
@@ -54,42 +52,54 @@ public abstract class BlockCanaryContext implements IBlockCanaryContext {
      *
      * @return apk唯一标示符
      */
-    public abstract String getQualifier();
+    public String getQualifier() {
+        return "Unspecified";
+    }
 
     /**
      * 用户id，方便联系用户和后台查询定位
      *
      * @return 用户id
      */
-    public abstract String getUid();
+    public String getUid() {
+        return "0";
+    }
 
     /**
      * 网络类型，应用通常都有自己的一套，且较重需要监听网络状态变化，不放在本库中实现
      *
      * @return 2G/3G/4G/wifi等
      */
-    public abstract String getNetworkType();
+    public String getNetworkType() {
+        return "UNKNOWN";
+    }
 
     /**
      * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，配合{@link BlockCanary}的isMonitorDurationEnd
      *
      * @return 监控持续时长（小时）
      */
-    public abstract int getConfigDuration();
+    public int getConfigDuration() {
+        return 99999;
+    }
 
     /**
      * 卡慢性能监控 间隔(毫秒)，超出该间隔判定为卡慢。建议根据机器性能设置不同的数值，如2000/Cpu核数
      *
      * @return 卡慢阙值（毫秒）
      */
-    public abstract int getConfigBlockThreshold();
+    public int getConfigBlockThreshold() {
+        return 1000;
+    }
 
     /**
      * 是否需要展示卡慢界面，如仅在Debug包开启
      *
      * @return 是否需要展示卡慢界面
      */
-    public abstract boolean isNeedDisplay();
+    public boolean isNeedDisplay() {
+        return true;
+    }
 
     /**
      * Log文件保存的位置，如"/blockcanary/log"
@@ -121,40 +131,5 @@ public abstract class BlockCanaryContext implements IBlockCanaryContext {
     @Override
     public void uploadLogFile(File zippedFile) {
 
-    }
-
-    /**
-     * 获得loop线程的handler
-     *
-     * @return loop线程
-     */
-    public Handler getTimerThreadHandler() {
-        return sLoopThread.getHandler();
-    }
-
-    /**
-     * 获得写log线程的handler
-     *
-     * @return 写log线程的handler
-     */
-    public Handler getWriteLogFileThreadHandler() {
-        return sWriteLogThread.getHandler();
-    }
-
-    private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
-    private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writelog");
-
-    private static class HandlerThreadWrapper {
-        private Handler handler = null;
-
-        public HandlerThreadWrapper(String name) {
-            HandlerThread handlerThread = new HandlerThread("BlockCanaryThread_" + name);
-            handlerThread.start();
-            handler = new Handler(handlerThread.getLooper());
-        }
-
-        public Handler getHandler() {
-            return handler;
-        }
     }
 }

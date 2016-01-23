@@ -65,7 +65,7 @@ class LooperPrinter implements Printer {
         final long startTime = mStartTimeMillis;
         final long startThreadTime = mStartThreadTimeMillis;
         final long endThreadTime = SystemClock.currentThreadTimeMillis();
-        BlockCanaryCore.getContext().getWriteLogFileThreadHandler().post(new Runnable() {
+        HandlerThread.getWriteLogFileThreadHandler().post(new Runnable() {
             @Override
             public void run() {
                 mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);

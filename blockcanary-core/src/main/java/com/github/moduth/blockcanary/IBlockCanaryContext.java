@@ -29,10 +29,6 @@ public interface IBlockCanaryContext {
 
     boolean isNeedDisplay();
 
-    Handler getWriteLogFileThreadHandler();
-
-    Handler getTimerThreadHandler();
-
     String getQualifier();
 
     String getUid();

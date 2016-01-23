@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary.log;
+package com.github.moduth.blockcanary;
 
-import com.github.moduth.blockcanary.BlockCanaryCore;
+import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -40,7 +40,7 @@ public class UploadMonitorLog {
     }
 
     public static void forceZipLogAndUpload() {
-        BlockCanaryCore.getContext().getWriteLogFileThreadHandler().post(new Runnable() {
+        HandlerThread.getWriteLogFileThreadHandler().post(new Runnable() {
             @Override
             public void run() {
                 final File file = zipFile();

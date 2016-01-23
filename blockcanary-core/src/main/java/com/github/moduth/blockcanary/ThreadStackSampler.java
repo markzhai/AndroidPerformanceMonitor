@@ -11,9 +11,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary.info;
+package com.github.moduth.blockcanary;
 
-import com.github.moduth.blockcanary.BlockCanaryCore;
 import com.github.moduth.blockcanary.log.Block;
 
 import java.text.SimpleDateFormat;
@@ -39,8 +38,7 @@ public class ThreadStackSampler {
         @Override
         public void run() {
             doSample();
-
-            BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
+            HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
         }
     };
 
@@ -78,12 +76,12 @@ public class ThreadStackSampler {
     }
 
     public void start() {
-        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
-        BlockCanaryCore.getContext().getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
+        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
+        HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, mSampleIntervalMillis);
     }
 
     public void stop() {
-        BlockCanaryCore.getContext().getTimerThreadHandler().removeCallbacks(mRunnable);
+        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
     }
 
     public ArrayList<String> getThreadStackEntries(long startTime, long endTime) {
