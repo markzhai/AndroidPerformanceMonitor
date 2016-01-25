@@ -2,13 +2,13 @@
 
 You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/moduth/).
 
-## Version 1.1 *(2016-01-21)*
+## Version 1.1 *(2016-01-23)*
 
 - Extract blockcanary to three modules.
 - Provide default implementation for BlockCanaryContext.
 
-### 1.1.1 (not released yet)
-Provide stack fold decision method.
+### 1.1.1 *(2016-01-25)*
+fix issue #19 and #23
 
 ## Version 1.0 *(2016-01-21)*
 
