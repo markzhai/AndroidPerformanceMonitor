@@ -17,7 +17,7 @@ import android.content.Context;
 
 import java.io.File;
 
-public abstract class BlockCanaryContext   {
+public class BlockCanaryContext implements IBlockCanaryContext {
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;
@@ -47,49 +47,64 @@ public abstract class BlockCanaryContext   {
      *
      * @return apk唯一标示符
      */
-    public abstract String getQualifier();
+    public String getQualifier() {
+        return "Unspecified";
+    }
 
     /**
      * 用户id，方便联系用户和后台查询定位
      *
      * @return 用户id
      */
-    public abstract String getUid();
+    public String getUid() {
+        return "0";
+    }
 
     /**
      * 网络类型，应用通常都有自己的一套，且较重需要监听网络状态变化，不放在本库中实现
      *
      * @return 2G/3G/4G/wifi等
      */
-    public abstract String getNetworkType();
+    public String getNetworkType() {
+        return "UNKNOWN";
+    }
 
     /**
-     * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，暂时未实现该功能
+     * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，配合{@link BlockCanary}的isMonitorDurationEnd
      *
      * @return 监控持续时长（小时）
      */
-    public abstract int getConfigDuration();
+    public int getConfigDuration() {
+        return 99999;
+    }
 
     /**
      * 卡慢性能监控 间隔(毫秒)，超出该间隔判定为卡慢。建议根据机器性能设置不同的数值，如2000/Cpu核数
      *
      * @return 卡慢阙值（毫秒）
      */
-    public abstract int getConfigBlockThreshold();
+    public int getConfigBlockThreshold() {
+        return 1000;
+    }
 
     /**
      * 是否需要展示卡慢界面，如仅在Debug包开启
      *
      * @return 是否需要展示卡慢界面
      */
-    public abstract boolean isNeedDisplay();
+    public boolean isNeedDisplay() {
+        return true;
+    }
 
     /**
      * Log文件保存的位置，如"/blockcanary/log"
      *
      * @return Log文件保存的位置
      */
-    public abstract String getLogPath();
+    @Override
+    public String getLogPath() {
+        return "/blockcanary/performance";
+    }
 
     /**
      * 压缩文件
@@ -98,12 +113,21 @@ public abstract class BlockCanaryContext   {
      * @param dest 压缩后的文件
      * @return 压缩是否成功
      */
-    public abstract boolean zipLogFile(File[] src, File dest);
+    public boolean zipLogFile(File[] src, File dest) {
+        return false;
+    }
 
     /**
      * 上传日志
      *
      * @param zippedFile 压缩后的文件
      */
-    public abstract void uploadLogFile(File zippedFile);
+    public void uploadLogFile(File zippedFile) {
+
+    }
+
+    @Override
+    public String getStackFoldPrefix() {
+        return null;
+    }
 }

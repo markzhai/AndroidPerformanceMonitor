@@ -132,4 +132,9 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     public void uploadLogFile(File zippedFile) {
 
     }
+
+    @Override
+    public String getStackFoldPrefix() {
+        return null;
+    }
 }

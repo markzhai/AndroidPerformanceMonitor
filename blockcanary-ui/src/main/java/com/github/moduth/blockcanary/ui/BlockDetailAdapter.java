@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.github.moduth.blockcanary.BlockCanaryCore;
 import com.github.moduth.blockcanary.R;
 import com.github.moduth.blockcanary.log.Block;
 import com.github.moduth.blockcanary.log.ProcessUtils;
@@ -115,7 +117,7 @@ final class BlockDetailAdapter extends BaseAdapter {
             case POSITION_THREAD_STACK:
             default:
                 if (folding) {
-                    int index = htmlString.indexOf(ProcessUtils.myProcessName());
+                    int index = htmlString.indexOf(getStackFoldPrefix());
                     if (index > 0) {
                         htmlString = htmlString.substring(index);
                     }
@@ -190,5 +192,18 @@ final class BlockDetailAdapter extends BaseAdapter {
     private static <T extends View> T findById(View view, int id) {
         return (T) view.findViewById(id);
     }
-}
 
+    private String mStackFoldPrefix = null;
+
+    private String getStackFoldPrefix() {
+        if (mStackFoldPrefix == null) {
+            String prefix = BlockCanaryCore.getContext().getStackFoldPrefix();
+            if (prefix != null) {
+                mStackFoldPrefix = prefix;
+            } else {
+                mStackFoldPrefix = ProcessUtils.myProcessName();
+            }
+        }
+        return mStackFoldPrefix;
+    }
+}
