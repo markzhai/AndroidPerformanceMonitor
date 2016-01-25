@@ -9,13 +9,13 @@ The naming is to pay respect to the great library [LeakCanary](https://github.co
 
 ```gradle
 dependencies {
-    compile 'com.github.moduth:blockcanary-android:1.1.1'
+    compile 'com.github.moduth:blockcanary-android:1.1.0'
     // this way you only see notification in debug package
-    debugCompile 'com.github.moduth:blockcanary-ui:1.1.1'
+    debugCompile 'com.github.moduth:blockcanary-ui:1.1.0'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-android:1.1.1'
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.1'
+    // debugCompile 'com.github.moduth:blockcanary-android:1.1.0'
+    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.0'
 }
 ```
 
