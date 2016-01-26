@@ -1,6 +1,6 @@
 [中文](https://github.com/moduth/blockcanary/blob/master/README_CN.md)
 
-# BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary)
+# BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android)
 A transparent ui-block detection library for Android. App only needs one-line-code to setup and provide application context.
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
@@ -9,13 +9,13 @@ The naming is to pay respect to the great library [LeakCanary](https://github.co
 
 ```gradle
 dependencies {
-    compile 'com.github.moduth:blockcanary-android:1.1.1'
-    // this way you only see notification in debug package
-    debugCompile 'com.github.moduth:blockcanary-ui:1.1.1'
+    compile 'com.github.moduth:blockcanary-ui:1.1.3'
+    
+    // this way you only write logs, without notification
+    // compile 'com.github.moduth:blockcanary-android:1.1.3'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-android:1.1.1'
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.1'
+    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.3'
 }
 ```
 

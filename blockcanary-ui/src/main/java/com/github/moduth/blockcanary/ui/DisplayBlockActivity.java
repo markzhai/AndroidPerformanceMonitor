@@ -39,7 +39,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.moduth.blockcanary.R;
+import com.github.moduth.blockcanary.ui.R;
 import com.github.moduth.blockcanary.log.Block;
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 import com.github.moduth.blockcanary.LogWriter;
