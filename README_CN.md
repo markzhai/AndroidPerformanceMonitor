@@ -31,7 +31,6 @@ dependencies {
 
 }
 ```
-```
 
 PS: 由于该库使用了 `getMainLooper().setMessageLogging();`, 请确认是否与你的app冲突.
 
