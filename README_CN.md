@@ -13,8 +13,9 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 # 引入
 
-## 一般选取以下其中一个 case 引入即可
-### 如果有多个buildTypes需求，请使用 ```buildTypeComple ``` 关键字根据buildTypes组合使用即可
+** 一般选取以下其中一个 case 引入即可 **
+
+**  如果有多个buildTypes需求，请使用 ```buildTypeComple ``` 关键字根据buildTypes组合使用即可 **
 
 ```gradle
 dependencies {
