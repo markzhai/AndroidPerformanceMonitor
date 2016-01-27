@@ -10,8 +10,11 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 - blockcanary-android blockcanary类的一些实现，是不包括UI的
 - blockcanary-core 记录block信息的核心实现
 - blockcanary-no-op 是空包，为了release打包时不编译进去
+
 # 引入
+
 ## 一般选取以下其中一个 case 引入即可
+
 ### 如果有多个buildTypes需求，请使用 ```buildTypeComple ``` 关键字根据buildTypes组合使用即可
 
 ```gradle
