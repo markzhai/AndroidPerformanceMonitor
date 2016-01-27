@@ -73,7 +73,7 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 - 看卡顿发生前最近的几次堆栈，如果堆栈相同，则可以判定为是改出发生卡顿，否则需要比较分析。
 
 # Demo工程
-**请参考本项目下的demo module，点击三个按钮会触发对应的耗时事件，消息栏则会弹出block的notification，点击可以进去查看详细信息。**
+**请参考本项目下的demo module，点击三个按钮会触发对应的耗时事件，消息栏则会弹出block的notification，点击可以进去查看详细信息。**  
 ![Block detail](art/shot1.png "detail")
 ![Block list](art/shot2.png "list")
 
