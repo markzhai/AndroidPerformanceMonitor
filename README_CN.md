@@ -6,16 +6,27 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
 
 # 引入
+### 以下只用引入一种case即可
 
 ```gradle
 dependencies {
+    //case 1: 既要记录，又要notifacation和UI
     compile 'com.github.moduth:blockcanary-ui:1.1.3'
-    
-    // 如果只想记录卡顿log，不需要notification和UI
-    // compile 'com.github.moduth:blockcanary-android:1.1.3'
 
-    // 如果希望release包不编译BlockCanary
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.3'
+    //case 2: 如果只想记录卡顿log，不需要notification和UI
+    compile 'com.github.moduth:blockcanary-android:1.1.3'
+
+    //case 3: 如果希望release包不编译BlockCanary，并且debug下需要记录和UI的
+    debugCompile 'com.github.moduth:blockcanary-ui:1.1.3'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.3'
+
+    //case 4: 如果希望release包不编译BlockCanary，并且debug下需要记录但不需要UI的
+    debugCompile 'com.github.moduth:blockcanary-android:1.1.3'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.3'
+
+    //case 5: 如果希望release包需要记录但不需要UI，并且debug下需要记录和UI的
+    debugCompile 'com.github.moduth:blockcanary-ui:1.1.3'
+    releaseCompile 'com.github.moduth:blockcanary-android:1.1.3'
 }
 ```
 ```
