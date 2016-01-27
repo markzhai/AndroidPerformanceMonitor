@@ -19,10 +19,10 @@ dependencies {
     //case 1: 既要记录，又要notifacation和UI
     compile 'com.github.moduth:blockcanary-ui:1.1.3'
 
-    //case 2: 只想记录卡顿log，不需要notification和UI
+    //case 2: 仅记录卡顿log，不需要notification和UI
     compile 'com.github.moduth:blockcanary-android:1.1.3'
 
-    //case 3: 希望release包不编译BlockCanary，并且debug下需要记录和UI的
+    //case 3: 仅在debug包启用BlockCanary进行卡顿监控和提示
     debugCompile 'com.github.moduth:blockcanary-ui:1.1.3'
     releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.3'
 
