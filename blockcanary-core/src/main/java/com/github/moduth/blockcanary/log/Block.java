@@ -32,6 +32,7 @@ import java.util.ArrayList;
  * @author markzhai on 15/9/27.
  */
 public class Block {
+
     public static final String SEPARATOR = "\r\n";
     public static final String KV = " = ";
 
@@ -54,6 +55,7 @@ public class Block {
     public static final String KEY_NETWORK = "network";
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
+
 
     public String qualifier;
     public String model;
@@ -81,6 +83,7 @@ public class Block {
     private StringBuilder timeSb = new StringBuilder();
     private StringBuilder stackSb = new StringBuilder();
     private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+    private static final String EMPTY_IMEI = "empty_imei";
 
     private Block() {
     }
@@ -97,9 +100,15 @@ public class Block {
                 e.printStackTrace();
             }
         }
+
         if (block.imei == null || block.imei.length() == 0) {
-            TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            block.imei = mTManager.getDeviceId();
+            try {
+                TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                block.imei = mTManager.getDeviceId();
+            } catch (Exception e) {
+                e.printStackTrace();
+                block.imei = EMPTY_IMEI;
+            }
         }
         block.qualifier = BlockCanaryCore.getContext().getQualifier();
         block.apiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
