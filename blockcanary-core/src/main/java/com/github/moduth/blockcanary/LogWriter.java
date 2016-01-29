@@ -15,6 +15,8 @@ package com.github.moduth.blockcanary;
 
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +29,8 @@ import java.text.SimpleDateFormat;
  * Created by markzhai on 2015/9/25.
  */
 public class LogWriter {
+
+    private static final String TAG = "LogWriter";
 
     private static final Object SAVE_DELETE_LOCK = new Object();
     private static final SimpleDateFormat FILE_NAME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS");
@@ -81,7 +85,7 @@ public class LogWriter {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
+                Log.e(TAG, "deleteLogFiles: ", e);
             }
         }
     }
@@ -106,7 +110,7 @@ public class LogWriter {
             writer.close();
             writer = null;
         } catch (Throwable t) {
-            t.printStackTrace();
+            Log.e(TAG, "saveLogToSDCard: ", t);
         } finally {
             try {
                 if (writer != null) {
@@ -114,7 +118,7 @@ public class LogWriter {
                     writer = null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "saveLogToSDCard: ", e);
             }
         }
         return path;

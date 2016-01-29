@@ -15,6 +15,8 @@ package com.github.moduth.blockcanary;
 
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
+import android.util.Log;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +26,9 @@ import java.util.Date;
  * Created by markzhai on 2015/9/25.
  */
 public class UploadMonitorLog {
+
+    private static final String TAG = "UploadMonitorLog";
+
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
     private static File zipFile() {
@@ -32,6 +37,7 @@ public class UploadMonitorLog {
             timeString = FORMAT.format(new Date());
         } catch (Throwable e) {
             // 以防万一
+            Log.e(TAG, "zipFile: ", e);
         }
         File zippedFile = LogWriter.generateTempZipFile("Monitor_looper_" + timeString);
         BlockCanaryCore.getContext().zipLogFile(BlockCanaryInternals.getLogFiles(), zippedFile);

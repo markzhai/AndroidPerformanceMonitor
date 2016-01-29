@@ -16,6 +16,7 @@ package com.github.moduth.blockcanary;
 import android.content.Context;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.lang.reflect.Constructor;
 
@@ -25,6 +26,8 @@ import java.lang.reflect.Constructor;
  */
 public class BlockCanary {
 
+    private static final String TAG = "BlockCanary";
+    
     private static BlockCanary sInstance;
     private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
@@ -127,7 +130,7 @@ public class BlockCanary {
             Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();
             mBlockCanaryCore.setOnBlockEventInterceptor(constructor.newInstance());
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "initNotification: ",e );
         }
     }
 }

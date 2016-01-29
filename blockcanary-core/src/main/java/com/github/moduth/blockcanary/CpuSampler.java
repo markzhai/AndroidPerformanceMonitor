@@ -15,6 +15,8 @@ package com.github.moduth.blockcanary;
 
 import com.github.moduth.blockcanary.log.Block;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +32,8 @@ import java.util.Map;
  */
 public class CpuSampler {
 
-    private static final String TAG = CpuSampler.class.getSimpleName();
+    private static final String TAG = "CpuSampler";
+    
     private static final int SAMPLE_INTERVAL_MILLIS = 1000;
     private static final int BUSY_TIME = (int) (SAMPLE_INTERVAL_MILLIS * 1.2f);
     private static final int MAX_ENTRY_COUNT = 10;
@@ -97,7 +100,7 @@ public class CpuSampler {
 
             parseCpuRate(cpuRate, pidCpuRate);
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            Log.e(TAG, "doSample: ",ex );
         } finally {
             try {
                 if (cpuReader != null) {
@@ -107,7 +110,7 @@ public class CpuSampler {
                     pidReader.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "doSample: ",e );
             }
         }
     }

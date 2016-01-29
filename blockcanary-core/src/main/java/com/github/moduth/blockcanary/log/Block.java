@@ -18,6 +18,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryCore;
 
@@ -32,6 +33,8 @@ import java.util.ArrayList;
  * @author markzhai on 15/9/27.
  */
 public class Block {
+
+    private static final String TAG = "Block";
 
     public static final String SEPARATOR = "\r\n";
     public static final String KV = " = ";
@@ -97,7 +100,7 @@ public class Block {
                 block.versionCode = info.versionCode;
                 block.versionName = info.versionName;
             } catch (Throwable e) {
-                e.printStackTrace();
+                Log.e(TAG, "newInstance: ", e);
             }
         }
 
@@ -106,7 +109,7 @@ public class Block {
                 TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 block.imei = mTManager.getDeviceId();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "newInstance: ", e);
                 block.imei = EMPTY_IMEI;
             }
         }
@@ -211,7 +214,7 @@ public class Block {
             reader.close();
             reader = null;
         } catch (Throwable t) {
-            t.printStackTrace();
+            Log.e(TAG, "newInstance: ", t);
         } finally {
             try {
                 if (reader != null) {
@@ -219,7 +222,7 @@ public class Block {
                     reader = null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "newInstance: ", e);
             }
         }
         block.flushString();
