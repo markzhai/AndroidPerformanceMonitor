@@ -47,12 +47,14 @@ class LooperPrinter implements Printer {
             mStartTimeMillis = System.currentTimeMillis();
             mStartThreadTimeMillis = SystemClock.currentThreadTimeMillis();
             mStartedPrinting = true;
+            startDump();
         } else {
             final long endTime = System.currentTimeMillis();
             mStartedPrinting = false;
             if (isBlock(endTime)) {
                 notifyBlockEvent(endTime);
             }
+            stopDump();
         }
     }
 
@@ -71,5 +73,25 @@ class LooperPrinter implements Printer {
                 mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);
             }
         });
+    }
+
+    private void startDump() {
+        if (null != BlockCanaryCore.get().threadStackSampler) {
+            BlockCanaryCore.get().threadStackSampler.start();
+        }
+
+        if (null != BlockCanaryCore.get().cpuSampler) {
+            BlockCanaryCore.get().cpuSampler.start();
+        }
+    }
+
+    private void stopDump() {
+        if (null != BlockCanaryCore.get().threadStackSampler) {
+            BlockCanaryCore.get().threadStackSampler.stop();
+        }
+
+        if (null != BlockCanaryCore.get().cpuSampler) {
+            BlockCanaryCore.get().cpuSampler.stop();
+        }
     }
 }

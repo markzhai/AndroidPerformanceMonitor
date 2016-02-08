@@ -13,9 +13,9 @@
  */
 package com.github.moduth.blockcanary;
 
-import com.github.moduth.blockcanary.log.Block;
-
 import android.util.Log;
+
+import com.github.moduth.blockcanary.log.Block;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -26,16 +26,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * CPU监控
+ * CPU Sampler, dumps cpu usage information.
  * <p>
  * Created by markzhai on 2015/9/25.
  */
-public class CpuSampler {
+class CpuSampler extends Sampler {
 
     private static final String TAG = "CpuSampler";
-    
-    private static final int SAMPLE_INTERVAL_MILLIS = 1000;
-    private static final int BUSY_TIME = (int) (SAMPLE_INTERVAL_MILLIS * 1.2f);
+
+    /**
+     * TODO: Explain how we define cpu busy in README
+     */
+    private final int BUSY_TIME;
     private static final int MAX_ENTRY_COUNT = 10;
 
     private final LinkedHashMap<Long, String> mCpuInfoEntries = new LinkedHashMap<>();
@@ -47,37 +49,61 @@ public class CpuSampler {
     private long mTotalLast = 0;
     private long mAppCpuTimeLast = 0;
 
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            doSample();
-            HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
-        }
-    };
+    public CpuSampler(long sampleIntervalMillis) {
+        super(sampleIntervalMillis);
+        BUSY_TIME = (int) (mSampleIntervalMillis * 1.2f);
+    }
 
+    @Override
     public void start() {
+        super.start();
         reset();
-        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
-        HandlerThread.getTimerThreadHandler().postDelayed(mRunnable, SAMPLE_INTERVAL_MILLIS);
-    }
-
-    public void stop() {
-        HandlerThread.getTimerThreadHandler().removeCallbacks(mRunnable);
-    }
-
-    private void reset() {
-        mUserLast = 0;
-        mSystemLast = 0;
-        mIdleLast = 0;
-        mIoWaitLast = 0;
-        mTotalLast = 0;
-        mAppCpuTimeLast = 0;
     }
 
     /**
-     * 获取系统总CPU使用时间
+     * Get cpu rate information
+     *
+     * @return string show cpu rate information
      */
-    private void doSample() {
+    public String getCpuRateInfo() {
+        StringBuilder sb = new StringBuilder();
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+        synchronized (mCpuInfoEntries) {
+            for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
+                long time = entry.getKey();
+                sb.append(dateFormat.format(time))
+                        .append(' ')
+                        .append(entry.getValue())
+                        .append(Block.SEPARATOR);
+            }
+        }
+        return sb.toString();
+    }
+
+    public boolean isCpuBusy(long start, long end) {
+        if (end - start > mSampleIntervalMillis) {
+            long s = start - mSampleIntervalMillis;
+            long e = start + mSampleIntervalMillis;
+            long last = 0;
+            synchronized (mCpuInfoEntries) {
+                for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
+                    long time = entry.getKey();
+                    if (s < time && time < e) {
+                        if (last != 0) {
+                            if (time - last > BUSY_TIME) {
+                                return true;
+                            }
+                        }
+                        last = time;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void doSample() {
         BufferedReader cpuReader = null;
         BufferedReader pidReader = null;
         try {
@@ -100,7 +126,7 @@ public class CpuSampler {
 
             parseCpuRate(cpuRate, pidCpuRate);
         } catch (Throwable ex) {
-            Log.e(TAG, "doSample: ",ex );
+            Log.e(TAG, "doSample: ", ex);
         } finally {
             try {
                 if (cpuReader != null) {
@@ -110,29 +136,38 @@ public class CpuSampler {
                     pidReader.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, "doSample: ",e );
+                Log.e(TAG, "doSample: ", e);
             }
         }
     }
 
+    private void reset() {
+        mUserLast = 0;
+        mSystemLast = 0;
+        mIdleLast = 0;
+        mIoWaitLast = 0;
+        mTotalLast = 0;
+        mAppCpuTimeLast = 0;
+    }
+
     private void parseCpuRate(String cpuRate, String pidCpuRate) {
-        String[] cpuInfos = cpuRate.split(" ");
-        if (cpuInfos.length < 9) {
+        String[] cpuInfoArray = cpuRate.split(" ");
+        if (cpuInfoArray.length < 9) {
             return;
         }
         // 从系统启动开始累计到当前时刻，用户态的CPU时间，不包含 nice值为负进程
-        long user = Long.parseLong(cpuInfos[2]);
+        long user = Long.parseLong(cpuInfoArray[2]);
         // 从系统启动开始累计到当前时刻，nice值为负的进程所占用的CPU时间
-        long nice = Long.parseLong(cpuInfos[3]);
+        long nice = Long.parseLong(cpuInfoArray[3]);
         // 从系统启动开始累计到当前时刻，核心时间
-        long system = Long.parseLong(cpuInfos[4]);
+        long system = Long.parseLong(cpuInfoArray[4]);
         // 从系统启动开始累计到当前时刻，除硬盘IO等待时间以外其它等待时间
-        long idle = Long.parseLong(cpuInfos[5]);
+        long idle = Long.parseLong(cpuInfoArray[5]);
         // 从系统启动开始累计到当前时刻，硬盘IO等待时间
-        long ioWait = Long.parseLong(cpuInfos[6]);
+        long ioWait = Long.parseLong(cpuInfoArray[6]);
 
         // CPU总时间 = 以上所有加上irq（硬中断）和softirq（软中断）的时间
-        long total = user + nice + system + idle + ioWait + Long.parseLong(cpuInfos[7]) + Long.parseLong(cpuInfos[8]);
+        long total = user + nice + system + idle + ioWait + Long.parseLong(cpuInfoArray[7]) + Long.parseLong(cpuInfoArray[8]);
 
         String[] pidCpuInfos = pidCpuRate.split(" ");
         if (pidCpuInfos.length < 17) {
@@ -176,43 +211,5 @@ public class CpuSampler {
         mTotalLast = total;
 
         mAppCpuTimeLast = appCpuTime;
-    }
-
-
-    public String getCpuRateInfo() {
-        StringBuilder sb = new StringBuilder();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
-        synchronized (mCpuInfoEntries) {
-            for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
-                long time = entry.getKey();
-                sb.append(dateFormat.format(time))
-                        .append(' ')
-                        .append(entry.getValue())
-                        .append(Block.SEPARATOR);
-            }
-        }
-        return sb.toString();
-    }
-
-    public boolean isCpuBusy(long start, long end) {
-        if (end - start > SAMPLE_INTERVAL_MILLIS) {
-            long s = start - SAMPLE_INTERVAL_MILLIS;
-            long e = start + SAMPLE_INTERVAL_MILLIS;
-            long last = 0;
-            synchronized (mCpuInfoEntries) {
-                for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
-                    long time = entry.getKey();
-                    if (s < time && time < e) {
-                        if (last != 0) {
-                            if (time - last > BUSY_TIME) {
-                                return true;
-                            }
-                        }
-                        last = time;
-                    }
-                }
-            }
-        }
-        return false;
     }
 }

@@ -137,4 +137,9 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     public String getStackFoldPrefix() {
         return null;
     }
+
+    @Override
+    public int getConfigDumpIntervalMillis() {
+        return getConfigBlockThreshold();
+    }
 }

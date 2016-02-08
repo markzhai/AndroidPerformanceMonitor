@@ -58,4 +58,13 @@ public interface IBlockCanaryContext {
      * @return string prefix, null if use process name.
      */
     String getStackFoldPrefix();
+
+    /**
+     * 线程栈采样周期，确定发卡慢后，按照当前指定的采样周期，对主线程线程栈进行采样
+     * <p>
+     * 注意： 因为Looper是实现机制问题，实际采样周期必然会大于指定的采样周期（CPU越忙，实际采样周期越大）
+     *
+     * @return 采样周期（毫秒）
+     */
+    int getConfigDumpIntervalMillis();
 }

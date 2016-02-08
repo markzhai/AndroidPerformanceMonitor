@@ -73,8 +73,6 @@ public class BlockCanary {
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.mainLooperPrinter);
-            mBlockCanaryCore.threadStackSampler.start();
-            mBlockCanaryCore.cpuSampler.start();
         }
     }
 

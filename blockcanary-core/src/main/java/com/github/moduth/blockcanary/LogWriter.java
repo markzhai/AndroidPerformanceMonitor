@@ -13,9 +13,9 @@
  */
 package com.github.moduth.blockcanary;
 
-import com.github.moduth.blockcanary.log.BlockCanaryInternals;
-
 import android.util.Log;
+
+import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,8 +24,8 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 
 /**
- * 写文件线程
- * <p>
+ * Log writer which runs in standalone thread.
+ * <p/>
  * Created by markzhai on 2015/9/25.
  */
 public class LogWriter {
@@ -41,14 +41,6 @@ public class LogWriter {
         String path;
         synchronized (SAVE_DELETE_LOCK) {
             path = saveLogToSDCard("looper", str);
-        }
-        return path;
-    }
-
-    public static String saveLogcatLog(String str) {
-        String path;
-        synchronized (SAVE_DELETE_LOCK) {
-            path = saveLogToSDCard("logcat", str);
         }
         return path;
     }
