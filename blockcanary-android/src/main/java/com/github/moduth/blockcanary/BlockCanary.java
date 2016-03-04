@@ -21,13 +21,14 @@ import android.util.Log;
 import java.lang.reflect.Constructor;
 
 /**
- * <p>looper线程监控</p>
- * Created by markzhai on 2015/9/25.
+ * Looper thread monitor.
+ *
+ * @author markzhai on 2015/9/25.
  */
 public class BlockCanary {
 
     private static final String TAG = "BlockCanary";
-    
+
     private static BlockCanary sInstance;
     private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
@@ -96,7 +97,7 @@ public class BlockCanary {
     }
 
     /**
-     * 记录开启监控的时间到preference，可以在release包收到push通知后调用。
+     * Record monitor start time to preference, you may use it when after push which tells start BlockCanary.
      */
     public void recordStartTime() {
         PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
@@ -104,17 +105,19 @@ public class BlockCanary {
     }
 
     /**
-     * 是否监控时间结束，根据上次开启的时间(recordStartTime)和getConfigDuration计算出来。
+     * Is monitor duration end, compute from recordStartTime end getConfigDuration.
      *
-     * @return true则结束
+     * @return true if ended
      */
     public boolean isMonitorDurationEnd() {
         long startTime = PreferenceManager.getDefaultSharedPreferences(
                 BlockCanaryContext.get().getContext()).getLong("BlockCanary_StartTime", 0);
         return startTime != 0 &&
-                System.currentTimeMillis() - startTime > BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
+                System.currentTimeMillis() - startTime >
+                        BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
     }
 
+    @SuppressWarnings("unchecked")
     private void initNotification() {
         if (!BlockCanaryContext.get().isNeedDisplay()) {
             return;
@@ -128,7 +131,7 @@ public class BlockCanary {
             Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();
             mBlockCanaryCore.setOnBlockEventInterceptor(constructor.newInstance());
         } catch (Exception e) {
-            Log.e(TAG, "initNotification: ",e );
+            Log.e(TAG, "initNotification: ", e);
         }
     }
 }

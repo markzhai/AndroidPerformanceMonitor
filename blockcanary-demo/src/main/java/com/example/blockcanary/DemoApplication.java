@@ -26,19 +26,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sContext = this;
-
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
-
-//        boolean shouldStart = true;
-//        if (!BuildConfig.DEBUG) {
-//            if (BlockCanary.get().isMonitorDurationEnd()) {
-//                shouldStart = false;
-//            }
-//        }
-//
-//        if (shouldStart) {
-//            BlockCanary.get().start();
-//        }
     }
 
     public static Context getAppContext() {

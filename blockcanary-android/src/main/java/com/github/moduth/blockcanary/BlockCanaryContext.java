@@ -18,8 +18,10 @@ import android.content.Context;
 import java.io.File;
 
 /**
- * 使用本库的应用实现该抽象类，提供运行环境给性能监控组件（包括使用配置和app相关的log如用户名和网络环境）
- * <p>
+ * You should provide a real implementation of this class to use BlockCanary,
+ * which provides runtime environment to library (including configuration
+ * and app-related log like uid and network environment)
+ * <p/>
  * Created by markzhai on 2015/9/25.
  */
 public class BlockCanaryContext implements IBlockCanaryContext {
@@ -48,63 +50,65 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     }
 
     /**
-     * 标示符，可以唯一标示该安装版本号，如版本+渠道名+编译平台
+     * qualifier which can specify this installation, like version + flavor
      *
-     * @return apk唯一标示符
+     * @return apk qualifier
      */
     public String getQualifier() {
         return "Unspecified";
     }
 
     /**
-     * 用户id，方便联系用户和后台查询定位
+     * Get user id
      *
-     * @return 用户id
+     * @return user id
      */
     public String getUid() {
         return "0";
     }
 
     /**
-     * 网络类型，应用通常都有自己的一套，且较重需要监听网络状态变化，不放在本库中实现
+     * Network type
      *
-     * @return 2G/3G/4G/wifi等
+     * @return String like 2G, 3G, 4G, wifi, etc.
      */
     public String getNetworkType() {
         return "UNKNOWN";
     }
 
     /**
-     * 卡慢性能监控 持续时长(小时)，开启后到达时长则关闭，配合{@link BlockCanary}的isMonitorDurationEnd
+     * Config monitor duration, after this time BlockCanary will stop, use
+     * with {@link BlockCanary}'s isMonitorDurationEnd
      *
-     * @return 监控持续时长（小时）
+     * @return monitor last duration (in hour)
      */
     public int getConfigDuration() {
         return 99999;
     }
 
     /**
-     * 卡慢性能监控 间隔(毫秒)，超出该间隔判定为卡慢。建议根据机器性能设置不同的数值，如2000/Cpu核数
+     * Config block threshold (in millis), dispatch over this duration is regarded as a BLOCK. You may set it
+     * from performance of device.
      *
-     * @return 卡慢阙值（毫秒）
+     * @return threshold in mills
      */
     public int getConfigBlockThreshold() {
         return 1000;
     }
 
     /**
-     * 是否需要展示卡慢界面，如仅在Debug包开启
+     * If need notification and block ui
      *
-     * @return 是否需要展示卡慢界面
+     * @return true if need, else if not need.
      */
     public boolean isNeedDisplay() {
         return true;
     }
 
     /**
-     * Log文件保存的位置，如"/blockcanary/log"
+     * Path to save log, like "/blockcanary/log"
      *
-     * @return Log文件保存的位置
+     * @return path of log files
      */
     @Override
     public String getLogPath() {
@@ -112,11 +116,11 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     }
 
     /**
-     * 压缩文件
+     * Zip log file
      *
-     * @param src  压缩前的文件
-     * @param dest 压缩后的文件
-     * @return 压缩是否成功
+     * @param src  files before compress
+     * @param dest files compressed
+     * @return true if compression is successful
      */
     @Override
     public boolean zipLogFile(File[] src, File dest) {
@@ -124,20 +128,34 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     }
 
     /**
-     * 上传日志
+     * Upload log file
      *
-     * @param zippedFile 压缩后的文件
+     * @param zippedFile zipped file
      */
     @Override
     public void uploadLogFile(File zippedFile) {
 
     }
 
+    /**
+     * Config string prefix to determine how to fold stack
+     *
+     * @return string prefix, null if use process name.
+     */
     @Override
     public String getStackFoldPrefix() {
         return null;
     }
 
+    /**
+     * Thread stack dump interval, use when block happens, BlockCanary will dump on main thread
+     * stack according to current sample cycle.
+     * <p/>
+     * PS: Because the implementation mechanism of Looper, real dump interval would be longer than
+     * the period specified here (longer if cpu is busier)
+     *
+     * @return dump interval(in millis)
+     */
     @Override
     public int getConfigDumpIntervalMillis() {
         return getConfigBlockThreshold();

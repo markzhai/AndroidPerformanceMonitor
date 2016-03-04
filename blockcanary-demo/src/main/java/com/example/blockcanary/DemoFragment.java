@@ -28,8 +28,7 @@ import java.io.IOException;
 public class DemoFragment extends Fragment implements View.OnClickListener {
 
     public static DemoFragment newInstance() {
-        DemoFragment f = new DemoFragment();
-        return f;
+        return new DemoFragment();
     }
 
     @Override
@@ -40,8 +39,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_main, null);
-        return v;
+        return inflater.inflate(R.layout.activity_main, null);
     }
 
     @Override
