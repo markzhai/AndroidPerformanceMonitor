@@ -95,7 +95,7 @@ public class LogWriter {
         String path = "";
         BufferedWriter writer = null;
         try {
-            File file = BlockCanaryInternals.detectedLeakDirectory();
+            File file = BlockCanaryInternals.detectedBlockDirectory();
             long time = System.currentTimeMillis();
             path = file.getAbsolutePath() + "/" + logFileName + "-" + FILE_NAME_FORMATTER.format(time) + ".txt";
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path, true), "UTF-8");
