@@ -37,6 +37,12 @@ public class LogWriter {
     private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final long OBSOLETE_DURATION = 2 * 24 * 3600 * 1000;
 
+    /**
+     * Save log to file
+     *
+     * @param str block log string
+     * @return log file path
+     */
     public static String saveLooperLog(String str) {
         String path;
         synchronized (SAVE_DELETE_LOCK) {
@@ -46,7 +52,7 @@ public class LogWriter {
     }
 
     /**
-     * 清除所有过期的文件，see {@code OBSOLETE_DURATION}
+     * Delete obsolete log files，see also {@code OBSOLETE_DURATION}
      */
     public static void cleanOldFiles() {
         HandlerThread.getWriteLogFileThreadHandler().post(new Runnable() {
@@ -67,6 +73,9 @@ public class LogWriter {
         });
     }
 
+    /**
+     * Delete all log files.
+     */
     public static void deleteLogFiles() {
         synchronized (SAVE_DELETE_LOCK) {
             try {

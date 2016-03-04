@@ -33,9 +33,9 @@ public class PerformanceUtils {
     private static long sTotalMemo = 0;
 
     /**
-     * 获取cpu核数
+     * Get cpu core number
      *
-     * @return int cpu核数
+     * @return int cpu core number
      */
     public static int getNumCores() {
         class CpuFilter implements FileFilter {
@@ -97,7 +97,7 @@ public class PerformanceUtils {
                     }
                 }
             }
-            sTotalMemo = initial_memory;// Byte转换为KB或者MB，内存大小规格化
+            sTotalMemo = initial_memory;
         }
         return sTotalMemo;
     }

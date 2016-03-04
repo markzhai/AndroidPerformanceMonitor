@@ -165,7 +165,6 @@ class CpuSampler extends Sampler {
         long idle = Long.parseLong(cpuInfoArray[5]);
         // 从系统启动开始累计到当前时刻，硬盘IO等待时间
         long ioWait = Long.parseLong(cpuInfoArray[6]);
-
         // CPU总时间 = 以上所有加上irq（硬中断）和softirq（软中断）的时间
         long total = user + nice + system + idle + ioWait + Long.parseLong(cpuInfoArray[7]) + Long.parseLong(cpuInfoArray[8]);
 
@@ -175,11 +174,11 @@ class CpuSampler extends Sampler {
         }
 
         /*
-         * utime  该任务在用户态运行的时间（第14个字段）
-         * stime  该任务在核心态运行的时间（第15个字段）
-         * cutime 所有已死线程在用户态运行的时间（第16个字段）
-         * cstime 所有已死在核心态运行的时间（第17个字段）
-         * 进程的总Cpu时间processCpuTime = utime + stime + cutime + cstime，该值包括其所有线程的cpu时间
+         * utime  Amount of time that this process has been scheduled in user mode
+         * stime  Amount of time that this process has been scheduled in kernel mode
+         * cutime Amount of time that this process's waited-for children have been scheduled in user mode
+         * cstime Amount of time that this process's waited-for children have been scheduled in kernel mode
+         * processCpuTime = utime + stime + cutime + cstime, which includes all its threads' cpu time
          */
         long appCpuTime = Long.parseLong(pidCpuInfos[13]) + Long.parseLong(pidCpuInfos[14])
                 + Long.parseLong(pidCpuInfos[15]) + Long.parseLong(pidCpuInfos[16]);

@@ -58,7 +58,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * 展示卡慢的页面
+ * Page show blocks
  *
  * @author markzhai on 15/9/26.
  */

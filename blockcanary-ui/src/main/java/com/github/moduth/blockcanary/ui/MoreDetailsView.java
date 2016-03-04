@@ -21,9 +21,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * @author markzhai on 15/9/27.
- */
 public final class MoreDetailsView extends View {
 
     private final Paint mIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

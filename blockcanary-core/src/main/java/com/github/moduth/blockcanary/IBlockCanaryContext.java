@@ -18,9 +18,9 @@ import android.content.Context;
 import java.io.File;
 
 /**
- * Created by Abner on 16/1/21.
- * Email nimengbo@gmail.com
- * github https://github.com/nimengbo
+ * interface defines {@link BlockCanaryCore} runtime environment.
+ *
+ * @author abner (nimengbo at github)
  */
 public interface IBlockCanaryContext {
 

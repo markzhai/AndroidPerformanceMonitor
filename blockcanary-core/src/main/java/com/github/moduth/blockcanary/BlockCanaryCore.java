@@ -46,7 +46,7 @@ public class BlockCanaryCore {
             @Override
             public void onBlockEvent(long realTimeStart, long realTimeEnd,
                                      long threadTimeStart, long threadTimeEnd) {
-                // 查询这段时间内的线程堆栈调用情况，CPU使用情况
+                // Get recent thread-stack entries and cpu usage
                 ArrayList<String> threadStackEntries = threadStackSampler
                         .getThreadStackEntries(realTimeStart, realTimeEnd);
                 // Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());

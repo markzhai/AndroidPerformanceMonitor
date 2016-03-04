@@ -126,7 +126,7 @@ public class Block {
     }
 
     /**
-     * 从保存的log文件创建log对象
+     * Create {@link Block} from saved log file.
      *
      * @param file looper log file
      * @return LooperLog created from log file

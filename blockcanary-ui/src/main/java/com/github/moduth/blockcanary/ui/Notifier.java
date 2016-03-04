@@ -15,11 +15,6 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
-/**
- * Created by markzhai on 16/1/22
- *
- * @author markzhai
- */
 public class Notifier implements OnBlockEventInterceptor {
 
     @Override
@@ -44,7 +39,7 @@ public class Notifier implements OnBlockEventInterceptor {
             notification.icon = R.drawable.block_canary_notification;
             notification.when = System.currentTimeMillis();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults = Notification.DEFAULT_SOUND;// add sound by chiahaolu
+            notification.defaults = Notification.DEFAULT_SOUND;
             notification.setLatestEventInfo(context, contentTitle, contentText, pendingIntent);
         } else {
             Notification.Builder builder = new Notification.Builder(context)
@@ -54,7 +49,7 @@ public class Notifier implements OnBlockEventInterceptor {
                     .setContentText(contentText)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
-                    .setDefaults(Notification.DEFAULT_SOUND);// add sound by chiahaolu
+                    .setDefaults(Notification.DEFAULT_SOUND);
             if (SDK_INT < JELLY_BEAN) {
                 notification = builder.getNotification();
             } else {

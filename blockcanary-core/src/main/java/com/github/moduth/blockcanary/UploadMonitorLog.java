@@ -29,7 +29,6 @@ import java.util.Date;
 class UploadMonitorLog {
 
     private static final String TAG = "UploadMonitorLog";
-
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
     private static File zipFile() {

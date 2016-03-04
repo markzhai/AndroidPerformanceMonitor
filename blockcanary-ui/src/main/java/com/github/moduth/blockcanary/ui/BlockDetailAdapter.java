@@ -30,9 +30,6 @@ import com.github.moduth.blockcanary.log.ProcessUtils;
 
 import java.util.Arrays;
 
-/**
- * @author markzhai on 15/9/27.
- */
 final class BlockDetailAdapter extends BaseAdapter {
 
     private static final int TOP_ROW = 0;
@@ -105,7 +102,7 @@ final class BlockDetailAdapter extends BaseAdapter {
                 htmlString = String.format("<font color='#f3cf83'>%s</font> ", htmlString);
                 break;
             case POSITION_CPU:
-                // FIXME 不知道为啥有时候前面的\r\n没法完整替换
+                // FIXME Figure out why sometimes \r\n cannot replace completely
                 htmlString = element;
                 if (folding) {
                     htmlString = htmlString.substring(0, htmlString.indexOf(Block.KEY_CPU_RATE));

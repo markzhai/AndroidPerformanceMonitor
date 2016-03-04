@@ -16,9 +16,8 @@ package com.github.moduth.blockcanary;
 import android.os.SystemClock;
 import android.util.Printer;
 
-
 /**
- * 打印looper线程的message执行时间监控
+ * LooperPrinter, uses message dispatch time to do monitoring.
  * <p/>
  * Created by markzhai on 2015/9/25.
  */
