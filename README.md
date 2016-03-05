@@ -5,6 +5,8 @@ A transparent ui-block detection library for Android. App only needs one-line-co
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
+Author: [markzhai](https://github.com/markzhai)
+
 # Getting started
 
 You may choose how to assemble them as you like.
@@ -13,7 +15,7 @@ You may choose how to assemble them as you like.
 dependencies {
     // most often used way, enable notification to notify block event
     compile 'com.github.moduth:blockcanary-ui:1.1.4'
-    
+
     // this way you only write block logs, without notification
     // compile 'com.github.moduth:blockcanary-android:1.1.4'
 

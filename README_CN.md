@@ -5,6 +5,8 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
 
+作者：[markzhai](https://github.com/markzhai)
+
 #包介绍
 - blockcanary-ui 包括了通知栏和点击通知栏后的activity这些UI信息
 - blockcanary-android blockcanary类的一些实现，是不包括UI的
