@@ -18,7 +18,7 @@ import android.content.Context;
 /**
  * No-op implementation.
  */
-public class BlockCanary {
+public final class BlockCanary {
 
     private static BlockCanary sInstance = null;
 
