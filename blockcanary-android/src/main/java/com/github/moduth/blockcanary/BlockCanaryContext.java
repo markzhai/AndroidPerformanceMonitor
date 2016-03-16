@@ -130,7 +130,7 @@ public class BlockCanaryContext implements IBlockCanaryContext {
      */
     @Override
     public void uploadLogFile(File zippedFile) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

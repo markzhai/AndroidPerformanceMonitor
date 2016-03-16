@@ -57,24 +57,28 @@ public class BlockCanary {
      * 开始主进程的主线程监控
      */
     public void start() {
+        throw new UnsupportedOperationException();
     }
 
     /**
      * 停止主进程的主线程监控
      */
     public void stop() {
+        throw new UnsupportedOperationException();
     }
 
     /**
      * 上传监控log文件
      */
     public void upload() {
+        throw new UnsupportedOperationException();
     }
 
     /**
      * 记录开启监控的时间到preference，可以在release包收到push通知后调用。
      */
     public void recordStartTime() {
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -123,7 +123,7 @@ public class BlockCanaryContext implements IBlockCanaryContext {
      * @param zippedFile 压缩后的文件
      */
     public void uploadLogFile(File zippedFile) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
