@@ -21,8 +21,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':blockcanary-ui')
-//    compile 'com.github.moduth:blockcanary-ui:1.1.3'
+//    compile project(':blockcanary-ui')
+
+    debugCompile 'com.github.moduth:blockcanary-ui:1.2.0'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.0'
+
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
 }

@@ -10,16 +10,24 @@ The naming is to pay respect to the great library [LeakCanary](https://github.co
 You may choose how to assemble them as you like.
 
 ```gradle
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.moduth:blockcanary-ui:1.1.4'
+    compile 'com.github.moduth:blockcanary-ui:1.2.0'
 
     // this way you only write block logs, without notification
-    // compile 'com.github.moduth:blockcanary-android:1.1.4'
+    // compile 'com.github.moduth:blockcanary-android:1.2.0'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-ui:1.1.4'
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.1.4'
+    // debugCompile 'com.github.moduth:blockcanary-ui:1.2.0'
+    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.0'
 }
 ```
 

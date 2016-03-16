@@ -21,8 +21,8 @@ import java.io.File;
  * You should provide a real implementation of this class to use BlockCanary,
  * which provides runtime environment to library (including configuration
  * and app-related log like uid and network environment)
- * <p/>
- * Created by markzhai on 2015/9/25.
+ *
+ * @author markzhai on 2015/9/25.
  */
 public class BlockCanaryContext implements IBlockCanaryContext {
 
@@ -150,10 +150,10 @@ public class BlockCanaryContext implements IBlockCanaryContext {
     /**
      * Thread stack dump interval, use when block happens, BlockCanary will dump on main thread
      * stack according to current sample cycle.
-     * <p/>
+     * <p>
      * PS: Because the implementation mechanism of Looper, real dump interval would be longer than
      * the period specified here (longer if cpu is busier)
-     *
+     * </p>
      * @return dump interval(in millis)
      */
     @Override

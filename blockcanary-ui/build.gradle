@@ -21,6 +21,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':blockcanary-android')
-//    compile 'com.github.moduth:blockcanary-android:1.1.4'
+//    compile project(':blockcanary-android')
+    compile 'com.github.moduth:blockcanary-android:1.2.0'
 }

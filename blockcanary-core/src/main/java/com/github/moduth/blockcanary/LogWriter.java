@@ -25,8 +25,8 @@ import java.text.SimpleDateFormat;
 
 /**
  * Log writer which runs in standalone thread.
- * <p/>
- * Created by markzhai on 2015/9/25.
+ *
+ * @author markzhai on 2015/9/25.
  */
 public class LogWriter {
 
