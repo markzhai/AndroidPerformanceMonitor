@@ -30,6 +30,10 @@ final class LeakCanaryUi {
 
     static final PorterDuffXfermode CLEAR_XFER_MODE = new PorterDuffXfermode(CLEAR);
 
+    private LeakCanaryUi() {
+        throw new AssertionError();
+    }
+
     /**
      * Converts from device independent pixels (dp or dip) to
      * device dependent pixels. This method returns the input
@@ -46,9 +50,5 @@ final class LeakCanaryUi {
     static float dpToPixel(float dp, Resources resources) {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return metrics.density * dp;
-    }
-
-    private LeakCanaryUi() {
-        throw new AssertionError();
     }
 }

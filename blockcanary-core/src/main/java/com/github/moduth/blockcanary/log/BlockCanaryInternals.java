@@ -23,6 +23,10 @@ import java.io.FilenameFilter;
  */
 public final class BlockCanaryInternals {
 
+    private BlockCanaryInternals() {
+        throw new AssertionError();
+    }
+
     public static String getPath() {
         String state = android.os.Environment.getExternalStorageState();
         if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
@@ -48,10 +52,6 @@ public final class BlockCanaryInternals {
             return f.listFiles(new BlockLogFileFilter());
         }
         return null;
-    }
-
-    private BlockCanaryInternals() {
-        throw new AssertionError();
     }
 
     static class BlockLogFileFilter implements FilenameFilter {
