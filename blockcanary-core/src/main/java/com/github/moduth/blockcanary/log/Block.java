@@ -58,6 +58,7 @@ public class Block {
     public static final String KEY_NETWORK = "network";
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
+    public static final String NEW_INSTANCE = "newInstance: ";
 
 
     public String qualifier;
@@ -100,7 +101,7 @@ public class Block {
                 block.versionCode = info.versionCode;
                 block.versionName = info.versionName;
             } catch (Throwable e) {
-                Log.e(TAG, "newInstance: ", e);
+                Log.e(TAG, NEW_INSTANCE, e);
             }
         }
 
@@ -109,7 +110,7 @@ public class Block {
                 TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 block.imei = mTManager.getDeviceId();
             } catch (Exception e) {
-                Log.e(TAG, "newInstance: ", e);
+                Log.e(TAG, NEW_INSTANCE, e);
                 block.imei = EMPTY_IMEI;
             }
         }
@@ -214,7 +215,7 @@ public class Block {
             reader.close();
             reader = null;
         } catch (Throwable t) {
-            Log.e(TAG, "newInstance: ", t);
+            Log.e(TAG, NEW_INSTANCE, t);
         } finally {
             try {
                 if (reader != null) {
@@ -222,7 +223,7 @@ public class Block {
                     reader = null;
                 }
             } catch (Exception e) {
-                Log.e(TAG, "newInstance: ", e);
+                Log.e(TAG, NEW_INSTANCE, e);
             }
         }
         block.flushString();
@@ -275,7 +276,7 @@ public class Block {
         cpuSb.append(KEY_CPU_BUSY).append(KV).append(cpuBusy).append(separator);
         cpuSb.append(KEY_CPU_RATE).append(KV).append(cpuRateInfo).append(separator);
 
-        if (threadStackEntries != null && threadStackEntries.size() > 0) {
+        if (threadStackEntries != null && !threadStackEntries.isEmpty()) {
             StringBuilder temp = new StringBuilder();
             for (String s : threadStackEntries) {
                 temp.append(s);

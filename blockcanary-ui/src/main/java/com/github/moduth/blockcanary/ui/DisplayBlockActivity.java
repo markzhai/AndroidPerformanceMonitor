@@ -263,7 +263,7 @@ public class DisplayBlockActivity extends Activity {
                 }
             });
         }
-        mActionButton.setVisibility(mBlockEntries.size() == 0 ? GONE : VISIBLE);
+        mActionButton.setVisibility(mBlockEntries.isEmpty() ? GONE : VISIBLE);
     }
 
     private void renderBlockDetail(final Block block) {

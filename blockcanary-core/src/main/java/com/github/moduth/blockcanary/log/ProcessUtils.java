@@ -41,7 +41,7 @@ public class ProcessUtils {
         final int pid = android.os.Process.myPid();
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> listTaskInfo = am.getRunningAppProcesses();
-        if (listTaskInfo != null && listTaskInfo.size() > 0) {
+        if (listTaskInfo != null && !listTaskInfo.isEmpty()) {
             for (ActivityManager.RunningAppProcessInfo info : listTaskInfo) {
                 if (info != null && info.pid == pid) {
                     return info.processName;
