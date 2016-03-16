@@ -31,7 +31,7 @@ dependencies {
 }
 ```
 
-PS: As this library uses `getMainLooper().setMessageLogging();`, please check if you also set that in your app.
+PS: As this library uses `getMainLooper().setMessageLogging();`, please check if you also set that in your app. (check related issue https://github.com/moduth/blockcanary/issues/27)
 
 # Usage
 
