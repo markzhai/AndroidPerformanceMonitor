@@ -35,7 +35,7 @@ public class LogWriter {
     private static final Object SAVE_DELETE_LOCK = new Object();
     private static final SimpleDateFormat FILE_NAME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS");
     private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final long OBSOLETE_DURATION = 2 * 24 * 3600 * 1000;
+    private static final long OBSOLETE_DURATION = 2 * 24 * 3600 * 1000L;
 
     /**
      * Save log to file

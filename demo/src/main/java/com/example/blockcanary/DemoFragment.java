@@ -83,10 +83,12 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                 double result = compute();
                 System.out.println(result);
                 break;
+            default:
+                break;
         }
     }
 
-    private double compute() {
+    private static double compute() {
         double result = 0;
         for (int i = 0; i < 1000000; ++i) {
             result += Math.acos(Math.cos(i));
@@ -95,7 +97,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
         return result;
     }
 
-    private void readFile() {
+    private static void readFile() {
         FileInputStream reader = null;
         try {
             reader = new FileInputStream("/proc/stat");
