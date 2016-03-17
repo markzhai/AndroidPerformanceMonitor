@@ -25,6 +25,10 @@ public class ProcessUtils {
     private static volatile String sProcessName;
     private final static Object sNameLock = new Object();
 
+    private ProcessUtils() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     public static String myProcessName() {
         if (sProcessName != null) {
             return sProcessName;

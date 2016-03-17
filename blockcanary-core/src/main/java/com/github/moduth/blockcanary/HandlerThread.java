@@ -12,6 +12,10 @@ class HandlerThread {
     private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
     private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writelog");
 
+    private HandlerThread() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     /**
      * Get handler of looper thread
      */
