@@ -32,6 +32,10 @@ public class PerformanceUtils {
     private static int sCoreNum = 0;
     private static long sTotalMemo = 0;
 
+    private PerformanceUtils() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     /**
      * Get cpu core number
      *
