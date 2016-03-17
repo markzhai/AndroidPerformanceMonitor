@@ -67,6 +67,14 @@ public class DisplayBlockActivity extends Activity {
     private static final String TAG = "DisplayBlockActivity";
     private static final String SHOW_BLOCK_EXTRA = "show_latest";
     public static final String SHOW_BLOCK_EXTRA_KEY = "BlockStartTime";
+    // null until it's been first loaded.
+    private List<Block> mBlockEntries = new ArrayList<>();
+    private String mBlockStartTime;
+
+    private ListView mListView;
+    private TextView mFailureView;
+    private Button mActionButton;
+    private int mMaxStoredBlockCount;
 
     public static PendingIntent createPendingIntent(Context context) {
         return createPendingIntent(context, null);
@@ -78,15 +86,6 @@ public class DisplayBlockActivity extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return PendingIntent.getActivity(context, 1, intent, FLAG_UPDATE_CURRENT);
     }
-
-    // null until it's been first loaded.
-    private List<Block> mBlockEntries = new ArrayList<>();
-    private String mBlockStartTime;
-
-    private ListView mListView;
-    private TextView mFailureView;
-    private Button mActionButton;
-    private int mMaxStoredBlockCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,8 +363,14 @@ public class DisplayBlockActivity extends Activity {
     static class LoadBlocks implements Runnable {
 
         static final List<LoadBlocks> inFlight = new ArrayList<>();
-
         static final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
+        private DisplayBlockActivity activityOrNull;
+        private final Handler mainHandler;
+
+        LoadBlocks(DisplayBlockActivity activity) {
+            this.activityOrNull = activity;
+            mainHandler = new Handler(Looper.getMainLooper());
+        }
 
         static void load(DisplayBlockActivity activity) {
             LoadBlocks loadBlocks = new LoadBlocks(activity);
@@ -378,14 +383,6 @@ public class DisplayBlockActivity extends Activity {
                 loadBlocks.activityOrNull = null;
             }
             inFlight.clear();
-        }
-
-        private DisplayBlockActivity activityOrNull;
-        private final Handler mainHandler;
-
-        LoadBlocks(DisplayBlockActivity activity) {
-            this.activityOrNull = activity;
-            mainHandler = new Handler(Looper.getMainLooper());
         }
 
         @Override
