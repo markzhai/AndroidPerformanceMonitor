@@ -42,15 +42,19 @@ public final class BlockCanary {
     }
 
     public void start() {
+        throw new UnsupportedOperationException();
     }
 
     public void stop() {
+        throw new UnsupportedOperationException();
     }
 
     public void upload() {
+        throw new UnsupportedOperationException();
     }
 
     public void recordStartTime() {
+        throw new UnsupportedOperationException();
     }
 
     public boolean isMonitorDurationEnd() {
