@@ -36,7 +36,7 @@ class UploadMonitorLog {
     }
 
     private static File zipFile() {
-        String timeString = System.currentTimeMillis() + "";
+        String timeString = Long.toString(System.currentTimeMillis());
         try {
             timeString = FORMAT.format(new Date());
         } catch (Throwable e) {
