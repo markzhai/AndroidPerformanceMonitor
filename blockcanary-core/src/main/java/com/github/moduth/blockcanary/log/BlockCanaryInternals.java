@@ -33,10 +33,8 @@ public final class BlockCanaryInternals {
         String state = Environment.getExternalStorageState();
         String logPath = BlockCanaryCore.getContext() == null ? "" : BlockCanaryCore.getContext().getLogPath();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            if (Environment.getExternalStorageDirectory().canWrite()) {
-                return Environment.getExternalStorageDirectory().getPath() + logPath;
-            }
+        if (Environment.MEDIA_MOUNTED.equals(state) && Environment.getExternalStorageDirectory().canWrite()) {
+            return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
         return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryCore.getContext().getLogPath();
     }

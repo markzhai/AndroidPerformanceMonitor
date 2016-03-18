@@ -89,10 +89,8 @@ class CpuSampler extends Sampler {
                 for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
                     long time = entry.getKey();
                     if (s < time && time < e) {
-                        if (last != 0) {
-                            if (time - last > BUSY_TIME) {
-                                return true;
-                            }
+                        if (last != 0 && time - last > BUSY_TIME) {
+                            return true;
                         }
                         last = time;
                     }
