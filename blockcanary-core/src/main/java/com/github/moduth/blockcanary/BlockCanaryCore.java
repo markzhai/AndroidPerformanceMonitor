@@ -50,7 +50,7 @@ public class BlockCanaryCore {
                 ArrayList<String> threadStackEntries = threadStackSampler
                         .getThreadStackEntries(realTimeStart, realTimeEnd);
                 // Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());
-                if (threadStackEntries.size() > 0) {
+                if (!threadStackEntries.isEmpty()) {
                     Block block = Block.newInstance()
                             .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
                             .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
