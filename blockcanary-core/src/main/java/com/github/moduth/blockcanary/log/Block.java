@@ -32,7 +32,7 @@ import java.util.ArrayList;
 /**
  * @author markzhai on 15/9/27.
  */
-public class Block {
+public final class Block {
 
     private static final String TAG = "Block";
 
