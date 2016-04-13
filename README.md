@@ -77,7 +77,10 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 ```
 
 # How does it work?
-See [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
+Blog in Chinese [BlockCanary](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
+
+Principle flow picture:
+![flow](art/flow.png "flow")
 
 1. `BlockCanary.install()` initializes context and internal data structures.
 2. `BlockCanary.start()` starts monitor by `Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);`
