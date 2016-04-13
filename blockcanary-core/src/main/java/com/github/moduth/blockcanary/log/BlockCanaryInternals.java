@@ -25,14 +25,16 @@ import java.io.FilenameFilter;
  */
 public final class BlockCanaryInternals {
 
+    private BlockCanaryInternals() {
+        throw new AssertionError();
+    }
+
     public static String getPath() {
         String state = Environment.getExternalStorageState();
         String logPath = BlockCanaryCore.getContext() == null ? "" : BlockCanaryCore.getContext().getLogPath();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            if (Environment.getExternalStorageDirectory().canWrite()) {
-                return Environment.getExternalStorageDirectory().getPath() + logPath;
-            }
+        if (Environment.MEDIA_MOUNTED.equals(state) && Environment.getExternalStorageDirectory().canWrite()) {
+            return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
         return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryCore.getContext().getLogPath();
     }
@@ -51,10 +53,6 @@ public final class BlockCanaryInternals {
             return f.listFiles(new BlockLogFileFilter());
         }
         return null;
-    }
-
-    private BlockCanaryInternals() {
-        throw new AssertionError();
     }
 
     static class BlockLogFileFilter implements FilenameFilter {

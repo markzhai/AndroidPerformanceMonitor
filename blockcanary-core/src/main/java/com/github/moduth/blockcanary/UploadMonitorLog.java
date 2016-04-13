@@ -31,8 +31,12 @@ class UploadMonitorLog {
     private static final String TAG = "UploadMonitorLog";
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
+    private UploadMonitorLog() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     private static File zipFile() {
-        String timeString = System.currentTimeMillis() + "";
+        String timeString = Long.toString(System.currentTimeMillis());
         try {
             timeString = FORMAT.format(new Date());
         } catch (Throwable e) {

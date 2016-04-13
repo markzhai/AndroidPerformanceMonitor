@@ -25,6 +25,10 @@ public class ProcessUtils {
     private static volatile String sProcessName;
     private final static Object sNameLock = new Object();
 
+    private ProcessUtils() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     public static String myProcessName() {
         if (sProcessName != null) {
             return sProcessName;
@@ -33,7 +37,8 @@ public class ProcessUtils {
             if (sProcessName != null) {
                 return sProcessName;
             }
-            return sProcessName = obtainProcessName(BlockCanaryCore.getContext().getContext());
+            sProcessName = obtainProcessName(BlockCanaryCore.getContext().getContext());
+            return sProcessName;
         }
     }
 
@@ -41,7 +46,7 @@ public class ProcessUtils {
         final int pid = android.os.Process.myPid();
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> listTaskInfo = am.getRunningAppProcesses();
-        if (listTaskInfo != null && listTaskInfo.size() > 0) {
+        if (listTaskInfo != null && !listTaskInfo.isEmpty()) {
             for (ActivityManager.RunningAppProcessInfo info : listTaskInfo) {
                 if (info != null && info.pid == pid) {
                     return info.processName;

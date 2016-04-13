@@ -20,12 +20,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 
 public class DemoFragment extends Fragment implements View.OnClickListener {
+
+    private static final String DEMO_FRAGMENT = "DemoFragment";
 
     public static DemoFragment newInstance() {
         return new DemoFragment();
@@ -72,6 +75,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Log.e(DEMO_FRAGMENT, "onClick of R.id.button1: ", e);
                 }
                 break;
             case R.id.button2:
@@ -83,10 +87,12 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                 double result = compute();
                 System.out.println(result);
                 break;
+            default:
+                break;
         }
     }
 
-    private double compute() {
+    private static double compute() {
         double result = 0;
         for (int i = 0; i < 1000000; ++i) {
             result += Math.acos(Math.cos(i));
@@ -95,19 +101,19 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
         return result;
     }
 
-    private void readFile() {
+    private static void readFile() {
         FileInputStream reader = null;
         try {
             reader = new FileInputStream("/proc/stat");
             while (reader.read() != -1) ;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(DEMO_FRAGMENT, "readFile: /proc/stat", e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(DEMO_FRAGMENT, " on close reader ", e);
                 }
             }
         }

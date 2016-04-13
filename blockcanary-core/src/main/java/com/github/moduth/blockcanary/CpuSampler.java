@@ -89,10 +89,8 @@ class CpuSampler extends Sampler {
                 for (Map.Entry<Long, String> entry : mCpuInfoEntries.entrySet()) {
                     long time = entry.getKey();
                     if (s < time && time < e) {
-                        if (last != 0) {
-                            if (time - last > BUSY_TIME) {
-                                return true;
-                            }
+                        if (last != 0 && time - last > BUSY_TIME) {
+                            return true;
                         }
                         last = time;
                     }
@@ -187,11 +185,11 @@ class CpuSampler extends Sampler {
             StringBuilder sb = new StringBuilder();
             long idleTime = idle - mIdleLast;
             long totalTime = total - mTotalLast;
-            sb.append("cpu:").append((totalTime - idleTime) * 100L / totalTime).append("% ");
-            sb.append("app:").append((appCpuTime - mAppCpuTimeLast) * 100L / totalTime).append("% ");
-            sb.append("[").append("user:").append((user - mUserLast) * 100L / totalTime).append("% ");
-            sb.append("system:").append((system - mSystemLast) * 100L / totalTime).append("% ");
-            sb.append("ioWait:").append((ioWait - mIoWaitLast) * 100L / totalTime).append("% ]");
+            sb.append("cpu:").append((totalTime - idleTime) * 100L / totalTime).append("% ")
+              .append("app:").append((appCpuTime - mAppCpuTimeLast) * 100L / totalTime).append("% ")
+              .append("[").append("user:").append((user - mUserLast) * 100L / totalTime).append("% ")
+              .append("system:").append((system - mSystemLast) * 100L / totalTime).append("% ")
+              .append("ioWait:").append((ioWait - mIoWaitLast) * 100L / totalTime).append("% ]");
             synchronized (mCpuInfoEntries) {
                 mCpuInfoEntries.put(System.currentTimeMillis(), sb.toString());
                 if (mCpuInfoEntries.size() > MAX_ENTRY_COUNT) {

@@ -37,6 +37,7 @@ final class BlockDetailAdapter extends BaseAdapter {
 
     private boolean[] mFoldings = new boolean[0];
 
+    private String mStackFoldPrefix = null;
     private Block mBlock;
 
     private static final int POSITION_BASIC = 1;
@@ -189,8 +190,6 @@ final class BlockDetailAdapter extends BaseAdapter {
     private static <T extends View> T findById(View view, int id) {
         return (T) view.findViewById(id);
     }
-
-    private String mStackFoldPrefix = null;
 
     private String getStackFoldPrefix() {
         if (mStackFoldPrefix == null) {

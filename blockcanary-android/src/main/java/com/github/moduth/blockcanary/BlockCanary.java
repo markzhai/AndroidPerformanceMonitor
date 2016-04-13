@@ -25,7 +25,7 @@ import java.lang.reflect.Constructor;
  *
  * @author markzhai on 2015/9/25.
  */
-public class BlockCanary {
+public final class BlockCanary {
 
     private static final String TAG = "BlockCanary";
 
