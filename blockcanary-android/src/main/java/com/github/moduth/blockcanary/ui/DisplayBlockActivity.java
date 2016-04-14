@@ -38,11 +38,10 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.github.moduth.blockcanary.LogWriter;
+import com.github.moduth.blockcanary.R;
 import com.github.moduth.blockcanary.log.Block;
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;

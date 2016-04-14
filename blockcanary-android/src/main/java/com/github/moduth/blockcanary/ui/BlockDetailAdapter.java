@@ -22,12 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.github.moduth.blockcanary.BlockCanaryCore;
-import com.github.moduth.blockcanary.ui.R;
+import com.github.moduth.blockcanary.R;
 import com.github.moduth.blockcanary.log.Block;
 import com.github.moduth.blockcanary.log.ProcessUtils;
-
 import java.util.Arrays;
 
 final class BlockDetailAdapter extends BaseAdapter {

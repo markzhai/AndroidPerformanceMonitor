@@ -13,12 +13,20 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
+import com.github.moduth.blockcanary.ui.DisplayBlockActivity;
 import java.lang.reflect.Constructor;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.DONT_KILL_APP;
 
 /**
  * Looper thread monitor.
@@ -33,6 +41,42 @@ public final class BlockCanary {
     private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
 
+    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
+    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
+
+    public static void executeOnFileIoThread(Runnable runnable) {
+        fileIoExecutor.execute(runnable);
+    }
+
+    public static Executor newSingleThreadExecutor(String threadName) {
+        return Executors.newSingleThreadExecutor(new LeakCanarySingleThreadFactory(threadName));
+    }
+
+    public static void enableDisplayBlockActivity(Context context) {
+        setEnabled(context, DisplayBlockActivity.class, true);
+    }
+
+    public static void setEnabled(Context context, final Class<?> componentClass,
+            final boolean enabled) {
+        final Context appContext = context.getApplicationContext();
+        executeOnFileIoThread(new Runnable() {
+            @Override
+            public void run() {
+                setEnabledBlocking(appContext, componentClass, enabled);
+            }
+        });
+    }
+
+    public static void setEnabledBlocking(Context appContext, Class<?> componentClass,
+            boolean enabled) {
+        ComponentName component = new ComponentName(appContext, componentClass);
+        PackageManager packageManager = appContext.getPackageManager();
+        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        // Blocks on IPC.
+        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
+    }
+    // end of lines copied from LeakCanary
+
     private BlockCanary() {
         BlockCanaryCore.setIBlockCanaryContext(BlockCanaryContext.get());
         mBlockCanaryCore = BlockCanaryCore.get();
@@ -42,11 +86,12 @@ public final class BlockCanary {
     /**
      * Install {@link BlockCanary}
      *
-     * @param context            application context
+     * @param context application context
      * @param blockCanaryContext implementation for {@link BlockCanaryContext}
      * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
+        enableDisplayBlockActivity(context);
         BlockCanaryContext.init(context, blockCanaryContext);
         return get();
     }
@@ -97,11 +142,14 @@ public final class BlockCanary {
     }
 
     /**
-     * Record monitor start time to preference, you may use it when after push which tells start BlockCanary.
+     * Record monitor start time to preference, you may use it when after push which tells start
+     * BlockCanary.
      */
     public void recordStartTime() {
         PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
-                .edit().putLong("BlockCanary_StartTime", System.currentTimeMillis()).commit();
+                .edit()
+                .putLong("BlockCanary_StartTime", System.currentTimeMillis())
+                .commit();
     }
 
     /**
@@ -110,11 +158,11 @@ public final class BlockCanary {
      * @return true if ended
      */
     public boolean isMonitorDurationEnd() {
-        long startTime = PreferenceManager.getDefaultSharedPreferences(
-                BlockCanaryContext.get().getContext()).getLong("BlockCanary_StartTime", 0);
-        return startTime != 0 &&
-                System.currentTimeMillis() - startTime >
-                        BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
+        long startTime =
+                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
+                        .getLong("BlockCanary_StartTime", 0);
+        return startTime != 0 && System.currentTimeMillis() - startTime >
+                BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
     }
 
     @SuppressWarnings("unchecked")
