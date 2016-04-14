@@ -6,9 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
 import com.github.moduth.blockcanary.OnBlockEventInterceptor;
-import com.github.moduth.blockcanary.ui.R;
+import com.github.moduth.blockcanary.R;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.os.Build.VERSION.SDK_INT;
