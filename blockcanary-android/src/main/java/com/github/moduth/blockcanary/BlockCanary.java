@@ -41,42 +41,6 @@ public final class BlockCanary {
     private BlockCanaryCore mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
 
-    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
-    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
-
-    public static void executeOnFileIoThread(Runnable runnable) {
-        fileIoExecutor.execute(runnable);
-    }
-
-    public static Executor newSingleThreadExecutor(String threadName) {
-        return Executors.newSingleThreadExecutor(new LeakCanarySingleThreadFactory(threadName));
-    }
-
-    public static void enableDisplayBlockActivity(Context context) {
-        setEnabled(context, DisplayBlockActivity.class, true);
-    }
-
-    public static void setEnabled(Context context, final Class<?> componentClass,
-            final boolean enabled) {
-        final Context appContext = context.getApplicationContext();
-        executeOnFileIoThread(new Runnable() {
-            @Override
-            public void run() {
-                setEnabledBlocking(appContext, componentClass, enabled);
-            }
-        });
-    }
-
-    public static void setEnabledBlocking(Context appContext, Class<?> componentClass,
-            boolean enabled) {
-        ComponentName component = new ComponentName(appContext, componentClass);
-        PackageManager packageManager = appContext.getPackageManager();
-        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
-        // Blocks on IPC.
-        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
-    }
-    // end of lines copied from LeakCanary
-
     private BlockCanary() {
         BlockCanaryCore.setIBlockCanaryContext(BlockCanaryContext.get());
         mBlockCanaryCore = BlockCanaryCore.get();
@@ -91,8 +55,8 @@ public final class BlockCanary {
      * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
-        enableDisplayBlockActivity(context);
         BlockCanaryContext.init(context, blockCanaryContext);
+        setEnabled(context, DisplayBlockActivity.class, BlockCanaryContext.get().isNeedDisplay());
         return get();
     }
 
@@ -181,5 +145,37 @@ public final class BlockCanary {
         } catch (Exception e) {
             Log.e(TAG, "initNotification: ", e);
         }
+    }
+
+    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
+    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
+
+    private static void setEnabledBlocking(Context appContext, Class<?> componentClass,
+                                           boolean enabled) {
+        ComponentName component = new ComponentName(appContext, componentClass);
+        PackageManager packageManager = appContext.getPackageManager();
+        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        // Blocks on IPC.
+        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
+    }
+    // end of lines copied from LeakCanary
+
+    private static void executeOnFileIoThread(Runnable runnable) {
+        fileIoExecutor.execute(runnable);
+    }
+
+    private static Executor newSingleThreadExecutor(String threadName) {
+        return Executors.newSingleThreadExecutor(new LeakCanarySingleThreadFactory(threadName));
+    }
+
+    private static void setEnabled(Context context, final Class<?> componentClass,
+                                   final boolean enabled) {
+        final Context appContext = context.getApplicationContext();
+        executeOnFileIoThread(new Runnable() {
+            @Override
+            public void run() {
+                setEnabledBlocking(appContext, componentClass, enabled);
+            }
+        });
     }
 }

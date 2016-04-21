@@ -14,12 +14,14 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * No-op implementation.
  */
 public final class BlockCanary {
 
+    private static final String TAG = "BlockCanary-no-op";
     private static BlockCanary sInstance = null;
 
     private BlockCanary() {
@@ -42,19 +44,19 @@ public final class BlockCanary {
     }
 
     public void start() {
-        throw new UnsupportedOperationException();
+        Log.i(TAG, "start");
     }
 
     public void stop() {
-        throw new UnsupportedOperationException();
+        Log.i(TAG, "stop");
     }
 
     public void upload() {
-        throw new UnsupportedOperationException();
+        Log.i(TAG, "upload");
     }
 
     public void recordStartTime() {
-        throw new UnsupportedOperationException();
+        Log.i(TAG, "recordStartTime");
     }
 
     public boolean isMonitorDurationEnd() {
