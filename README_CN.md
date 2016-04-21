@@ -7,11 +7,10 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 作者：[markzhai](https://github.com/markzhai)
 
-#包介绍
-- blockcanary-ui 包括了通知栏和点击通知栏后的activity这些UI信息
-- blockcanary-android blockcanary类的一些实现，是不包括UI的
-- blockcanary-core 记录block信息的核心实现
-- blockcanary-no-op 是空包，为了release打包时不编译进去
+# 包介绍
+- blockcanary-android blockcanary类的一些实现
+- blockcanary-core    记录block信息的核心实现
+- blockcanary-no-op   空包，为了release打包时不编译进去
 
 # 引入
 
@@ -21,20 +20,15 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 ```gradle
 dependencies {
-    //case 1: 既要记录，又要notifacation和UI
-    compile 'com.github.moduth:blockcanary-ui:1.2.0'
+    compile 'com.github.moduth:blockcanary-android:1.2.1'
 
-    //case 2: 仅记录卡顿log，不需要notification和UI
-    compile 'com.github.moduth:blockcanary-android:1.2.0'
-
-    //case 3: 仅在debug包启用BlockCanary进行卡顿监控和提示
-    debugCompile 'com.github.moduth:blockcanary-ui:1.2.0'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.0'
-
+    // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
+    debugCompile 'com.github.moduth:blockcanary-android:1.2.1'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.1'
 }
 ```
 
-PS: 由于该库使用了 `getMainLooper().setMessageLogging();`, 请确认是否与你的app冲突.
+PS: 由于该库使用了 `getMainLooper().setMessageLogging()`, 请确认是否与你的app冲突.
 
 
 # 使用方法

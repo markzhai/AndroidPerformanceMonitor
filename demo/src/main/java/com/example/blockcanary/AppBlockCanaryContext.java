@@ -19,8 +19,6 @@ import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
 
-import java.io.File;
-
 /**
  * 监控环境的上下文实现
  * <p/>
