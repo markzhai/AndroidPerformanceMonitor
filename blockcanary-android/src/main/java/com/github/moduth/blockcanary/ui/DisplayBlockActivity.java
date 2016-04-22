@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -304,7 +305,7 @@ public class DisplayBlockActivity extends Activity {
     }
 
     private Block getBlock(String startTime) {
-        if (mBlockEntries == null) {
+        if (mBlockEntries == null || TextUtils.isEmpty(startTime)) {
             return null;
         }
         for (Block block : mBlockEntries) {
