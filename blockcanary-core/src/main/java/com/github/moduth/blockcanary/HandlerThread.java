@@ -3,7 +3,7 @@ package com.github.moduth.blockcanary;
 import android.os.Handler;
 
 /**
- * Created by markzhai on 16/1/23
+ * Handler thread wrapper
  *
  * @author markzhai
  */
@@ -12,19 +12,19 @@ class HandlerThread {
     private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
     private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writelog");
 
+    private HandlerThread() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     /**
-     * 获得loop线程的handler
-     *
-     * @return loop线程
+     * Get handler of looper thread
      */
     public static Handler getTimerThreadHandler() {
         return sLoopThread.getHandler();
     }
 
     /**
-     * 获得写log线程的handler
-     *
-     * @return 写log线程的handler
+     * Get handler of log-writer thread
      */
     public static Handler getWriteLogFileThreadHandler() {
         return sWriteLogThread.getHandler();

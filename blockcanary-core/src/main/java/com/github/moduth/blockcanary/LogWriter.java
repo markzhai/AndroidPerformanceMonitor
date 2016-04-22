@@ -13,6 +13,8 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.util.Log;
+
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
 import java.io.BufferedWriter;
@@ -22,18 +24,30 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 
 /**
- * 写文件线程
- * <p>
- * Created by markzhai on 2015/9/25.
+ * Log writer which runs in standalone thread.
+ *
+ * @author markzhai on 2015/9/25.
  */
 public class LogWriter {
+
+    private static final String TAG = "LogWriter";
 
     private static final Object SAVE_DELETE_LOCK = new Object();
     private static final SimpleDateFormat FILE_NAME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss.SSS");
     private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final long OBSOLETE_DURATION = 2 * 24 * 3600 * 1000;
+    private static final long OBSOLETE_DURATION = 2 * 24 * 3600 * 1000L;
 
-    public static String saveLooperLog(String str) {
+    private LogWriter() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
+    /**
+     * Save log to file
+     *
+     * @param str block log string
+     * @return log file path
+     */
+	public static String saveLooperLog(String str) {
         String path;
         synchronized (SAVE_DELETE_LOCK) {
             path = saveLogToSDCard("looper", str);
@@ -41,16 +55,8 @@ public class LogWriter {
         return path;
     }
 
-    public static String saveLogcatLog(String str) {
-        String path;
-        synchronized (SAVE_DELETE_LOCK) {
-            path = saveLogToSDCard("logcat", str);
-        }
-        return path;
-    }
-
     /**
-     * 清除所有过期的文件，see {@code OBSOLETE_DURATION}
+     * Delete obsolete log files，see also {@code OBSOLETE_DURATION}
      */
     public static void cleanOldFiles() {
         HandlerThread.getWriteLogFileThreadHandler().post(new Runnable() {
@@ -71,6 +77,9 @@ public class LogWriter {
         });
     }
 
+    /**
+     * Delete all log files.
+     */
     public static void deleteLogFiles() {
         synchronized (SAVE_DELETE_LOCK) {
             try {
@@ -81,7 +90,7 @@ public class LogWriter {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
+                Log.e(TAG, "deleteLogFiles: ", e);
             }
         }
     }
@@ -90,7 +99,7 @@ public class LogWriter {
         String path = "";
         BufferedWriter writer = null;
         try {
-            File file = BlockCanaryInternals.detectedLeakDirectory();
+            File file = BlockCanaryInternals.detectedBlockDirectory();
             long time = System.currentTimeMillis();
             path = file.getAbsolutePath() + "/" + logFileName + "-" + FILE_NAME_FORMATTER.format(time) + ".txt";
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path, true), "UTF-8");
@@ -106,7 +115,7 @@ public class LogWriter {
             writer.close();
             writer = null;
         } catch (Throwable t) {
-            t.printStackTrace();
+            Log.e(TAG, "saveLogToSDCard: ", t);
         } finally {
             try {
                 if (writer != null) {
@@ -114,7 +123,7 @@ public class LogWriter {
                     writer = null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "saveLogToSDCard: ", e);
             }
         }
         return path;

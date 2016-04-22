@@ -2,6 +2,10 @@
 
 You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/moduth/).
 
+## Version 1.2 *(2016-03-16)*
+
+- Much faster! It now has almost none side-effect at run-time.
+
 ## Version 1.1 *(2016-01-23)*
 
 - Extract blockcanary to three modules.

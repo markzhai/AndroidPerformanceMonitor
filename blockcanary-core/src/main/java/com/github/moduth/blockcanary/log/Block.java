@@ -18,6 +18,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryCore;
 
@@ -31,7 +32,9 @@ import java.util.ArrayList;
 /**
  * @author markzhai on 15/9/27.
  */
-public class Block {
+public final class Block {
+
+    private static final String TAG = "Block";
 
     public static final String SEPARATOR = "\r\n";
     public static final String KV = " = ";
@@ -55,6 +58,7 @@ public class Block {
     public static final String KEY_NETWORK = "network";
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
+    public static final String NEW_INSTANCE = "newInstance: ";
 
 
     public String qualifier;
@@ -97,7 +101,7 @@ public class Block {
                 block.versionCode = info.versionCode;
                 block.versionName = info.versionName;
             } catch (Throwable e) {
-                e.printStackTrace();
+                Log.e(TAG, NEW_INSTANCE, e);
             }
         }
 
@@ -106,7 +110,7 @@ public class Block {
                 TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 block.imei = mTManager.getDeviceId();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, NEW_INSTANCE, e);
                 block.imei = EMPTY_IMEI;
             }
         }
@@ -123,7 +127,7 @@ public class Block {
     }
 
     /**
-     * 从保存的log文件创建log对象
+     * Create {@link Block} from saved log file.
      *
      * @param file looper log file
      * @return LooperLog created from log file
@@ -211,7 +215,7 @@ public class Block {
             reader.close();
             reader = null;
         } catch (Throwable t) {
-            t.printStackTrace();
+            Log.e(TAG, NEW_INSTANCE, t);
         } finally {
             try {
                 if (reader != null) {
@@ -219,7 +223,7 @@ public class Block {
                     reader = null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, NEW_INSTANCE, e);
             }
         }
         block.flushString();
@@ -272,7 +276,7 @@ public class Block {
         cpuSb.append(KEY_CPU_BUSY).append(KV).append(cpuBusy).append(separator);
         cpuSb.append(KEY_CPU_RATE).append(KV).append(cpuRateInfo).append(separator);
 
-        if (threadStackEntries != null && threadStackEntries.size() > 0) {
+        if (threadStackEntries != null && !threadStackEntries.isEmpty()) {
             StringBuilder temp = new StringBuilder();
             for (String s : threadStackEntries) {
                 temp.append(s);

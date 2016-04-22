@@ -16,9 +16,8 @@ package com.github.moduth.blockcanary;
 import android.os.SystemClock;
 import android.util.Printer;
 
-
 /**
- * 打印looper线程的message执行时间监控
+ * LooperPrinter, uses message dispatch time to do monitoring.
  * <p/>
  * Created by markzhai on 2015/9/25.
  */
@@ -47,12 +46,14 @@ class LooperPrinter implements Printer {
             mStartTimeMillis = System.currentTimeMillis();
             mStartThreadTimeMillis = SystemClock.currentThreadTimeMillis();
             mStartedPrinting = true;
+            startDump();
         } else {
             final long endTime = System.currentTimeMillis();
             mStartedPrinting = false;
             if (isBlock(endTime)) {
                 notifyBlockEvent(endTime);
             }
+            stopDump();
         }
     }
 
@@ -71,5 +72,25 @@ class LooperPrinter implements Printer {
                 mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);
             }
         });
+    }
+
+    private void startDump() {
+        if (null != BlockCanaryCore.get().threadStackSampler) {
+            BlockCanaryCore.get().threadStackSampler.start();
+        }
+
+        if (null != BlockCanaryCore.get().cpuSampler) {
+            BlockCanaryCore.get().cpuSampler.start();
+        }
+    }
+
+    private void stopDump() {
+        if (null != BlockCanaryCore.get().threadStackSampler) {
+            BlockCanaryCore.get().threadStackSampler.stop();
+        }
+
+        if (null != BlockCanaryCore.get().cpuSampler) {
+            BlockCanaryCore.get().cpuSampler.stop();
+        }
     }
 }

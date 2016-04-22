@@ -13,6 +13,8 @@
  */
 package com.github.moduth.blockcanary.log;
 
+import android.os.Environment;
+
 import com.github.moduth.blockcanary.BlockCanaryCore;
 
 import java.io.File;
@@ -23,18 +25,21 @@ import java.io.FilenameFilter;
  */
 public final class BlockCanaryInternals {
 
-    public static String getPath() {
-        String state = android.os.Environment.getExternalStorageState();
-        if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
-            if (android.os.Environment.getExternalStorageDirectory().canWrite()) {
-                return android.os.Environment.getExternalStorageDirectory().getPath()
-                        + BlockCanaryCore.getContext().getLogPath();
-            }
-        }
-        return android.os.Environment.getDataDirectory().getAbsolutePath() + BlockCanaryCore.getContext().getLogPath();
+    private BlockCanaryInternals() {
+        throw new AssertionError();
     }
 
-    public static File detectedLeakDirectory() {
+    public static String getPath() {
+        String state = Environment.getExternalStorageState();
+        String logPath = BlockCanaryCore.getContext() == null ? "" : BlockCanaryCore.getContext().getLogPath();
+
+        if (Environment.MEDIA_MOUNTED.equals(state) && Environment.getExternalStorageDirectory().canWrite()) {
+            return Environment.getExternalStorageDirectory().getPath() + logPath;
+        }
+        return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryCore.getContext().getLogPath();
+    }
+
+    public static File detectedBlockDirectory() {
         File directory = new File(getPath());
         if (!directory.exists()) {
             directory.mkdirs();
@@ -43,15 +48,11 @@ public final class BlockCanaryInternals {
     }
 
     public static File[] getLogFiles() {
-        File f = BlockCanaryInternals.detectedLeakDirectory();
+        File f = BlockCanaryInternals.detectedBlockDirectory();
         if (f.exists() && f.isDirectory()) {
             return f.listFiles(new BlockLogFileFilter());
         }
         return null;
-    }
-
-    private BlockCanaryInternals() {
-        throw new AssertionError();
     }
 
     static class BlockLogFileFilter implements FilenameFilter {

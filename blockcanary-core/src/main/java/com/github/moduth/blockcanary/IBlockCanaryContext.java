@@ -18,24 +18,14 @@ import android.content.Context;
 import java.io.File;
 
 /**
- * Created by Abner on 16/1/21.
- * Email nimengbo@gmail.com
- * github https://github.com/nimengbo
+ * interface defines {@link BlockCanaryCore} runtime environment.
+ *
+ * @author abner (nimengbo at github)
  */
 public interface IBlockCanaryContext {
 
-    /**
-     * Config block threshold
-     *
-     * @return threshold in mills
-     */
     int getConfigBlockThreshold();
 
-    /**
-     * If need notification and list ui
-     *
-     * @return true if need, else if not need.
-     */
     boolean isNeedDisplay();
 
     String getQualifier();
@@ -52,10 +42,7 @@ public interface IBlockCanaryContext {
 
     void uploadLogFile(File zippedFile);
 
-    /**
-     * Config string prefix to determine how to fold stack
-     *
-     * @return string prefix, null if use process name.
-     */
     String getStackFoldPrefix();
+
+    int getConfigDumpIntervalMillis();
 }

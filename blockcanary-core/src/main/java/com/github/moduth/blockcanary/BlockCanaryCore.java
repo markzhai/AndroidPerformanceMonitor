@@ -20,9 +20,9 @@ import com.github.moduth.blockcanary.log.Block;
 import java.util.ArrayList;
 
 /**
- * Created by Abner on 16/1/22.
- * Email nimengbo@gmail.com
- * github https://github.com/nimengbo
+ * BlockCanary internal core.
+ *
+ * @author [abner](github nimengbo), markzhai
  */
 public class BlockCanaryCore {
 
@@ -30,33 +30,29 @@ public class BlockCanaryCore {
     public ThreadStackSampler threadStackSampler;
     public CpuSampler cpuSampler;
 
-    private static final int MIN_INTERVAL_MILLIS = 300;
-
     private static BlockCanaryCore sInstance;
     private static IBlockCanaryContext sBlockCanaryContext;
 
     private OnBlockEventInterceptor mOnBlockEventInterceptor;
 
     public BlockCanaryCore() {
-        int blockThresholdMillis = getContext().getConfigBlockThreshold();
-        long sampleIntervalMillis = sampleInterval(blockThresholdMillis);
-        threadStackSampler = new ThreadStackSampler(
-                Looper.getMainLooper().getThread(), sampleIntervalMillis);
-        cpuSampler = new CpuSampler();
+
+        threadStackSampler = new ThreadStackSampler(Looper.getMainLooper().getThread(),
+                sBlockCanaryContext.getConfigDumpIntervalMillis());
+        cpuSampler = new CpuSampler(sBlockCanaryContext.getConfigDumpIntervalMillis());
 
         setMainLooperPrinter(new LooperPrinter(new BlockListener() {
 
             @Override
             public void onBlockEvent(long realTimeStart, long realTimeEnd,
                                      long threadTimeStart, long threadTimeEnd) {
-                // 查询这段时间内的线程堆栈调用情况，CPU使用情况
+                // Get recent thread-stack entries and cpu usage
                 ArrayList<String> threadStackEntries = threadStackSampler
                         .getThreadStackEntries(realTimeStart, realTimeEnd);
                 // Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());
-                if (threadStackEntries.size() > 0) {
+                if (!threadStackEntries.isEmpty()) {
                     Block block = Block.newInstance()
-                            .setMainThreadTimeCost(realTimeStart, realTimeEnd,
-                                    threadTimeStart, threadTimeEnd)
+                            .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
                             .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
                             .setRecentCpuRate(cpuSampler.getCpuRateInfo())
                             .setThreadStackEntries(threadStackEntries)
@@ -68,12 +64,8 @@ public class BlockCanaryCore {
                     }
                 }
             }
-        }, blockThresholdMillis));
+        }, getContext().getConfigBlockThreshold()));
         LogWriter.cleanOldFiles();
-    }
-
-    public void setMainLooperPrinter(LooperPrinter looperPrinter) {
-        mainLooperPrinter = looperPrinter;
     }
 
     /**
@@ -92,24 +84,36 @@ public class BlockCanaryCore {
         return sInstance;
     }
 
-    private long sampleInterval(int blockThresholdMillis) {
-        // minimum protect
-        long sampleIntervalMillis = blockThresholdMillis / 2;
-        if (sampleIntervalMillis < MIN_INTERVAL_MILLIS) {
-            sampleIntervalMillis = MIN_INTERVAL_MILLIS;
-        }
-        return sampleIntervalMillis;
-    }
-
+    /**
+     * set {@link IBlockCanaryContext} implementation
+     *
+     * @param blockCanaryContext blockCanaryContext
+     */
     public static void setIBlockCanaryContext(IBlockCanaryContext blockCanaryContext) {
         sBlockCanaryContext = blockCanaryContext;
+    }
+
+    public static IBlockCanaryContext getContext() {
+        return sBlockCanaryContext;
     }
 
     public void setOnBlockEventInterceptor(OnBlockEventInterceptor onBlockEventInterceptor) {
         mOnBlockEventInterceptor = onBlockEventInterceptor;
     }
 
-    public static IBlockCanaryContext getContext() {
-        return sBlockCanaryContext;
+    public void setMainLooperPrinter(LooperPrinter looperPrinter) {
+        mainLooperPrinter = looperPrinter;
+    }
+
+    /**
+     * Because postDelayed maybe cause more delay than MonitorEnv.get().getConfigBlockThreshold()
+     * it maybe cause can not get Thread Task info when notify block event.
+     * So, is it be better to make delay time < MonitorEnv.get().getConfigBlockThreshold(),
+     * such as MonitorEnv.get().getConfigBlockThreshold() * 0.8f OR MonitorEnv.get().getConfigBlockThreshold() - 20 ?
+     *
+     * @return sample delay
+     */
+    long getSampleDelay() {
+        return (long) (BlockCanaryCore.getContext().getConfigBlockThreshold() * 0.8f);
     }
 }

@@ -34,5 +34,3 @@ captures/
 # jetbrain project file
 .idea/
 *.iml
-gradle/
-gradlew*

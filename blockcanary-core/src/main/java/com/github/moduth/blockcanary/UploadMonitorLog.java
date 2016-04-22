@@ -13,6 +13,8 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.util.Log;
+
 import com.github.moduth.blockcanary.log.BlockCanaryInternals;
 
 import java.io.File;
@@ -20,18 +22,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <p>上报监控日志</p>
+ * Upload monitor log.
+ * <p>
  * Created by markzhai on 2015/9/25.
  */
-public class UploadMonitorLog {
+class UploadMonitorLog {
+
+    private static final String TAG = "UploadMonitorLog";
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
+    private UploadMonitorLog() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     private static File zipFile() {
-        String timeString = System.currentTimeMillis() + "";
+        String timeString = Long.toString(System.currentTimeMillis());
         try {
             timeString = FORMAT.format(new Date());
         } catch (Throwable e) {
-            // 以防万一
+            Log.e(TAG, "zipFile: ", e);
         }
         File zippedFile = LogWriter.generateTempZipFile("Monitor_looper_" + timeString);
         BlockCanaryCore.getContext().zipLogFile(BlockCanaryInternals.getLogFiles(), zippedFile);

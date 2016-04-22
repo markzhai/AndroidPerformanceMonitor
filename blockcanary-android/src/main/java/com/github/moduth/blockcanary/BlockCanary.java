@@ -13,17 +13,29 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-
+import android.util.Log;
+import com.github.moduth.blockcanary.ui.DisplayBlockActivity;
 import java.lang.reflect.Constructor;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.DONT_KILL_APP;
 
 /**
- * <p>looper线程监控</p>
- * Created by markzhai on 2015/9/25.
+ * Looper thread monitor.
+ *
+ * @author markzhai on 2015/9/25.
  */
-public class BlockCanary {
+public final class BlockCanary {
+
+    private static final String TAG = "BlockCanary";
 
     private static BlockCanary sInstance;
     private BlockCanaryCore mBlockCanaryCore;
@@ -38,12 +50,13 @@ public class BlockCanary {
     /**
      * Install {@link BlockCanary}
      *
-     * @param context            application context
+     * @param context application context
      * @param blockCanaryContext implementation for {@link BlockCanaryContext}
      * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
         BlockCanaryContext.init(context, blockCanaryContext);
+        setEnabled(context, DisplayBlockActivity.class, BlockCanaryContext.get().isNeedDisplay());
         return get();
     }
 
@@ -70,8 +83,6 @@ public class BlockCanary {
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
             Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.mainLooperPrinter);
-            mBlockCanaryCore.threadStackSampler.start();
-            mBlockCanaryCore.cpuSampler.start();
         }
     }
 
@@ -95,25 +106,30 @@ public class BlockCanary {
     }
 
     /**
-     * 记录开启监控的时间到preference，可以在release包收到push通知后调用。
+     * Record monitor start time to preference, you may use it when after push which tells start
+     * BlockCanary.
      */
     public void recordStartTime() {
         PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
-                .edit().putLong("BlockCanary_StartTime", System.currentTimeMillis()).commit();
+                .edit()
+                .putLong("BlockCanary_StartTime", System.currentTimeMillis())
+                .commit();
     }
 
     /**
-     * 是否监控时间结束，根据上次开启的时间(recordStartTime)和getConfigDuration计算出来。
+     * Is monitor duration end, compute from recordStartTime end getConfigDuration.
      *
-     * @return true则结束
+     * @return true if ended
      */
     public boolean isMonitorDurationEnd() {
-        long startTime = PreferenceManager.getDefaultSharedPreferences(
-                BlockCanaryContext.get().getContext()).getLong("BlockCanary_StartTime", 0);
-        return startTime != 0 &&
-                System.currentTimeMillis() - startTime > BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
+        long startTime =
+                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
+                        .getLong("BlockCanary_StartTime", 0);
+        return startTime != 0 && System.currentTimeMillis() - startTime >
+                BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
     }
 
+    @SuppressWarnings("unchecked")
     private void initNotification() {
         if (!BlockCanaryContext.get().isNeedDisplay()) {
             return;
@@ -127,7 +143,39 @@ public class BlockCanary {
             Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();
             mBlockCanaryCore.setOnBlockEventInterceptor(constructor.newInstance());
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "initNotification: ", e);
         }
+    }
+
+    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
+    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
+
+    private static void setEnabledBlocking(Context appContext, Class<?> componentClass,
+                                           boolean enabled) {
+        ComponentName component = new ComponentName(appContext, componentClass);
+        PackageManager packageManager = appContext.getPackageManager();
+        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        // Blocks on IPC.
+        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
+    }
+    // end of lines copied from LeakCanary
+
+    private static void executeOnFileIoThread(Runnable runnable) {
+        fileIoExecutor.execute(runnable);
+    }
+
+    private static Executor newSingleThreadExecutor(String threadName) {
+        return Executors.newSingleThreadExecutor(new LeakCanarySingleThreadFactory(threadName));
+    }
+
+    private static void setEnabled(Context context, final Class<?> componentClass,
+                                   final boolean enabled) {
+        final Context appContext = context.getApplicationContext();
+        executeOnFileIoThread(new Runnable() {
+            @Override
+            public void run() {
+                setEnabledBlocking(appContext, componentClass, enabled);
+            }
+        });
     }
 }
