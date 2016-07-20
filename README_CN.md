@@ -55,7 +55,7 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 见[BlockCanary — 轻松找出Android App界面卡顿元凶](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
 
 或见下图
-![flow](art/flow.png "flow")
+![flow](art/flow-cn.png "flow")
 
 # 如何分析log
 除了图形界面可以供开发、测试阶段直接看卡顿原因外，更多的使用场景其实在于大范围的log采集和分析：如线上环境和monkey，或者测试同学们在整个测试阶段的log收集和分析。
