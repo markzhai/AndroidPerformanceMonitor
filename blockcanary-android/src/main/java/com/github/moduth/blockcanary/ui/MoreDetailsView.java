@@ -29,10 +29,9 @@ public final class MoreDetailsView extends View {
     public MoreDetailsView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mIconPaint.setStrokeWidth(LeakCanaryUi.dpToPixel(2f, getResources()));
-        mIconPaint.setColor(LeakCanaryUi.ROOT_COLOR);
+        mIconPaint.setStrokeWidth(BlockCanaryUi.dpToPixel(2f, getResources()));
+        mIconPaint.setColor(BlockCanaryUi.ROOT_COLOR);
     }
-
 
     @Override protected void onDraw(Canvas canvas) {
         int width = getWidth();

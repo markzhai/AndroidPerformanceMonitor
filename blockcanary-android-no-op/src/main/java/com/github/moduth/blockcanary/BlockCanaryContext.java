@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2016 MarkZhai (http://zhaiyifan.cn).
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,8 +18,13 @@ package com.github.moduth.blockcanary;
 import android.content.Context;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
-public class BlockCanaryContext implements IBlockCanaryContext {
+/**
+ * No-op context.
+ */
+public class BlockCanaryContext {
 
     private static Context sAppContext;
     private static BlockCanaryContext sInstance = null;
@@ -66,9 +73,8 @@ public class BlockCanaryContext implements IBlockCanaryContext {
         return true;
     }
 
-    @Override
     public String getLogPath() {
-        return "/blockcanary/performance";
+        return "/blockcanary/";
     }
 
     public boolean zipLogFile(File[] src, File dest) {
@@ -79,8 +85,11 @@ public class BlockCanaryContext implements IBlockCanaryContext {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public String getStackFoldPrefix() {
+        return null;
+    }
+
+    public List<String> getWhiteList() {
         return null;
     }
 }

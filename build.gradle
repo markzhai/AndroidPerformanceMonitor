@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.3'
     }
 }
 
@@ -16,9 +16,9 @@ allprojects {
         jcenter()
     }
     ext {
-        LIBRARY_COMPILE_SDK_VERSION = 22
-        LIBRARY_BUILD_TOOLS_VERSION = "23.0.2"
-        LIBRARY_MIN_SDK_VERSION = 8
-        LIBRARY_TARGET_SDK_VERSION = 21
+        LIBRARY_COMPILE_SDK_VERSION = 23
+        LIBRARY_BUILD_TOOLS_VERSION = "23.0.3"
+        LIBRARY_MIN_SDK_VERSION = 9
+        LIBRARY_TARGET_SDK_VERSION = 22
     }
 }

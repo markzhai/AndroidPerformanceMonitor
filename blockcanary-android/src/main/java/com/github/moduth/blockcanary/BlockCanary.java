@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2016 MarkZhai (http://zhaiyifan.cn).
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,9 +20,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import com.github.moduth.blockcanary.ui.DisplayBlockActivity;
-import java.lang.reflect.Constructor;
+
+import com.github.moduth.blockcanary.ui.DisplayActivity;
+import com.github.moduth.blockcanary.ui.DisplayService;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -29,22 +32,23 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 import static android.content.pm.PackageManager.DONT_KILL_APP;
 
 /**
- * Looper thread monitor.
- *
- * @author markzhai on 2015/9/25.
+ * {@}
  */
 public final class BlockCanary {
 
     private static final String TAG = "BlockCanary";
 
     private static BlockCanary sInstance;
-    private BlockCanaryCore mBlockCanaryCore;
+    private BlockCanaryInternals mBlockCanaryCore;
     private boolean mLooperLoggingStarted = false;
 
     private BlockCanary() {
-        BlockCanaryCore.setIBlockCanaryContext(BlockCanaryContext.get());
-        mBlockCanaryCore = BlockCanaryCore.get();
-        initNotification();
+        BlockCanaryInternals.setContext(BlockCanaryContext.get());
+        mBlockCanaryCore = BlockCanaryInternals.getInstance();
+        if (!BlockCanaryContext.get().isNeedDisplay()) {
+            return;
+        }
+        mBlockCanaryCore.setOnBlockInterceptor(new DisplayService());
     }
 
     /**
@@ -56,7 +60,7 @@ public final class BlockCanary {
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
         BlockCanaryContext.init(context, blockCanaryContext);
-        setEnabled(context, DisplayBlockActivity.class, BlockCanaryContext.get().isNeedDisplay());
+        setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().isNeedDisplay());
         return get();
     }
 
@@ -82,7 +86,7 @@ public final class BlockCanary {
     public void start() {
         if (!mLooperLoggingStarted) {
             mLooperLoggingStarted = true;
-            Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.mainLooperPrinter);
+            Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.monitor);
         }
     }
 
@@ -93,7 +97,7 @@ public final class BlockCanary {
         if (mLooperLoggingStarted) {
             mLooperLoggingStarted = false;
             Looper.getMainLooper().setMessageLogging(null);
-            mBlockCanaryCore.threadStackSampler.stop();
+            mBlockCanaryCore.stackSampler.stop();
             mBlockCanaryCore.cpuSampler.stop();
         }
     }
@@ -102,7 +106,7 @@ public final class BlockCanary {
      * Zip and upload log files.
      */
     public void upload() {
-        UploadMonitorLog.forceZipLogAndUpload();
+        Uploader.forceZipLogAndUpload();
     }
 
     /**
@@ -129,24 +133,6 @@ public final class BlockCanary {
                 BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
     }
 
-    @SuppressWarnings("unchecked")
-    private void initNotification() {
-        if (!BlockCanaryContext.get().isNeedDisplay()) {
-            return;
-        }
-
-        try {
-            Class notifier = Class.forName("com.github.moduth.blockcanary.ui.Notifier");
-            if (notifier == null) {
-                return;
-            }
-            Constructor<? extends OnBlockEventInterceptor> constructor = notifier.getConstructor();
-            mBlockCanaryCore.setOnBlockEventInterceptor(constructor.newInstance());
-        } catch (Exception e) {
-            Log.e(TAG, "initNotification: ", e);
-        }
-    }
-
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
     private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
 
@@ -165,7 +151,7 @@ public final class BlockCanary {
     }
 
     private static Executor newSingleThreadExecutor(String threadName) {
-        return Executors.newSingleThreadExecutor(new LeakCanarySingleThreadFactory(threadName));
+        return Executors.newSingleThreadExecutor(new SingleThreadFactory(threadName));
     }
 
     private static void setEnabled(Context context, final Class<?> componentClass,
