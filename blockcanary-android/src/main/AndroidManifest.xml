@@ -1,0 +1,18 @@
+<manifest package="com.github.moduth.blockcanary"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+                android:name=".ui.DisplayBlockActivity"
+                android:icon="@drawable/block_canary_icon"
+                android:enabled="false"
+                android:label="@string/display_activity_label"
+                android:taskAffinity="com.github.moduth.blockcanary"
+                android:theme="@style/block_canary_BlockCanary.Base">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>

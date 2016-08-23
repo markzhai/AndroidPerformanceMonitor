@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BlockCanary</string>
+
+    <string name="hello_world">After click button, main-thread consuming event will be triggered, which would be caught be BlockCanary, write to log file, and use notification to display</string>
+    <string name="thread_waiting">Thread\nwait\nblock</string>
+    <string name="io_waiting">IO\nblock</string>
+    <string name="cpu_busy">Computation\nblock</string>
+    <string name="more">Wait\nfor\nmore</string>
+    <string name="action_settings">Settings</string>
+</resources>

@@ -1,0 +1,1 @@
+include ':demo', ':blockcanary-android-no-op', ':blockcanary-android', ':blockcanary-core'

@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="state_bar_height">25dp</dimen>
+</resources>
