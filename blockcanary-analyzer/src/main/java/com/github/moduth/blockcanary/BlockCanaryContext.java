@@ -103,7 +103,7 @@ public class BlockCanaryContext {
      *
      * @return true if need, else if not need.
      */
-    public boolean isNeedDisplay() {
+    public boolean displayNotification() {
         return true;
     }
 

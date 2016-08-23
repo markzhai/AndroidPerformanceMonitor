@@ -60,7 +60,7 @@ public final class BlockCanaryInternals {
                             .flushString();
                     LogWriter.save(blockInfo.toString());
 
-                    if (getContext().isNeedDisplay() && mInterceptor != null) {
+                    if (getContext().displayNotification() && mInterceptor != null) {
                         mInterceptor.onBlock(getContext().getContext(), blockInfo.timeStart);
                     }
                 }

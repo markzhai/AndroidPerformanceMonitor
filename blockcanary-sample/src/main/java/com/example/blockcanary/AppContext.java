@@ -58,7 +58,7 @@ public class AppContext extends BlockCanaryContext {
     }
 
     @Override
-    public boolean isNeedDisplay() {
+    public boolean displayNotification() {
         return BuildConfig.DEBUG;
     }
 }

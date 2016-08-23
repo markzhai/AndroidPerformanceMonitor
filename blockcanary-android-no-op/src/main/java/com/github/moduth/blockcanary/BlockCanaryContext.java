@@ -69,8 +69,8 @@ public class BlockCanaryContext {
         return 1000;
     }
 
-    public boolean isNeedDisplay() {
-        return true;
+    public boolean displayNotification() {
+        return false;
     }
 
     public String getLogPath() {

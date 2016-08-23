@@ -45,7 +45,7 @@ public final class BlockCanary {
     private BlockCanary() {
         BlockCanaryInternals.setContext(BlockCanaryContext.get());
         mBlockCanaryCore = BlockCanaryInternals.getInstance();
-        if (!BlockCanaryContext.get().isNeedDisplay()) {
+        if (!BlockCanaryContext.get().displayNotification()) {
             return;
         }
         mBlockCanaryCore.setOnBlockInterceptor(new DisplayService());
@@ -60,7 +60,7 @@ public final class BlockCanary {
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
         BlockCanaryContext.init(context, blockCanaryContext);
-        setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().isNeedDisplay());
+        setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().displayNotification());
         return get();
     }
 
