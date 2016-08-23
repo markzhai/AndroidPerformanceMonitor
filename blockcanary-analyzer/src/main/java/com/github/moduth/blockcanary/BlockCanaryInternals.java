@@ -39,9 +39,9 @@ public final class BlockCanaryInternals {
 
         stackSampler = new StackSampler(
                 Looper.getMainLooper().getThread(),
-                sContext.getConfigDumpIntervalMillis());
+                sContext.getConfigDumpInterval());
 
-        cpuSampler = new CpuSampler(sContext.getConfigDumpIntervalMillis());
+        cpuSampler = new CpuSampler(sContext.getConfigDumpInterval());
 
         setMonitor(new LooperMonitor(new BlockListener() {
 

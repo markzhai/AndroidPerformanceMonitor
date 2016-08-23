@@ -22,9 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * User should provide a real implementation of this class to use BlockCanary,
- * which provides runtime environment to library (including configuration
- * and app-related log like uid and network environment).
+ * User should provide a real implementation of this class to use BlockCanary.
  */
 public class BlockCanaryContext {
 
@@ -157,7 +155,7 @@ public class BlockCanaryContext {
      *
      * @return dump interval (in millis)
      */
-    public int getConfigDumpIntervalMillis() {
+    public int getConfigDumpInterval() {
         return getConfigBlockThreshold();
     }
 

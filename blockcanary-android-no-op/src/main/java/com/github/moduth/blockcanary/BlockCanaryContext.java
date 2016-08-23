@@ -89,6 +89,10 @@ public class BlockCanaryContext {
         return null;
     }
 
+    public int getConfigDumpInterval() {
+        return getConfigBlockThreshold();
+    }
+
     public List<String> getWhiteList() {
         return null;
     }
