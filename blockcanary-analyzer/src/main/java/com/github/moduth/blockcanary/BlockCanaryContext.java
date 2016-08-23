@@ -40,7 +40,7 @@ public class BlockCanaryContext {
 
     public static BlockCanaryContext get() {
         if (sInstance == null) {
-            throw new RuntimeException("BlockCanaryContext not init");
+            throw new RuntimeException("BlockCanaryContext null");
         } else {
             return sInstance;
         }
@@ -57,7 +57,7 @@ public class BlockCanaryContext {
      * @return apk qualifier
      */
     public String getQualifier() {
-        return "Unspecified";
+        return "unknown";
     }
 
     /**
@@ -66,7 +66,7 @@ public class BlockCanaryContext {
      * @return user id
      */
     public String getUid() {
-        return "0";
+        return "uid";
     }
 
     /**
@@ -75,7 +75,7 @@ public class BlockCanaryContext {
      * @return String like 2G, 3G, 4G, wifi, etc.
      */
     public String getNetworkType() {
-        return "UNKNOWN";
+        return "unknown";
     }
 
     /**
