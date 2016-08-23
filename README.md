@@ -1,7 +1,7 @@
 [Chinese README](https://github.com/moduth/blockcanary/blob/master/README_CN.md)
 
 # BlockCanary [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android)
-A transparent ui-block detection library for Android, app only needs one-line-code to setup. Author: [markzhai](https://github.com/markzhai), [Contributors](https://github.com/moduth/blockcanary#contributors)
+A transparent ui-block detection library for Android, app only needs one-line-code to setup.
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
@@ -86,9 +86,9 @@ Principle flow picture:
 
 # Contributors
 
-This library is initially created by [markzhai](https://github.com/markzhai), and is maintained under the organization [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
+This library is initially created by [markzhai](https://github.com/markzhai), and maintained under the organization [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
 
-Special thanks to [android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu) to contribute when this library is still young.
+Special thanks to [android-cjj](https://github.com/android-cjj), [Mr.Bao](https://github.com/baoyongzhang), [chiahaolu](https://github.com/chiahaolu) to contribute.
 
 # Change Log
 
