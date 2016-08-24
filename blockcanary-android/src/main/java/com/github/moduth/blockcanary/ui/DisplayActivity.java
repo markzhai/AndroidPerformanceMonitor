@@ -302,7 +302,7 @@ public class DisplayActivity extends Activity {
             return null;
         }
         for (BlockInfo blockInfo : mBlockInfoEntries) {
-            if (blockInfo.timeStart.equals(startTime)) {
+            if (blockInfo.timeStart != null && startTime.equals(blockInfo.timeStart)) {
                 return blockInfo;
             }
         }
