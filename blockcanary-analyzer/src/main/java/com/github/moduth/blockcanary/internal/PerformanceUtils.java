@@ -68,7 +68,7 @@ class PerformanceUtils {
     }
 
     public static long getFreeMemory() {
-        ActivityManager am = (ActivityManager) BlockCanaryInternals.getContext().getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) BlockCanaryInternals.getContext().provideContext().getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
         return mi.availMem / 1024;

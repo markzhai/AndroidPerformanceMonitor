@@ -18,9 +18,6 @@ package com.github.moduth.blockcanary;
 import android.os.SystemClock;
 import android.util.Printer;
 
-/**
- * LooperMonitor, uses message dispatch to do monitoring.
- */
 class LooperMonitor implements Printer {
 
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
@@ -29,8 +26,7 @@ class LooperMonitor implements Printer {
     private long mStartTimestamp = 0;
     private long mStartThreadTimestamp = 0;
     private BlockListener mBlockListener = null;
-
-    private boolean mStartedPrinting = false;
+    private boolean mPrintingStarted = false;
 
     public interface BlockListener {
         void onBlockEvent(long realStartTime,
@@ -49,14 +45,14 @@ class LooperMonitor implements Printer {
 
     @Override
     public void println(String x) {
-        if (!mStartedPrinting) {
+        if (!mPrintingStarted) {
             mStartTimestamp = System.currentTimeMillis();
             mStartThreadTimestamp = SystemClock.currentThreadTimeMillis();
-            mStartedPrinting = true;
+            mPrintingStarted = true;
             startDump();
         } else {
             final long endTime = System.currentTimeMillis();
-            mStartedPrinting = false;
+            mPrintingStarted = false;
             if (isBlock(endTime)) {
                 notifyBlockEvent(endTime);
             }

@@ -39,7 +39,7 @@ public class ProcessUtils {
             if (sProcessName != null) {
                 return sProcessName;
             }
-            sProcessName = obtainProcessName(BlockCanaryInternals.getContext().getContext());
+            sProcessName = obtainProcessName(BlockCanaryInternals.getContext().provideContext());
             return sProcessName;
         }
     }

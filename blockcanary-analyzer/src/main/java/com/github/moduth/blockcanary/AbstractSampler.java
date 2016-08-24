@@ -47,7 +47,6 @@ abstract class AbstractSampler {
     }
 
     public void start() {
-        // exit if dumping
         if (mShouldSample.get()) {
             return;
         }
@@ -59,7 +58,6 @@ abstract class AbstractSampler {
     }
 
     public void stop() {
-        // exit if not dumping
         if (!mShouldSample.get()) {
             return;
         }

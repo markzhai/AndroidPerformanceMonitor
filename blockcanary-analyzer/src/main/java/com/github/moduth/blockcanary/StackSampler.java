@@ -17,22 +17,19 @@ package com.github.moduth.blockcanary;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 
 /**
- * {@link StackSampler} dumps main thread stack and saves last recent stack piece locally.
+ * Dumps thread stack.
  */
 class StackSampler extends AbstractSampler {
 
-    private static final LinkedHashMap<Long, String> mThreadStackEntries = new LinkedHashMap<>();
     private static final int DEFAULT_MAX_ENTRY_COUNT = 100;
+    private static final LinkedHashMap<Long, String> sStackMap = new LinkedHashMap<>();
 
     private int mMaxEntryCount = DEFAULT_MAX_ENTRY_COUNT;
-
-    private Thread mThread;
+    private Thread mCurrentThread;
 
     public StackSampler(Thread thread, long sampleIntervalMillis) {
         this(thread, DEFAULT_MAX_ENTRY_COUNT, sampleIntervalMillis);
@@ -40,19 +37,19 @@ class StackSampler extends AbstractSampler {
 
     public StackSampler(Thread thread, int maxEntryCount, long sampleIntervalMillis) {
         super(sampleIntervalMillis);
-        mThread = thread;
+        mCurrentThread = thread;
         mMaxEntryCount = maxEntryCount;
     }
 
     public ArrayList<String> getThreadStackEntries(long startTime, long endTime) {
         ArrayList<String> result = new ArrayList<>();
-        synchronized (mThreadStackEntries) {
-            for (Long entryTime : mThreadStackEntries.keySet()) {
+        synchronized (sStackMap) {
+            for (Long entryTime : sStackMap.keySet()) {
                 if (startTime < entryTime && entryTime < endTime) {
                     result.add(BlockInfo.TIME_FORMATTER.format(entryTime)
                             + BlockInfo.SEPARATOR
                             + BlockInfo.SEPARATOR
-                            + mThreadStackEntries.get(entryTime));
+                            + sStackMap.get(entryTime));
                 }
             }
         }
@@ -63,17 +60,17 @@ class StackSampler extends AbstractSampler {
     protected void doSample() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (StackTraceElement stackTraceElement : mThread.getStackTrace()) {
+        for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {
             stringBuilder
                     .append(stackTraceElement.toString())
                     .append(BlockInfo.SEPARATOR);
         }
 
-        synchronized (mThreadStackEntries) {
-            if (mThreadStackEntries.size() == mMaxEntryCount && mMaxEntryCount > 0) {
-                mThreadStackEntries.remove(mThreadStackEntries.keySet().iterator().next());
+        synchronized (sStackMap) {
+            if (sStackMap.size() == mMaxEntryCount && mMaxEntryCount > 0) {
+                sStackMap.remove(sStackMap.keySet().iterator().next());
             }
-            mThreadStackEntries.put(System.currentTimeMillis(), stringBuilder.toString());
+            sStackMap.put(System.currentTimeMillis(), stringBuilder.toString());
         }
     }
 }

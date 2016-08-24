@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Dumps cpu usage information.
+ * Dumps cpu usage.
  */
 class CpuSampler extends AbstractSampler {
 

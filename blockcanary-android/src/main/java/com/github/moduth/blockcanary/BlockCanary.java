@@ -110,23 +110,23 @@ public final class BlockCanary {
      * BlockCanary.
      */
     public void recordStartTime() {
-        PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
+        PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
                 .edit()
                 .putLong("BlockCanary_StartTime", System.currentTimeMillis())
                 .commit();
     }
 
     /**
-     * Is monitor duration end, compute from recordStartTime end getConfigDuration.
+     * Is monitor duration end, compute from recordStartTime end provideMonitorDuration.
      *
      * @return true if ended
      */
     public boolean isMonitorDurationEnd() {
         long startTime =
-                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().getContext())
+                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
                         .getLong("BlockCanary_StartTime", 0);
         return startTime != 0 && System.currentTimeMillis() - startTime >
-                BlockCanaryContext.get().getConfigDuration() * 3600 * 1000;
+                BlockCanaryContext.get().provideMonitorDuration() * 3600 * 1000;
     }
 
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.

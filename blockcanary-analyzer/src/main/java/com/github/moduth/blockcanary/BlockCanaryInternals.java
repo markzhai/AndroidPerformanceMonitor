@@ -39,9 +39,9 @@ public final class BlockCanaryInternals {
 
         stackSampler = new StackSampler(
                 Looper.getMainLooper().getThread(),
-                sContext.getConfigDumpInterval());
+                sContext.provideDumpInterval());
 
-        cpuSampler = new CpuSampler(sContext.getConfigDumpInterval());
+        cpuSampler = new CpuSampler(sContext.provideDumpInterval());
 
         setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() {
 
@@ -61,11 +61,11 @@ public final class BlockCanaryInternals {
                     LogWriter.save(blockInfo.toString());
 
                     if (getContext().displayNotification() && mInterceptor != null) {
-                        mInterceptor.onBlock(getContext().getContext(), blockInfo.timeStart);
+                        mInterceptor.onBlock(getContext().provideContext(), blockInfo.timeStart);
                     }
                 }
             }
-        }, getContext().getConfigBlockThreshold()));
+        }, getContext().provideBlockThreshold()));
 
         LogWriter.cleanObsolete();
     }
@@ -108,19 +108,19 @@ public final class BlockCanaryInternals {
     }
 
     public long getSampleDelay() {
-        return (long) (BlockCanaryInternals.getContext().getConfigBlockThreshold() * 0.8f);
+        return (long) (BlockCanaryInternals.getContext().provideBlockThreshold() * 0.8f);
     }
 
     public static String getPath() {
         String state = Environment.getExternalStorageState();
         String logPath = BlockCanaryInternals.getContext()
-                == null ? "" : BlockCanaryInternals.getContext().getLogPath();
+                == null ? "" : BlockCanaryInternals.getContext().providePath();
 
         if (Environment.MEDIA_MOUNTED.equals(state)
                 && Environment.getExternalStorageDirectory().canWrite()) {
             return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
-        return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryInternals.getContext().getLogPath();
+        return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryInternals.getContext().providePath();
     }
 
     public static File detectedBlockDirectory() {

@@ -41,7 +41,7 @@ final class Uploader {
             Log.e(TAG, "zip: ", e);
         }
         File zippedFile = LogWriter.generateTempZip("BlockCanary-" + timeString);
-        BlockCanaryInternals.getContext().zipLogFile(BlockCanaryInternals.getLogFiles(), zippedFile);
+        BlockCanaryInternals.getContext().zip(BlockCanaryInternals.getLogFiles(), zippedFile);
         LogWriter.deleteAll();
         return zippedFile;
     }
@@ -52,7 +52,7 @@ final class Uploader {
             public void run() {
                 final File file = zip();
                 if (file.exists()) {
-                    BlockCanaryInternals.getContext().uploadLogFile(file);
+                    BlockCanaryInternals.getContext().upload(file);
                 }
             }
         });

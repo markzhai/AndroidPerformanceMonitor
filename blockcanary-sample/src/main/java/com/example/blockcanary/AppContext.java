@@ -25,35 +25,35 @@ public class AppContext extends BlockCanaryContext {
     private static final String TAG = "AppContext";
 
     @Override
-    public String getQualifier() {
+    public String provideQualifier() {
         String qualifier = "";
         try {
             PackageInfo info = DemoApplication.getAppContext().getPackageManager()
                     .getPackageInfo(DemoApplication.getAppContext().getPackageName(), 0);
             qualifier += info.versionCode + "_" + info.versionName + "_YYB";
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "getQualifier exception", e);
+            Log.e(TAG, "provideQualifier exception", e);
         }
         return qualifier;
     }
 
     @Override
-    public String getUid() {
+    public String provideUid() {
         return "87224330";
     }
 
     @Override
-    public String getNetworkType() {
+    public String provideNetworkType() {
         return "4G";
     }
 
     @Override
-    public int getConfigDuration() {
+    public int provideMonitorDuration() {
         return 9999;
     }
 
     @Override
-    public int getConfigBlockThreshold() {
+    public int provideBlockThreshold() {
         return 500;
     }
 

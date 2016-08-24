@@ -26,15 +26,14 @@ import java.util.List;
  */
 public class BlockCanaryContext {
 
-    private static Context sAppContext;
+    private static Context sApplicationContext;
     private static BlockCanaryContext sInstance = null;
 
     public BlockCanaryContext() {
     }
 
-    public static void init(Context context,
-                            BlockCanaryContext blockCanaryContext) {
-        sAppContext = context;
+    public static void init(Context context, BlockCanaryContext blockCanaryContext) {
+        sApplicationContext = context;
         sInstance = blockCanaryContext;
     }
 
@@ -46,8 +45,11 @@ public class BlockCanaryContext {
         }
     }
 
-    public Context getContext() {
-        return sAppContext;
+    /**
+     * Provide application context.
+     */
+    public Context provideContext() {
+        return sApplicationContext;
     }
 
     /**
@@ -56,7 +58,7 @@ public class BlockCanaryContext {
      *
      * @return apk qualifier
      */
-    public String getQualifier() {
+    public String provideQualifier() {
         return "unknown";
     }
 
@@ -65,16 +67,16 @@ public class BlockCanaryContext {
      *
      * @return user id
      */
-    public String getUid() {
+    public String provideUid() {
         return "uid";
     }
 
     /**
      * Network type
      *
-     * @return String like 2G, 3G, 4G, wifi, etc.
+     * @return {@link String} like 2G, 3G, 4G, wifi, etc.
      */
-    public String getNetworkType() {
+    public String provideNetworkType() {
         return "unknown";
     }
 
@@ -84,8 +86,8 @@ public class BlockCanaryContext {
      *
      * @return monitor last duration (in hour)
      */
-    public int getConfigDuration() {
-        return 99999;
+    public int provideMonitorDuration() {
+        return -1;
     }
 
     /**
@@ -94,8 +96,31 @@ public class BlockCanaryContext {
      *
      * @return threshold in mills
      */
-    public int getConfigBlockThreshold() {
+    public int provideBlockThreshold() {
         return 1000;
+    }
+
+    /**
+     * Thread stack dump interval, use when block happens, BlockCanary will dump on main thread
+     * stack according to current sample cycle.
+     * <p>
+     * Because the implementation mechanism of Looper, real dump interval would be longer than
+     * the period specified here (especially when cpu is busier)
+     * </p>
+     *
+     * @return dump interval (in millis)
+     */
+    public int provideDumpInterval() {
+        return provideBlockThreshold();
+    }
+
+    /**
+     * Path to save log, like "/blockcanary/", will save to sdcard if can
+     *
+     * @return path of log files
+     */
+    public String providePath() {
+        return "/blockcanary/";
     }
 
     /**
@@ -108,65 +133,44 @@ public class BlockCanaryContext {
     }
 
     /**
-     * Path to save log, like "/blockcanary/log", will save to sdcard if can
-     *
-     * @return path of log files
-     */
-    public String getLogPath() {
-        return "/blockcanary/";
-    }
-
-    /**
-     * Implement in your project.
+     * Implement in your project, bundle files into a zip file.
      *
      * @param src  files before compress
      * @param dest files compressed
      * @return true if compression is successful
      */
-    public boolean zipLogFile(File[] src, File dest) {
+    public boolean zip(File[] src, File dest) {
         return false;
     }
 
     /**
-     * Implement in your project.
+     * Implement in your project, bundled log files.
      *
      * @param zippedFile zipped file
      */
-    public void uploadLogFile(File zippedFile) {
+    public void upload(File zippedFile) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Config string prefix to determine how to fold stack
+     * Config string prefix to determine how to fold stack (only for ui),
+     * by default it uses process name.
      *
      * @return string prefix, null if use process name.
      */
-    public String getStackFoldPrefix() {
+    public String provideStackFoldPrefix() {
         return null;
-    }
-
-    /**
-     * Thread stack dump interval, use when block happens, BlockCanary will dump on main thread
-     * stack according to current sample cycle.
-     * <p>
-     * Notice: Because the implementation mechanism of Looper, real dump interval would be longer than
-     * the period specified here (longer if cpu is busier)
-     * </p>
-     *
-     * @return dump interval (in millis)
-     */
-    public int getConfigDumpInterval() {
-        return getConfigBlockThreshold();
     }
 
     /**
      * Get white list, operations in white list will not be recorded.
      */
-    public List<String> getWhiteList() {
+    public List<String> provideWhiteList() {
         LinkedList<String> whiteList = new LinkedList<>();
         whiteList.add("com.android");
         whiteList.add("java");
         whiteList.add("android");
+        whiteList.add("org.chromium");
         return whiteList;
     }
 }

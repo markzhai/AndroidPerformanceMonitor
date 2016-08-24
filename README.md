@@ -33,7 +33,7 @@ Maximum log count is set to 100, you can rewrite it in your app `int.xml`.
 public class DemoApplication extends Application {
     @Override
     public void onCreate() {
-        ...
+        // ...
         // Do it on main process
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }

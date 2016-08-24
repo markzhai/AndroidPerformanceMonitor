@@ -18,7 +18,6 @@ package com.github.moduth.blockcanary;
 import android.content.Context;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,14 +25,14 @@ import java.util.List;
  */
 public class BlockCanaryContext {
 
-    private static Context sAppContext;
+    private static Context sApplicationContext;
     private static BlockCanaryContext sInstance = null;
 
     public BlockCanaryContext() {
     }
 
     public static void init(Context c, BlockCanaryContext g) {
-        sAppContext = c;
+        sApplicationContext = c;
         sInstance = g;
     }
 
@@ -45,55 +44,55 @@ public class BlockCanaryContext {
         }
     }
 
-    public Context getContext() {
-        return sAppContext;
+    public Context provideContext() {
+        return sApplicationContext;
     }
 
-    public String getQualifier() {
+    public String provideQualifier() {
         return "Unspecified";
     }
 
-    public String getUid() {
+    public String provideUid() {
         return "0";
     }
 
-    public String getNetworkType() {
+    public String provideNetworkType() {
         return "UNKNOWN";
     }
 
-    public int getConfigDuration() {
+    public int provideMonitorDuration() {
         return 99999;
     }
 
-    public int getConfigBlockThreshold() {
+    public int provideBlockThreshold() {
         return 1000;
+    }
+
+    public int provideDumpInterval() {
+        return provideBlockThreshold();
+    }
+
+    public String providePath() {
+        return "/blockcanary/";
     }
 
     public boolean displayNotification() {
         return false;
     }
 
-    public String getLogPath() {
-        return "/blockcanary/";
-    }
-
-    public boolean zipLogFile(File[] src, File dest) {
+    public boolean zip(File[] src, File dest) {
         return false;
     }
 
-    public void uploadLogFile(File zippedFile) {
+    public void upload(File zippedFile) {
         throw new UnsupportedOperationException();
     }
 
-    public String getStackFoldPrefix() {
+    public String provideStackFoldPrefix() {
         return null;
     }
 
-    public int getConfigDumpInterval() {
-        return getConfigBlockThreshold();
-    }
-
-    public List<String> getWhiteList() {
+    public List<String> provideWhiteList() {
         return null;
     }
 }

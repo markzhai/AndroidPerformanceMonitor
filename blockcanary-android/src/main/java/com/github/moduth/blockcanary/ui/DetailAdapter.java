@@ -191,7 +191,7 @@ final class DetailAdapter extends BaseAdapter {
 
     private String getStackFoldPrefix() {
         if (mStackFoldPrefix == null) {
-            String prefix = BlockCanaryInternals.getContext().getStackFoldPrefix();
+            String prefix = BlockCanaryInternals.getContext().provideStackFoldPrefix();
             if (prefix != null) {
                 mStackFoldPrefix = prefix;
             } else {
