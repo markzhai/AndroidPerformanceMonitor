@@ -67,16 +67,6 @@ public final class BlockInfo {
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
 
-//    public static String sQualifier;
-//    public static String sModel;
-//    public static String sApiLevel = "";
-//    /**
-//     * The International Mobile Equipment Identity or IMEI /aɪˈmiː/ is a number,
-//     * usually unique, to identify 3GPP and iDEN mobile phones
-//     */
-//    public static String sImei = "";
-//    public static int sCpuCoreNum = -1;
-
     public static String sQualifier;
     public static String sModel;
     public static String sApiLevel = "";
@@ -86,6 +76,12 @@ public final class BlockInfo {
      */
     public static String sImei = "";
     public static int sCpuCoreNum = -1;
+
+    public String qualifier;
+    public String model;
+    public String apiLevel = "";
+    public String imei = "";
+    public int cpuCoreNum = -1;
 
     // Per Block Info fields
     public String uid;
@@ -109,7 +105,24 @@ public final class BlockInfo {
     private StringBuilder stackSb = new StringBuilder();
     private static final String EMPTY_IMEI = "empty_imei";
 
-    public File logFile;
+    public File logFileForUi;
+
+    static {
+        sCpuCoreNum = PerformanceUtils.getNumCores();
+        sModel = Build.MODEL;
+        sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
+        sQualifier = BlockCanaryInternals.getContext().provideQualifier();
+        try {
+            TelephonyManager mTManager = (TelephonyManager) BlockCanaryInternals
+                    .getContext()
+                    .provideContext()
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            sImei = mTManager.getDeviceId();
+        } catch (Exception exception) {
+            Log.e(TAG, NEW_INSTANCE_METHOD, exception);
+            sImei = EMPTY_IMEI;
+        }
+    }
 
     private BlockInfo() {
     }
@@ -127,20 +140,11 @@ public final class BlockInfo {
             }
         }
 
-        if (sCpuCoreNum < 0) {
-            sCpuCoreNum = PerformanceUtils.getNumCores();
-            sModel = Build.MODEL;
-            sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
-            sQualifier = BlockCanaryInternals.getContext().provideQualifier();
-            try {
-                TelephonyManager mTManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                sImei = mTManager.getDeviceId();
-            } catch (Exception e) {
-                Log.e(TAG, NEW_INSTANCE_METHOD, e);
-                sImei = EMPTY_IMEI;
-            }
-        }
-
+        blockInfo.cpuCoreNum = sCpuCoreNum;
+        blockInfo.model = sModel;
+        blockInfo.apiLevel = sApiLevel;
+        blockInfo.qualifier = sQualifier;
+        blockInfo.imei = sImei;
         blockInfo.uid = BlockCanaryInternals.getContext().provideUid();
         blockInfo.processName = ProcessUtils.myProcessName();
         blockInfo.network = BlockCanaryInternals.getContext().provideNetworkType();
@@ -158,7 +162,7 @@ public final class BlockInfo {
      */
     public static BlockInfo newInstance(File file) {
         BlockInfo blockInfo = new BlockInfo();
-        blockInfo.logFile = file;
+        blockInfo.logFileForUi = file;
 
         BufferedReader reader = null;
         try {
@@ -167,16 +171,16 @@ public final class BlockInfo {
             reader = new BufferedReader(in);
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.startsWith(KEY_QUA)) {
-                    blockInfo.sQualifier = line.split(KV)[1];
+                    blockInfo.qualifier = line.split(KV)[1];
                 } else if (line.startsWith(KEY_MODEL)) {
-                    blockInfo.sModel = line.split(KV)[1];
+                    blockInfo.model = line.split(KV)[1];
                 } else if (line.startsWith(KEY_API)) {
-                    blockInfo.sApiLevel = line.split(KV)[1];
+                    blockInfo.apiLevel = line.split(KV)[1];
                 } else if (line.startsWith(KEY_IMEI)) {
-                    blockInfo.sImei = line.split(KV)[1];
+                    blockInfo.imei = line.split(KV)[1];
                 } else if (line.startsWith(KEY_CPU_CORE)) {
-                    blockInfo.sCpuCoreNum = Integer.valueOf(line.split(KV)[1]);
-                }  else if (line.startsWith(KEY_UID)) {
+                    blockInfo.cpuCoreNum = Integer.valueOf(line.split(KV)[1]);
+                } else if (line.startsWith(KEY_UID)) {
                     blockInfo.uid = line.split(KV)[1];
                 } else if (line.startsWith(KEY_TIME_COST_START)) {
                     blockInfo.timeStart = line.split(KV)[1];
@@ -198,7 +202,7 @@ public final class BlockInfo {
                     blockInfo.totalMemory = line.split(KV)[1];
                 } else if (line.startsWith(KEY_FREE_MEMORY)) {
                     blockInfo.freeMemory = line.split(KV)[1];
-                }else if (line.startsWith(KEY_CPU_BUSY)) {
+                } else if (line.startsWith(KEY_CPU_BUSY)) {
                     blockInfo.cpuBusy = Boolean.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_CPU_RATE)) {
                     String[] split = line.split(KV);
@@ -277,15 +281,15 @@ public final class BlockInfo {
 
     public BlockInfo flushString() {
         String separator = SEPARATOR;
-        basicSb.append(KEY_QUA).append(KV).append(sQualifier).append(separator);
+        basicSb.append(KEY_QUA).append(KV).append(qualifier).append(separator);
         basicSb.append(KEY_VERSION_NAME).append(KV).append(versionName).append(separator);
         basicSb.append(KEY_VERSION_CODE).append(KV).append(versionCode).append(separator);
-        basicSb.append(KEY_IMEI).append(KV).append(sImei).append(separator);
+        basicSb.append(KEY_IMEI).append(KV).append(imei).append(separator);
         basicSb.append(KEY_UID).append(KV).append(uid).append(separator);
         basicSb.append(KEY_NETWORK).append(KV).append(network).append(separator);
-        basicSb.append(KEY_MODEL).append(KV).append(Build.MODEL).append(separator);
-        basicSb.append(KEY_API).append(KV).append(sApiLevel).append(separator);
-        basicSb.append(KEY_CPU_CORE).append(KV).append(sCpuCoreNum).append(separator);
+        basicSb.append(KEY_MODEL).append(KV).append(model).append(separator);
+        basicSb.append(KEY_API).append(KV).append(apiLevel).append(separator);
+        basicSb.append(KEY_CPU_CORE).append(KV).append(cpuCoreNum).append(separator);
         basicSb.append(KEY_PROCESS).append(KV).append(processName).append(separator);
         basicSb.append(KEY_FREE_MEMORY).append(KV).append(freeMemory).append(separator);
         basicSb.append(KEY_TOTAL_MEMORY).append(KV).append(totalMemory).append(separator);

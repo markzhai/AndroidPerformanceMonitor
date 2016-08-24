@@ -195,7 +195,7 @@ public class DisplayActivity extends Activity {
     }
 
     private void shareHeapDump(BlockInfo blockInfo) {
-        File heapDumpFile = blockInfo.logFile;
+        File heapDumpFile = blockInfo.logFileForUi;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             heapDumpFile.setReadable(true, false);
@@ -285,7 +285,7 @@ public class DisplayActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if (blockInfo != null) {
-                        blockInfo.logFile.delete();
+                        blockInfo.logFileForUi.delete();
                         mBlockStartTime = null;
                         mBlockInfoEntries.remove(blockInfo);
                         updateUi();
@@ -347,7 +347,7 @@ public class DisplayActivity extends Activity {
                     getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
             titleView.setText(title);
             String time = DateUtils.formatDateTime(DisplayActivity.this,
-                    blockInfo.logFile.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
+                    blockInfo.logFileForUi.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
             timeView.setText(time);
             return convertView;
         }
@@ -380,7 +380,7 @@ public class DisplayActivity extends Activity {
 
         @Override
         public void run() {
-            final List<BlockInfo> blockInfos = new ArrayList<BlockInfo>();
+            final List<BlockInfo> blockInfos = new ArrayList<>();
             File[] files = BlockCanaryInternals.getLogFiles();
             if (files != null) {
                 for (File blockFile : files) {
@@ -395,8 +395,8 @@ public class DisplayActivity extends Activity {
                 Collections.sort(blockInfos, new Comparator<BlockInfo>() {
                     @Override
                     public int compare(BlockInfo lhs, BlockInfo rhs) {
-                        return Long.valueOf(rhs.logFile.lastModified())
-                                .compareTo(lhs.logFile.lastModified());
+                        return Long.valueOf(rhs.logFileForUi.lastModified())
+                                .compareTo(lhs.logFileForUi.lastModified());
                     }
                 });
             }
