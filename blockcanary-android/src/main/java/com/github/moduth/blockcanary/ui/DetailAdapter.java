@@ -22,10 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.github.moduth.blockcanary.BlockCanaryInternals;
+
 import com.github.moduth.blockcanary.R;
 import com.github.moduth.blockcanary.internal.BlockInfo;
-import com.github.moduth.blockcanary.internal.ProcessUtils;
+
 import java.util.Arrays;
 
 final class DetailAdapter extends BaseAdapter {
@@ -42,6 +42,11 @@ final class DetailAdapter extends BaseAdapter {
     private static final int POSITION_TIME = 2;
     private static final int POSITION_CPU = 3;
     private static final int POSITION_THREAD_STACK = 4;
+
+    public DetailAdapter() {
+        super();
+        mStackFoldPrefix = DisplayUtils.getStackFoldPrefix();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -113,7 +118,7 @@ final class DetailAdapter extends BaseAdapter {
             case POSITION_THREAD_STACK:
             default:
                 if (folding) {
-                    int index = htmlString.indexOf(getStackFoldPrefix());
+                    int index = htmlString.indexOf(mStackFoldPrefix);
                     if (index > 0) {
                         htmlString = htmlString.substring(index);
                     }
@@ -187,17 +192,5 @@ final class DetailAdapter extends BaseAdapter {
     @SuppressWarnings("unchecked")
     private static <T extends View> T findById(View view, int id) {
         return (T) view.findViewById(id);
-    }
-
-    private String getStackFoldPrefix() {
-        if (mStackFoldPrefix == null) {
-            String prefix = BlockCanaryInternals.getContext().provideStackFoldPrefix();
-            if (prefix != null) {
-                mStackFoldPrefix = prefix;
-            } else {
-                mStackFoldPrefix = ProcessUtils.myProcessName();
-            }
-        }
-        return mStackFoldPrefix;
     }
 }

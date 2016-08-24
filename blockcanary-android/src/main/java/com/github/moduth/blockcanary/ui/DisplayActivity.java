@@ -343,7 +343,7 @@ public class DisplayActivity extends Activity {
                 index = (mBlockInfoEntries.size() - position) + ". ";
             }
 
-            String title = index + keyStackString(blockInfo) + " " +
+            String title = index + DisplayUtils.keyStackString(blockInfo) + " " +
                     getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
             titleView.setText(title);
             String time = DateUtils.formatDateTime(DisplayActivity.this,
@@ -412,37 +412,5 @@ public class DisplayActivity extends Activity {
                 }
             });
         }
-    }
-
-    /**
-     * Get key stack string to show as title in ui list.
-     */
-    static String keyStackString(BlockInfo blockInfo) {
-        String result = "";
-        for (String stackEntry : blockInfo.threadStackEntries) {
-            if (Character.isLetter(stackEntry.charAt(0))) {
-                String[] lines = stackEntry.split(BlockInfo.SEPARATOR);
-                for (String line : lines) {
-                    if (!line.startsWith("com.android")
-                            && !line.startsWith("java")
-                            && !line.startsWith("android")) {
-                        result = classSimpleName(line);
-                        return result;
-                    }
-                }
-                return lines[0];
-            }
-        }
-        return result;
-    }
-
-    static String classSimpleName(String className) {
-//        int separator = className.lastIndexOf('.');
-//        if (separator == -1) {
-//            return className;
-//        } else {
-//            return className.substring(separator + 1);
-//        }
-        return className.substring(className.indexOf('(') + 1, className.indexOf(')'));
     }
 }
