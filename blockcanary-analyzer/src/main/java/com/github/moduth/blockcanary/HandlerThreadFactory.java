@@ -27,16 +27,10 @@ final class HandlerThreadFactory {
         throw new InstantiationError("Must not instantiate this class");
     }
 
-    /**
-     * Get looper thread handler
-     */
     public static Handler getTimerThreadHandler() {
         return sLoopThread.getHandler();
     }
 
-    /**
-     * Get log-writer thread handler
-     */
     public static Handler getWriteLogThreadHandler() {
         return sWriteLogThread.getHandler();
     }
@@ -44,8 +38,8 @@ final class HandlerThreadFactory {
     private static class HandlerThreadWrapper {
         private Handler handler = null;
 
-        public HandlerThreadWrapper(String name) {
-            HandlerThread handlerThread = new HandlerThread("BlockCanary_" + name);
+        public HandlerThreadWrapper(String threadName) {
+            HandlerThread handlerThread = new HandlerThread("BlockCanary-" + threadName);
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
         }

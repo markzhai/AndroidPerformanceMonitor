@@ -32,6 +32,13 @@ class LooperMonitor implements Printer {
 
     private boolean mStartedPrinting = false;
 
+    public interface BlockListener {
+        void onBlockEvent(long realStartTime,
+                          long realTimeEnd,
+                          long threadTimeStart,
+                          long threadTimeEnd);
+    }
+
     public LooperMonitor(BlockListener blockListener, long blockThresholdMillis) {
         if (blockListener == null) {
             throw new IllegalArgumentException("blockListener should not be null.");

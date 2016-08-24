@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary.ui;
+package com.github.moduth.blockcanary;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -23,8 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.github.moduth.blockcanary.BlockInterceptor;
-import com.github.moduth.blockcanary.R;
+import com.github.moduth.blockcanary.ui.DisplayActivity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,7 +33,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
-public class DisplayService implements BlockInterceptor {
+final class DisplayService implements BlockInterceptor {
 
     private static final String TAG = "DisplayService";
 

@@ -22,7 +22,6 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import com.github.moduth.blockcanary.ui.DisplayActivity;
-import com.github.moduth.blockcanary.ui.DisplayService;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -31,16 +30,13 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 import static android.content.pm.PackageManager.DONT_KILL_APP;
 
-/**
- * {@}
- */
 public final class BlockCanary {
 
     private static final String TAG = "BlockCanary";
 
     private static BlockCanary sInstance;
     private BlockCanaryInternals mBlockCanaryCore;
-    private boolean mLooperLoggingStarted = false;
+    private boolean mMonitorStarted = false;
 
     private BlockCanary() {
         BlockCanaryInternals.setContext(BlockCanaryContext.get());
@@ -54,7 +50,7 @@ public final class BlockCanary {
     /**
      * Install {@link BlockCanary}
      *
-     * @param context application context
+     * @param context            application context
      * @param blockCanaryContext implementation for {@link BlockCanaryContext}
      * @return {@link BlockCanary}
      */
@@ -81,11 +77,11 @@ public final class BlockCanary {
     }
 
     /**
-     * Start main-thread monitoring.
+     * Start monitoring.
      */
     public void start() {
-        if (!mLooperLoggingStarted) {
-            mLooperLoggingStarted = true;
+        if (!mMonitorStarted) {
+            mMonitorStarted = true;
             Looper.getMainLooper().setMessageLogging(mBlockCanaryCore.monitor);
         }
     }
@@ -94,8 +90,8 @@ public final class BlockCanary {
      * Stop monitoring.
      */
     public void stop() {
-        if (mLooperLoggingStarted) {
-            mLooperLoggingStarted = false;
+        if (mMonitorStarted) {
+            mMonitorStarted = false;
             Looper.getMainLooper().setMessageLogging(null);
             mBlockCanaryCore.stackSampler.stop();
             mBlockCanaryCore.cpuSampler.stop();
@@ -103,10 +99,10 @@ public final class BlockCanary {
     }
 
     /**
-     * Zip and upload log files.
+     * Zip and upload log files, will user context's zip and log implementation.
      */
     public void upload() {
-        Uploader.forceZipLogAndUpload();
+        Uploader.zipAndUpload();
     }
 
     /**
@@ -136,7 +132,8 @@ public final class BlockCanary {
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
     private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
 
-    private static void setEnabledBlocking(Context appContext, Class<?> componentClass,
+    private static void setEnabledBlocking(Context appContext,
+                                           Class<?> componentClass,
                                            boolean enabled) {
         ComponentName component = new ComponentName(appContext, componentClass);
         PackageManager packageManager = appContext.getPackageManager();
@@ -154,7 +151,8 @@ public final class BlockCanary {
         return Executors.newSingleThreadExecutor(new SingleThreadFactory(threadName));
     }
 
-    private static void setEnabled(Context context, final Class<?> componentClass,
+    private static void setEnabled(Context context,
+                                   final Class<?> componentClass,
                                    final boolean enabled) {
         final Context appContext = context.getApplicationContext();
         executeOnFileIoThread(new Runnable() {

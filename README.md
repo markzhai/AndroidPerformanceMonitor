@@ -12,15 +12,15 @@ You may choose how to assemble them as you like.
 ```gradle
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.moduth:blockcanary-android:1.2.1'
+    compile 'com.github.moduth:blockcanary-android:1.3.0'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-android:1.2.1'
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.1'
+    // debugCompile 'com.github.moduth:blockcanary-android:1.3.0'
+    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.3.0'
 }
 ```
 
-PS: As this library uses `getMainLooper().setMessageLogging()`, please check if you also set that in your app. (check related issue https://github.com/moduth/blockcanary/issues/27)
+PS: As this library uses `getMainLooper().setMessageLogging()`, please check if you also set that in your app (related issue https://github.com/moduth/blockcanary/issues/27)
 
 # Usage
 
@@ -60,7 +60,7 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
     // path to save log file
     @Override
     public String getLogPath() {
-        return "/blockcanary/performance";
+        return "/blockcanary/";
     }
 }
 ```

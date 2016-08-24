@@ -43,7 +43,7 @@ public final class BlockCanaryInternals {
 
         cpuSampler = new CpuSampler(sContext.getConfigDumpInterval());
 
-        setMonitor(new LooperMonitor(new BlockListener() {
+        setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() {
 
             @Override
             public void onBlockEvent(long realTimeStart, long realTimeEnd,
