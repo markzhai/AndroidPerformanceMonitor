@@ -321,24 +321,6 @@ public final class BlockInfo {
         return timeSb.toString();
     }
 
-    public String getKeyStackString() {
-        String result = "";
-        for (String stackEntry : threadStackEntries) {
-            if (Character.isLetter(stackEntry.charAt(0))) {
-                String[] lines = stackEntry.split(BlockInfo.SEPARATOR);
-                for (String line : lines) {
-                    if (!line.startsWith("com.android")
-                            && !line.startsWith("java")
-                            && !line.startsWith("android")) {
-                        result = line.substring(line.indexOf('(') + 1, line.indexOf(')'));
-                        return result;
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
     public String toString() {
         return String.valueOf(basicSb) + timeSb + cpuSb + stackSb;
     }

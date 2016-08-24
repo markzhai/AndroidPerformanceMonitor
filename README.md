@@ -20,13 +20,13 @@ dependencies {
 }
 ```
 
-PS: As this library uses `getMainLooper().setMessageLogging()`, please check if you also set that in your app (related issue https://github.com/moduth/blockcanary/issues/27)
+As this library uses `getMainLooper().setMessageLogging()`, please check if you set it in your app (related issue https://github.com/moduth/blockcanary/issues/27)
 
 # Usage
 
-Maximum log count is set to 100, you can rewrite it in your app `int.xml`.
+Maximum log count is set to 500, you can rewrite it in your app `int.xml`.
 ```xml
-<integer name="block_canary_max_stored_count">100</integer>
+<integer name="block_canary_max_stored_count">1000</integer>
 ```
 
 ```java
@@ -43,13 +43,6 @@ public class DemoApplication extends Application {
 Implement BlockCanaryContext context：
 ```java
 public class AppBlockCanaryContext extends BlockCanaryContext {
-
-    /**
-     * Provide application context.
-     */
-    public Context provideContext() {
-        return sApplicationContext;
-    }
 
     /**
      * Implement in your project.
