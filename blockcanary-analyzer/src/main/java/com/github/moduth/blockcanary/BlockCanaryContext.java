@@ -54,9 +54,8 @@ public class BlockCanaryContext {
 
     /**
      * Implement in your project.
-     * Qualifier which can specify this installation, like version + flavor
      *
-     * @return apk qualifier
+     * @return Qualifier which can specify this installation, like version + flavor.
      */
     public String provideQualifier() {
         return "unknown";
@@ -105,7 +104,7 @@ public class BlockCanaryContext {
      * stack according to current sample cycle.
      * <p>
      * Because the implementation mechanism of Looper, real dump interval would be longer than
-     * the period specified here (especially when cpu is busier)
+     * the period specified here (especially when cpu is busier).
      * </p>
      *
      * @return dump interval (in millis)
@@ -115,7 +114,7 @@ public class BlockCanaryContext {
     }
 
     /**
-     * Path to save log, like "/blockcanary/", will save to sdcard if can
+     * Path to save log, like "/blockcanary/", will save to sdcard if can.
      *
      * @return path of log files
      */
