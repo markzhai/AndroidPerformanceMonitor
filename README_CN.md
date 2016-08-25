@@ -20,11 +20,11 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 ```gradle
 dependencies {
-    compile 'com.github.moduth:blockcanary-android:1.2.1'
+    compile 'com.github.moduth:blockcanary-android:1.3.0'
 
     // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
-    debugCompile 'com.github.moduth:blockcanary-android:1.2.1'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.2.1'
+    debugCompile 'com.github.moduth:blockcanary-android:1.3.0'
+    releaseCompile 'com.github.moduth:blockcanary-no-op:1.3.0'
 }
 ```
 
@@ -55,7 +55,7 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 见[BlockCanary — 轻松找出Android App界面卡顿元凶](http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/).
 
 或见下图
-![flow](art/flow-cn.png "flow")
+![flow](art/flow.png "flow")
 
 # 如何分析log
 除了图形界面可以供开发、测试阶段直接看卡顿原因外，更多的使用场景其实在于大范围的log采集和分析：如线上环境和monkey，或者测试同学们在整个测试阶段的log收集和分析。
@@ -91,6 +91,8 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 
 # 协议
 
+    Copyright (C) 2016 MarkZhai (http://zhaiyifan.cn).
+    
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at

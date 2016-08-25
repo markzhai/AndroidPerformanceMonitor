@@ -2,6 +2,11 @@
 
 You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/moduth/).
 
+## Version 1.3
+
+- Code refactor.
+- Support white-list and concern packages.
+
 ## Version 1.2 *(2016-03-16)*
 
 - Much faster! It now has almost none side-effect at run-time.

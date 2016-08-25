@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="CjjBaseTheme" parent="Base.Theme.DesignDemo">
+    </style>
+
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryDark">#1976D2</item>
+        <item name="colorAccent">#F44336</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+    <style name="ModuThreeHandsomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+</resources>
