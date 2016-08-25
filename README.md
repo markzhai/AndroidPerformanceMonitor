@@ -144,25 +144,41 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
     }
 
     /**
-     * Config string prefix to determine how to fold stack (only for ui),
-     * by default it uses process name.
+     * Packages that developer concern, by default it uses process name.
      *
-     * @return string prefix, null if use process name.
+     * @return null if simply concern only package with process name.
      */
-    public String provideStackFoldPrefix() {
+    public List<String> concernPackages() {
         return null;
     }
 
     /**
-     * Get white list, operations in white list will not be recorded.
+     * Filter complete system api stack, used with @{code concernPackages}.
+     *
+     * @return true if filter, false it not.
+     */
+    public boolean filterNonConcernStack() {
+        return true;
+    }
+
+    /**
+     * Provide white list, operations in white list will not be recorded.
+     *
+     * @return return null if you don't need filter on mobile side.
      */
     public List<String> provideWhiteList() {
         LinkedList<String> whiteList = new LinkedList<>();
-        whiteList.add("com.android");
-        whiteList.add("java");
-        whiteList.add("android");
         whiteList.add("org.chromium");
         return whiteList;
+    }
+
+    /**
+     * Whether to delete files whose stack is in white list, used with white-list.
+     *
+     * @return true if delete, false it not.
+     */
+    public boolean deleteFilesInWhiteList() {
+        return true;
     }
 }
 ```
@@ -180,6 +196,9 @@ Principle flow picture:
 4. Each time a message dispatch costs time over that set by `BlockCanaryContext.getConfigBlockThreshold`, it triggers a block notify.
 5. Write log file with data for analysis.
 6. If `BlockCanaryContext.isNeedDisplay` is true, a notification is shown, developer can click and check directly.
+
+# How does white list work?
+
 
 # Screenshot
 

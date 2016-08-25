@@ -152,24 +152,41 @@ public class BlockCanaryContext {
     }
 
     /**
-     * Config string prefix to determine how to fold stack (only for ui),
-     * by default it uses process name.
+     * Packages that developer concern, by default it uses process name,
+     * put high priority one in pre-order.
      *
-     * @return string prefix, null if use process name.
+     * @return null if simply concern only package with process name.
      */
-    public String provideStackFoldPrefix() {
+    public List<String> concernPackages() {
         return null;
     }
 
     /**
-     * Get white list, operations in white list will not be recorded.
+     * Filter stack without any in concern package, used with @{code concernPackages}.
+     *
+     * @return true if filter, false it not.
+     */
+    public boolean filterNonConcernStack() {
+        return false;
+    }
+
+    /**
+     * Provide white list, entry in white list will not be shown in ui list.
+     *
+     * @return return null if you don't need white-list filter.
      */
     public List<String> provideWhiteList() {
         LinkedList<String> whiteList = new LinkedList<>();
-        whiteList.add("com.android");
-        whiteList.add("java");
-        whiteList.add("android");
         whiteList.add("org.chromium");
         return whiteList;
+    }
+
+    /**
+     * Whether to delete files whose stack is in white list, used with white-list.
+     *
+     * @return true if delete, false it not.
+     */
+    public boolean deleteFilesInWhiteList() {
+        return true;
     }
 }

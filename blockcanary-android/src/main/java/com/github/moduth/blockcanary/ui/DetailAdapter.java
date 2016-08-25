@@ -35,18 +35,12 @@ final class DetailAdapter extends BaseAdapter {
 
     private boolean[] mFoldings = new boolean[0];
 
-    private String mStackFoldPrefix = null;
     private BlockInfo mBlockInfo;
 
     private static final int POSITION_BASIC = 1;
     private static final int POSITION_TIME = 2;
     private static final int POSITION_CPU = 3;
     private static final int POSITION_THREAD_STACK = 4;
-
-    public DetailAdapter() {
-        super();
-        mStackFoldPrefix = DisplayUtils.getStackFoldPrefix();
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -118,9 +112,12 @@ final class DetailAdapter extends BaseAdapter {
             case POSITION_THREAD_STACK:
             default:
                 if (folding) {
-                    int index = htmlString.indexOf(mStackFoldPrefix);
-                    if (index > 0) {
-                        htmlString = htmlString.substring(index);
+                    for (String concernPackage : BlockCanaryUtils.getConcernPackages()) {
+                        int index = htmlString.indexOf(concernPackage);
+                        if (index > 0) {
+                            htmlString = htmlString.substring(index);
+                            break;
+                        }
                     }
                 }
                 htmlString = String.format("<font color='#ffffff'>%s</font> ", htmlString);

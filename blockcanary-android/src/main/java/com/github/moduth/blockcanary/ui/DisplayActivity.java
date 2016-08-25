@@ -40,10 +40,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 import com.github.moduth.blockcanary.LogWriter;
 import com.github.moduth.blockcanary.R;
-import com.github.moduth.blockcanary.internal.BlockInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,8 +67,9 @@ public class DisplayActivity extends Activity {
     private static final String TAG = "DisplayActivity";
     private static final String SHOW_BLOCK_EXTRA = "show_latest";
     public static final String SHOW_BLOCK_EXTRA_KEY = "BlockStartTime";
-    // null until it's been first loaded.
-    private List<BlockInfo> mBlockInfoEntries = new ArrayList<>();
+
+    // empty until it's been first loaded.
+    private List<BlockInfoEx> mBlockInfoEntries = new ArrayList<>();
     private String mBlockStartTime;
 
     private ListView mListView;
@@ -144,7 +145,7 @@ public class DisplayActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final BlockInfo blockInfo = getBlock(mBlockStartTime);
+        final BlockInfoEx blockInfo = getBlock(mBlockStartTime);
         if (blockInfo != null) {
             menu.add(R.string.block_canary_share_leak)
                     .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -186,7 +187,7 @@ public class DisplayActivity extends Activity {
         }
     }
 
-    private void shareBlock(BlockInfo blockInfo) {
+    private void shareBlock(BlockInfoEx blockInfo) {
         String leakInfo = blockInfo.toString();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -194,8 +195,8 @@ public class DisplayActivity extends Activity {
         startActivity(Intent.createChooser(intent, getString(R.string.block_canary_share_with)));
     }
 
-    private void shareHeapDump(BlockInfo blockInfo) {
-        File heapDumpFile = blockInfo.logFileForUi;
+    private void shareHeapDump(BlockInfoEx blockInfo) {
+        File heapDumpFile = blockInfo.logFile;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             heapDumpFile.setReadable(true, false);
@@ -207,7 +208,7 @@ public class DisplayActivity extends Activity {
     }
 
     private void updateUi() {
-        final BlockInfo blockInfo = getBlock(mBlockStartTime);
+        final BlockInfoEx blockInfo = getBlock(mBlockStartTime);
         if (blockInfo == null) {
             mBlockStartTime = null;
         }
@@ -258,7 +259,7 @@ public class DisplayActivity extends Activity {
         mActionButton.setVisibility(mBlockInfoEntries.isEmpty() ? GONE : VISIBLE);
     }
 
-    private void renderBlockDetail(final BlockInfo blockInfo) {
+    private void renderBlockDetail(final BlockInfoEx blockInfo) {
         ListAdapter listAdapter = mListView.getAdapter();
         final DetailAdapter adapter;
         if (listAdapter instanceof DetailAdapter) {
@@ -285,7 +286,7 @@ public class DisplayActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if (blockInfo != null) {
-                        blockInfo.logFileForUi.delete();
+                        blockInfo.logFile.delete();
                         mBlockStartTime = null;
                         mBlockInfoEntries.remove(blockInfo);
                         updateUi();
@@ -297,11 +298,11 @@ public class DisplayActivity extends Activity {
         setTitle(getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost));
     }
 
-    private BlockInfo getBlock(String startTime) {
+    private BlockInfoEx getBlock(String startTime) {
         if (mBlockInfoEntries == null || TextUtils.isEmpty(startTime)) {
             return null;
         }
-        for (BlockInfo blockInfo : mBlockInfoEntries) {
+        for (BlockInfoEx blockInfo : mBlockInfoEntries) {
             if (blockInfo.timeStart != null && startTime.equals(blockInfo.timeStart)) {
                 return blockInfo;
             }
@@ -317,7 +318,7 @@ public class DisplayActivity extends Activity {
         }
 
         @Override
-        public BlockInfo getItem(int position) {
+        public BlockInfoEx getItem(int position) {
             return mBlockInfoEntries.get(position);
         }
 
@@ -334,7 +335,7 @@ public class DisplayActivity extends Activity {
             }
             TextView titleView = (TextView) convertView.findViewById(R.id.__leak_canary_row_text);
             TextView timeView = (TextView) convertView.findViewById(R.id.__leak_canary_row_time);
-            BlockInfo blockInfo = getItem(position);
+            BlockInfoEx blockInfo = getItem(position);
 
             String index;
             if (position == 0 && mBlockInfoEntries.size() == mMaxStoredBlockCount) {
@@ -343,11 +344,12 @@ public class DisplayActivity extends Activity {
                 index = (mBlockInfoEntries.size() - position) + ". ";
             }
 
-            String title = index + DisplayUtils.keyStackString(blockInfo) + " " +
+            String keyStackString = BlockCanaryUtils.concernStackString(blockInfo);
+            String title = index + keyStackString + " " +
                     getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
             titleView.setText(title);
             String time = DateUtils.formatDateTime(DisplayActivity.this,
-                    blockInfo.logFileForUi.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
+                    blockInfo.logFile.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
             timeView.setText(time);
             return convertView;
         }
@@ -380,23 +382,46 @@ public class DisplayActivity extends Activity {
 
         @Override
         public void run() {
-            final List<BlockInfo> blockInfos = new ArrayList<>();
+            final List<BlockInfoEx> blockInfoList = new ArrayList<>();
             File[] files = BlockCanaryInternals.getLogFiles();
             if (files != null) {
                 for (File blockFile : files) {
                     try {
-                        blockInfos.add(BlockInfo.newInstance(blockFile));
+                        BlockInfoEx blockInfo = BlockInfoEx.newInstance(blockFile);
+                        if (!BlockCanaryUtils.isBlockInfoValid(blockInfo)) {
+                            throw new BlockInfoCorruptException(blockInfo);
+                        }
+
+                        boolean needAddToList = true;
+
+                        if (BlockCanaryUtils.isInWhiteList(blockInfo)) {
+                            if (BlockCanaryContext.get().deleteFilesInWhiteList()) {
+                                blockFile.delete();
+                                blockFile = null;
+                            }
+                            needAddToList = false;
+                        }
+
+                        blockInfo.concernStackString = BlockCanaryUtils.concernStackString(blockInfo);
+                        if (BlockCanaryContext.get().filterNonConcernStack() &&
+                                TextUtils.isEmpty(blockInfo.concernStackString)) {
+                            needAddToList = false;
+                        }
+
+                        if (needAddToList && blockFile != null) {
+                            blockInfoList.add(blockInfo);
+                        }
                     } catch (Exception e) {
-                        // Likely a format change in the blockFile
+                        // Probably blockFile corrupts or format changes, just delete it.
                         blockFile.delete();
                         Log.e(TAG, "Could not read block log file, deleted :" + blockFile, e);
                     }
                 }
-                Collections.sort(blockInfos, new Comparator<BlockInfo>() {
+                Collections.sort(blockInfoList, new Comparator<BlockInfoEx>() {
                     @Override
-                    public int compare(BlockInfo lhs, BlockInfo rhs) {
-                        return Long.valueOf(rhs.logFileForUi.lastModified())
-                                .compareTo(lhs.logFileForUi.lastModified());
+                    public int compare(BlockInfoEx lhs, BlockInfoEx rhs) {
+                        return Long.valueOf(rhs.logFile.lastModified())
+                                .compareTo(lhs.logFile.lastModified());
                     }
                 });
             }
@@ -405,8 +430,8 @@ public class DisplayActivity extends Activity {
                 public void run() {
                     inFlight.remove(LoadBlocks.this);
                     if (activityOrNull != null) {
-                        activityOrNull.mBlockInfoEntries = blockInfos;
-                        //Log.d("BlockCanary", "load block entries: " + blockInfos.size());
+                        activityOrNull.mBlockInfoEntries = blockInfoList;
+                        Log.d(TAG, "load block entries: " + blockInfoList.size());
                         activityOrNull.updateUi();
                     }
                 }

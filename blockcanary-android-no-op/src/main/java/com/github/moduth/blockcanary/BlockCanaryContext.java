@@ -18,6 +18,7 @@ package com.github.moduth.blockcanary;
 import android.content.Context;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -88,11 +89,19 @@ public class BlockCanaryContext {
         throw new UnsupportedOperationException();
     }
 
-    public String provideStackFoldPrefix() {
+    public List<String> concernPackages() {
         return null;
     }
 
     public List<String> provideWhiteList() {
         return null;
+    }
+
+    public boolean filterNonConcernStack() {
+        return true;
+    }
+
+    public boolean deleteFilesInWhiteList() {
+        return true;
     }
 }

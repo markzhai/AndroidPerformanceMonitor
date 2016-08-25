@@ -21,6 +21,8 @@ import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
 
+import java.util.List;
+
 public class AppContext extends BlockCanaryContext {
     private static final String TAG = "AppContext";
 
@@ -60,5 +62,19 @@ public class AppContext extends BlockCanaryContext {
     @Override
     public boolean displayNotification() {
         return BuildConfig.DEBUG;
+    }
+
+    @Override
+    public List<String> concernPackages() {
+        List<String> list = super.provideWhiteList();
+        list.add("com.example");
+        return list;
+    }
+
+    @Override
+    public List<String> provideWhiteList() {
+        List<String> list = super.provideWhiteList();
+        list.add("com.whitelist");
+        return list;
     }
 }
