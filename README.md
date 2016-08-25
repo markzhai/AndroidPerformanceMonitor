@@ -143,8 +143,10 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
         throw new UnsupportedOperationException();
     }
 
+
     /**
-     * Packages that developer concern, by default it uses process name.
+     * Packages that developer concern, by default it uses process name,
+     * put high priority one in pre-order.
      *
      * @return null if simply concern only package with process name.
      */
@@ -153,18 +155,18 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
     }
 
     /**
-     * Filter complete system api stack, used with @{code concernPackages}.
+     * Filter stack without any in concern package, used with @{code concernPackages}.
      *
      * @return true if filter, false it not.
      */
     public boolean filterNonConcernStack() {
-        return true;
+        return false;
     }
 
     /**
-     * Provide white list, operations in white list will not be recorded.
+     * Provide white list, entry in white list will not be shown in ui list.
      *
-     * @return return null if you don't need filter on mobile side.
+     * @return return null if you don't need white-list filter.
      */
     public List<String> provideWhiteList() {
         LinkedList<String> whiteList = new LinkedList<>();
@@ -196,9 +198,6 @@ Principle flow picture:
 4. Each time a message dispatch costs time over that set by `BlockCanaryContext.getConfigBlockThreshold`, it triggers a block notify.
 5. Write log file with data for analysis.
 6. If `BlockCanaryContext.isNeedDisplay` is true, a notification is shown, developer can click and check directly.
-
-# How does white list work?
-
 
 # Screenshot
 
