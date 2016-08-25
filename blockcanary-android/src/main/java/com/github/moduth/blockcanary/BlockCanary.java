@@ -50,8 +50,8 @@ public final class BlockCanary {
     /**
      * Install {@link BlockCanary}
      *
-     * @param context            application context
-     * @param blockCanaryContext implementation for {@link BlockCanaryContext}
+     * @param context            Application context
+     * @param blockCanaryContext BlockCanary context
      * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {

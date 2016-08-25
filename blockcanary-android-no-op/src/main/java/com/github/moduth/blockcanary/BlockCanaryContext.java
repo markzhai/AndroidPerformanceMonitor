@@ -93,15 +93,15 @@ public class BlockCanaryContext {
         return null;
     }
 
+    public boolean filterNonConcernStack() {
+        return false;
+    }
+
     public List<String> provideWhiteList() {
         return null;
     }
 
-    public boolean filterNonConcernStack() {
-        return true;
-    }
-
     public boolean deleteFilesInWhiteList() {
-        return true;
+        return false;
     }
 }
