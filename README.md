@@ -5,6 +5,8 @@ A transparent ui-block detection library for Android, app only needs one-line-co
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
+- 1.3.0 Add white-list and concern-package feature.
+
 # Getting started
 
 You may choose how to assemble them as you like.
@@ -40,7 +42,7 @@ public class DemoApplication extends Application {
 }
 ```
 
-Implement BlockCanaryContext context：
+Implement your application `BlockCanaryContext` context (strongly recommend you to check all these configs)：
 ```java
 public class AppBlockCanaryContext extends BlockCanaryContext {
 
@@ -192,13 +194,6 @@ Principle flow picture:
 
 ![flow](art/flow.png "flow")
 
-1. `BlockCanary.install()` initializes context and internal data structures.
-2. `BlockCanary.start()` starts monitor by `Looper.getMainLooper().setMessageLogging(mMainLooperPrinter);`
-3. `ThreadStackSampler` and `CpuSampler` start catching thread stack and cpu data.
-4. Each time a message dispatch costs time over that set by `BlockCanaryContext.getConfigBlockThreshold`, it triggers a block notify.
-5. Write log file with data for analysis.
-6. If `BlockCanaryContext.isNeedDisplay` is true, a notification is shown, developer can click and check directly.
-
 # Screenshot
 
 ![Block detail](art/shot1.png "detail")
@@ -221,7 +216,7 @@ If you would like to contribute code to BlockCanary you can do so through GitHub
 # License
 
     Copyright (C) 2016 MarkZhai (http://zhaiyifan.cn).
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
