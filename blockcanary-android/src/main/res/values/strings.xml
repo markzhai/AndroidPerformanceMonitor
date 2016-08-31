@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">BlockCanary</string>
-    <string name="display_activity_label">Blocks</string>
+    <string name="block_canary_display_activity_label">Blocks</string>
     <string name="block_canary_share_leak">Share info</string>
     <string name="block_canary_share_stack_dump">Share stack dump</string>
     <string name="block_canary_share_with">Share with…</string>

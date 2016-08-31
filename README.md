@@ -6,6 +6,7 @@ A transparent ui-block detection library for Android, app only needs one-line-co
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
 - 1.3.0 Add white-list and concern-package feature.
+- 1.3.1 Enable configuration of label and icon.
 
 # Getting started
 
@@ -14,10 +15,10 @@ You may choose how to assemble them as you like.
 ```gradle
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.moduth:blockcanary-android:1.3.0'
+    compile 'com.github.moduth:blockcanary-android:1.3.1'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-android:1.3.0'
+    // debugCompile 'com.github.moduth:blockcanary-android:1.3.1'
     // releaseCompile 'com.github.moduth:blockcanary-no-op:1.3.0'
 }
 ```
@@ -29,6 +30,11 @@ As this library uses `getMainLooper().setMessageLogging()`, please check if you 
 Maximum log count is set to 500, you can rewrite it in your app `int.xml`.
 ```xml
 <integer name="block_canary_max_stored_count">1000</integer>
+```
+
+Monitor app's label and icon can be configured by placing a `block_canary_icon` drawable in your xhdpi drawable directory and in `strings.xml`:
+```xml
+<string name="block_canary_display_activity_label">Blocks</string>
 ```
 
 ```java
