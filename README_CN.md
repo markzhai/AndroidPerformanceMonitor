@@ -1,6 +1,6 @@
-[English](https://github.com/moduth/blockcanary/blob/master/README.md)
+[English](https://github.com/markzhai/AndroidPerformanceMonitor/blob/master/README.md)
 
-# Android Performance Monitor [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android)
+# Android Performance Monitor [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.markzhai/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.markzhai/blockcanary-android)
 BlockCanary是一个Android平台的一个非侵入式的性能监控组件，应用只需要实现一个抽象类，提供一些该组件需要的上下文环境，就可以在平时使用应用的时候检测主线程上的各种卡慢问题，并通过组件提供的各种信息分析出原因并进行修复。
 
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
@@ -20,11 +20,11 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 ```gradle
 dependencies {
-    compile 'com.github.moduth:blockcanary-android:1.3.1'
+    compile 'com.github.markzhai:blockcanary-android:1.3.1'
 
     // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
-    debugCompile 'com.github.moduth:blockcanary-android:1.3.1'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.3.0'
+    debugCompile 'com.github.markzhai:blockcanary-android:1.3.1'
+    releaseCompile 'com.github.markzhai:blockcanary-no-op:1.3.1'
 }
 ```
 
@@ -221,7 +221,7 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
 特别鸣谢[Mr.Bao](https://github.com/baoyongzhang), [android-cjj](https://github.com/android-cjj), [chiahaolu](https://github.com/chiahaolu)在项目早期做出的贡献。
 
 # 修改日志
-见[CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
+见[CHANGELOG](https://github.com/markzhai/AndroidPerformanceMonitor/blob/master/CHANGELOG.md)
 
 # 贡献
 

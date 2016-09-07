@@ -1,6 +1,6 @@
 [Chinese README](https://github.com/markzhai/AndroidPerformanceMonitor/blob/master/README_CN.md)
 
-# Android Performance Monitor [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.moduth/blockcanary-android)
+# Android Performance Monitor [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.markzhai/blockcanary-android/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.markzhai/blockcanary-android)
 A transparent ui-block detection library for Android, app only needs one-line-code to setup.
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
@@ -15,11 +15,11 @@ You may choose how to assemble them as you like.
 ```gradle
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.moduth:blockcanary-android:1.3.1'
+    compile 'com.github.markzhai:blockcanary-android:1.3.1'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.moduth:blockcanary-android:1.3.1'
-    // releaseCompile 'com.github.moduth:blockcanary-no-op:1.3.0'
+    // debugCompile 'com.github.markzhai:blockcanary-android:1.3.1'
+    // releaseCompile 'com.github.markzhai:blockcanary-no-op:1.3.1'
 }
 ```
 
@@ -213,7 +213,7 @@ Special thanks to [android-cjj](https://github.com/android-cjj), [Mr.Bao](https:
 
 # Change Log
 
-Check [CHANGELOG](https://github.com/moduth/blockcanary/blob/master/CHANGELOG.md)
+Check [CHANGELOG](https://github.com/markzhai/AndroidPerformanceMonitor/blob/master/CHANGELOG.md)
 
 # Contribute
 
