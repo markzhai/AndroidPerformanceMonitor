@@ -107,18 +107,18 @@ public class BlockInfo {
         sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
         sQualifier = BlockCanaryInternals.getContext().provideQualifier();
         try {
-            TelephonyManager mTManager = (TelephonyManager) BlockCanaryInternals
+            TelephonyManager telephonyManager = (TelephonyManager) BlockCanaryInternals
                     .getContext()
                     .provideContext()
                     .getSystemService(Context.TELEPHONY_SERVICE);
-            sImei = mTManager.getDeviceId();
+            sImei = telephonyManager.getDeviceId();
         } catch (Exception exception) {
             Log.e(TAG, NEW_INSTANCE_METHOD, exception);
             sImei = EMPTY_IMEI;
         }
     }
 
-    private BlockInfo() {
+    public BlockInfo() {
     }
 
     public static BlockInfo newInstance() {

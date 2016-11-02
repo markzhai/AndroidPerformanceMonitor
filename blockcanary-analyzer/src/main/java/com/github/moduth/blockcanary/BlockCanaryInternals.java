@@ -23,17 +23,19 @@ import com.github.moduth.blockcanary.internal.BlockInfo;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public final class BlockCanaryInternals {
 
-    public LooperMonitor monitor;
-    public StackSampler stackSampler;
-    public CpuSampler cpuSampler;
+    LooperMonitor monitor;
+    StackSampler stackSampler;
+    CpuSampler cpuSampler;
 
     private static BlockCanaryInternals sInstance;
     private static BlockCanaryContext sContext;
 
-    private BlockInterceptor mInterceptor;
+    private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
     public BlockCanaryInternals() {
 
@@ -60,8 +62,10 @@ public final class BlockCanaryInternals {
                             .flushString();
                     LogWriter.save(blockInfo.toString());
 
-                    if (getContext().displayNotification() && mInterceptor != null) {
-                        mInterceptor.onBlock(getContext().provideContext(), blockInfo.timeStart);
+                    if (getContext().displayNotification() && mInterceptorChain.size() != 0) {
+                        for (BlockInterceptor interceptor : mInterceptorChain) {
+                            interceptor.onBlock(getContext().provideContext(), blockInfo);
+                        }
                     }
                 }
             }
@@ -75,7 +79,7 @@ public final class BlockCanaryInternals {
      *
      * @return BlockCanaryInternals instance
      */
-    public static BlockCanaryInternals getInstance() {
+    static BlockCanaryInternals getInstance() {
         if (sInstance == null) {
             synchronized (BlockCanaryInternals.class) {
                 if (sInstance == null) {
@@ -99,19 +103,19 @@ public final class BlockCanaryInternals {
         return sContext;
     }
 
-    public void setOnBlockInterceptor(BlockInterceptor blockInterceptor) {
-        mInterceptor = blockInterceptor;
+    void addBlockInterceptor(BlockInterceptor blockInterceptor) {
+        mInterceptorChain.add(blockInterceptor);
     }
 
-    public void setMonitor(LooperMonitor looperPrinter) {
+    private void setMonitor(LooperMonitor looperPrinter) {
         monitor = looperPrinter;
     }
 
-    public long getSampleDelay() {
+    long getSampleDelay() {
         return (long) (BlockCanaryInternals.getContext().provideBlockThreshold() * 0.8f);
     }
 
-    public static String getPath() {
+    static String getPath() {
         String state = Environment.getExternalStorageState();
         String logPath = BlockCanaryInternals.getContext()
                 == null ? "" : BlockCanaryInternals.getContext().providePath();
@@ -123,7 +127,7 @@ public final class BlockCanaryInternals {
         return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryInternals.getContext().providePath();
     }
 
-    public static File detectedBlockDirectory() {
+    static File detectedBlockDirectory() {
         File directory = new File(getPath());
         if (!directory.exists()) {
             directory.mkdirs();
@@ -139,11 +143,11 @@ public final class BlockCanaryInternals {
         return null;
     }
 
-    static class BlockLogFileFilter implements FilenameFilter {
+    private static class BlockLogFileFilter implements FilenameFilter {
 
         private String TYPE = ".log";
 
-        public BlockLogFileFilter() {
+        BlockLogFileFilter() {
 
         }
 

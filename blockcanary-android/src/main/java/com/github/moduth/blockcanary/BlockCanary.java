@@ -44,7 +44,8 @@ public final class BlockCanary {
         if (!BlockCanaryContext.get().displayNotification()) {
             return;
         }
-        mBlockCanaryCore.setOnBlockInterceptor(new DisplayService());
+        mBlockCanaryCore.addBlockInterceptor(new DisplayService());
+        mBlockCanaryCore.addBlockInterceptor(BlockCanaryContext.get());
     }
 
     /**

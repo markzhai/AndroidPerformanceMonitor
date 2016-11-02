@@ -17,8 +17,9 @@ package com.github.moduth.blockcanary;
 
 import android.content.Context;
 
+import com.github.moduth.blockcanary.internal.BlockInfo;
+
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class BlockCanaryContext {
     public BlockCanaryContext() {
     }
 
-    public static void init(Context c, BlockCanaryContext g) {
+    static void init(Context c, BlockCanaryContext g) {
         sApplicationContext = c;
         sInstance = g;
     }
@@ -103,5 +104,9 @@ public class BlockCanaryContext {
 
     public boolean deleteFilesInWhiteList() {
         return false;
+    }
+
+    public void onBlock(Context context, BlockInfo blockInfo) {
+
     }
 }
