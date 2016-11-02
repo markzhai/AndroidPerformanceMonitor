@@ -118,7 +118,7 @@ public class BlockInfo {
         }
     }
 
-    protected BlockInfo() {
+    private BlockInfo() {
     }
 
     public static BlockInfo newInstance() {

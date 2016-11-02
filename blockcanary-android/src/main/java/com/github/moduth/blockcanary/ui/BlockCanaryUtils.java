@@ -17,7 +17,9 @@ final class BlockCanaryUtils {
     static {
         WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
 
-        CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
+        if (BlockCanaryInternals.getContext().concernPackages() != null) {
+            CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
+        }
         if (CONCERN_LIST.isEmpty()) {
             CONCERN_LIST.add(ProcessUtils.myProcessName());
         }
