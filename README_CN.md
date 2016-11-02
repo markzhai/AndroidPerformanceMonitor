@@ -5,6 +5,7 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
 
+- 1.4.0 修复 1.3.x 的 bug，增加发生卡慢时的拦截方法。
 - 1.3.0 增加白名单和包名过滤功能
 
 # 包介绍
@@ -20,11 +21,11 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 ```gradle
 dependencies {
-    compile 'com.github.markzhai:blockcanary-android:1.3.1'
+    compile 'com.github.markzhai:blockcanary-android:1.4.0'
 
     // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
-    debugCompile 'com.github.markzhai:blockcanary-android:1.3.1'
-    releaseCompile 'com.github.markzhai:blockcanary-no-op:1.3.1'
+    debugCompile 'com.github.markzhai:blockcanary-android:1.4.0'
+    releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.0'
 }
 ```
 
@@ -185,6 +186,13 @@ public class AppBlockCanaryContext extends BlockCanaryContext {
      */
     public boolean deleteFilesInWhiteList() {
         return true;
+    }
+
+    /**
+     * Block interceptor, developer may provide their own actions.
+     */
+    public void onBlock(Context context, BlockInfo blockInfo) {
+
     }
 }
 ```
