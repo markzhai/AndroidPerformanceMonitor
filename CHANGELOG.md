@@ -7,7 +7,7 @@ You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public
 - Bug fix.
 - Add onBlock interceptor.
 
-## Version 1.3
+## Version 1.3 *(2016-08-42)*
 
 - Code refactor.
 - Support white-list and concern packages.
