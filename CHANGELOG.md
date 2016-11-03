@@ -1,6 +1,11 @@
 # Change Log
 
-You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/moduth/).
+You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/markzhai/).
+
+## Version 1.4
+
+- Bug fix.
+- Add onBlock interceptor.
 
 ## Version 1.3
 
