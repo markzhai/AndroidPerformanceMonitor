@@ -6,6 +6,9 @@
     <string name="block_canary_block_list_title">Blocks in %s</string>
     <string name="block_canary_delete">Delete</string>
     <string name="block_canary_delete_all">Delete all</string>
+    <string name="block_canary_delete_all_dialog_content">Are you sure to delete all records?</string>
     <string name="block_canary_class_has_blocked">blocked %s ms</string>
     <string name="block_canary_notification_message">Click for more details</string>
+    <string name="block_canary_yes">Yes</string>
+    <string name="block_canary_no">No</string>
 </resources>
