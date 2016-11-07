@@ -296,18 +296,18 @@ public class DisplayActivity extends Activity {
             }
             mActionButton.setVisibility(VISIBLE);
             mActionButton.setText(R.string.block_canary_delete);
-            mActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (blockInfo != null) {
-                        blockInfo.logFile.delete();
-                        mBlockStartTime = null;
-                        mBlockInfoEntries.remove(blockInfo);
-                        updateUi();
-                    }
-                }
-            });
         }
+        mActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (blockInfo != null) {
+                    blockInfo.logFile.delete();
+                    mBlockStartTime = null;
+                    mBlockInfoEntries.remove(blockInfo);
+                    updateUi();
+                }
+            }
+        });
         adapter.update(blockInfo);
         setTitle(getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost));
     }
