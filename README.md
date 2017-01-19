@@ -217,8 +217,7 @@ Principle flow picture:
 # Donation
 
 If you find this repository helpful, you may make a donation to me via alipay or wechat.
-![alipay](http://blog.zhaiyifan.cn/images/donation-alipay.png "alipay")
-![wechat](http://blog.zhaiyifan.cn/images/donation.jpg "wechat")
+![alipay](http://blog.zhaiyifan.cn/images/donation-alipay.png "alipay") ![wechat](http://blog.zhaiyifan.cn/images/donation.jpg "wechat")
 
 # Contributors
 
