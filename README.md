@@ -214,6 +214,12 @@ Principle flow picture:
 ![Block detail](art/shot1.png "detail")
 ![Block list](art/shot2.png "list")
 
+# Donation
+
+If you find this repository helpful, you may make a donation to me via alipay or wechat.
+![alipay](http://blog.zhaiyifan.cn/images/donation-alipay.png "alipay")
+![wechat](http://blog.zhaiyifan.cn/images/donation.jpg "wechat")
+
 # Contributors
 
 This library is initially created by [markzhai](https://github.com/markzhai), and maintained under the organization [moduth](https://github.com/moduth) with [nimengbo](https://github.com/nimengbo) and [zzz40500](https://github.com/zzz40500).
