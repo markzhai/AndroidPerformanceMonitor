@@ -62,7 +62,7 @@ public final class BlockCanaryInternals {
                             .flushString();
                     LogWriter.save(blockInfo.toString());
 
-                    if (getContext().displayNotification() && mInterceptorChain.size() != 0) {
+                    if (mInterceptorChain.size() != 0) {
                         for (BlockInterceptor interceptor : mInterceptorChain) {
                             interceptor.onBlock(getContext().provideContext(), blockInfo);
                         }
