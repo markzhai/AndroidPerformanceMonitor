@@ -5,6 +5,7 @@ A transparent ui-block detection library for Android, app only needs one-line-co
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
+- 1.4.1 Bug fix.
 - 1.4.0 Bug fix, add onBlock interceptor in context.
 - 1.3.1 Enable configuration of label and icon.
 - 1.3.0 Add white-list and concern-package feature.
@@ -16,11 +17,11 @@ You may choose how to assemble them as you like.
 ```gradle
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.markzhai:blockcanary-android:1.4.0'
+    compile 'com.github.markzhai:blockcanary-android:1.4.1'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.markzhai:blockcanary-android:1.4.0'
-    // releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.0'
+    // debugCompile 'com.github.markzhai:blockcanary-android:1.4.1'
+    // releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.1'
 }
 ```
 

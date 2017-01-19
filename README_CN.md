@@ -5,10 +5,12 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 取名为BlockCanary则是为了向LeakCanary致敬，顺便本库的UI部分是从LeakCanary改来的，之后可能会做一些调整。
 
+- 1.4.1 Bug修复
 - 1.4.0 修复 1.3.x 的 bug，增加发生卡慢时的拦截方法。
 - 1.3.0 增加白名单和包名过滤功能
 
 # 包介绍
+
 - blockcanary-android  blockcanary类的一些实现
 - blockcanary-analyzer 记录block信息的核心实现
 - blockcanary-no-op    空包，为了release打包时不编译进去
@@ -21,11 +23,11 @@ BlockCanary是一个Android平台的一个非侵入式的性能监控组件，�
 
 ```gradle
 dependencies {
-    compile 'com.github.markzhai:blockcanary-android:1.4.0'
+    compile 'com.github.markzhai:blockcanary-android:1.4.1'
 
     // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
-    debugCompile 'com.github.markzhai:blockcanary-android:1.4.0'
-    releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.0'
+    debugCompile 'com.github.markzhai:blockcanary-android:1.4.1'
+    releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.1'
 }
 ```
 
@@ -37,7 +39,6 @@ PS: 由于该库使用了 `getMainLooper().setMessageLogging()`, 请确认是否
 public class DemoApplication extends Application {
     @Override
     public void onCreate() {
-        ...
         // 在主进程初始化调用哈
         BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }
