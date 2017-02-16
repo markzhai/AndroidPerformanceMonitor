@@ -77,4 +77,9 @@ public class AppContext extends BlockCanaryContext {
         list.add("com.whitelist");
         return list;
     }
+
+    @Override
+    public boolean stopWhenDebugging() {
+        return false;
+    }
 }

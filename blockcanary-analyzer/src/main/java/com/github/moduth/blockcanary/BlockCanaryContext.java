@@ -199,4 +199,13 @@ public class BlockCanaryContext implements BlockInterceptor {
     public void onBlock(Context context, BlockInfo blockInfo) {
 
     }
+
+    /**
+     * Whether to stop monitoring when in debug mode.
+     *
+     * @return true if stop, false otherwise
+     */
+    public boolean stopWhenDebugging() {
+        return true;
+    }
 }

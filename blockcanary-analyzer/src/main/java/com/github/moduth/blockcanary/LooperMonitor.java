@@ -15,6 +15,7 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.os.Debug;
 import android.os.SystemClock;
 import android.util.Printer;
 
@@ -27,6 +28,7 @@ class LooperMonitor implements Printer {
     private long mStartThreadTimestamp = 0;
     private BlockListener mBlockListener = null;
     private boolean mPrintingStarted = false;
+    private final boolean mStopWhenDebugging;
 
     public interface BlockListener {
         void onBlockEvent(long realStartTime,
@@ -35,16 +37,20 @@ class LooperMonitor implements Printer {
                           long threadTimeEnd);
     }
 
-    public LooperMonitor(BlockListener blockListener, long blockThresholdMillis) {
+    public LooperMonitor(BlockListener blockListener, long blockThresholdMillis, boolean stopWhenDebugging) {
         if (blockListener == null) {
             throw new IllegalArgumentException("blockListener should not be null.");
         }
         mBlockListener = blockListener;
         mBlockThresholdMillis = blockThresholdMillis;
+        mStopWhenDebugging = stopWhenDebugging;
     }
 
     @Override
     public void println(String x) {
+        if (mStopWhenDebugging && Debug.isDebuggerConnected()) {
+            return;
+        }
         if (!mPrintingStarted) {
             mStartTimestamp = System.currentTimeMillis();
             mStartThreadTimestamp = SystemClock.currentThreadTimeMillis();
