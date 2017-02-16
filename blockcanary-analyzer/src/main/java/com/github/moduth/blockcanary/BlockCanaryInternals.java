@@ -69,7 +69,7 @@ public final class BlockCanaryInternals {
                     }
                 }
             }
-        }, getContext().provideBlockThreshold()));
+        }, getContext().provideBlockThreshold(), getContext().stopWhenDebugging()));
 
         LogWriter.cleanObsolete();
     }
