@@ -78,7 +78,7 @@ public class AppContext extends BlockCanaryContext {
         return list;
     }
 
-    @Override
+    //@Override
     public boolean stopWhenDebugging() {
         return false;
     }
