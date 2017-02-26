@@ -109,4 +109,8 @@ public class BlockCanaryContext {
     public void onBlock(Context context, BlockInfo blockInfo) {
 
     }
+
+    public boolean stopWhenDebugging() {
+        return true;
+    }
 }

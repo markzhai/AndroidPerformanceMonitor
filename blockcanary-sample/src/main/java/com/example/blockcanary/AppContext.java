@@ -80,6 +80,6 @@ public class AppContext extends BlockCanaryContext {
 
     @Override
     public boolean stopWhenDebugging() {
-        return false;
+        return true;
     }
 }
