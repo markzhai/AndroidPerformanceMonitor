@@ -2,6 +2,10 @@
 
 You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/markzhai/).
 
+## Version 1.5 *(2017-02-26)*
+
+Debug mode stop monitor.
+
 ## Version 1.4 *(2016-11-02)*
 
 - Bug fix.

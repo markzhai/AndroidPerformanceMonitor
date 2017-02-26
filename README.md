@@ -5,6 +5,7 @@ A transparent ui-block detection library for Android, app only needs one-line-co
 
 The naming is to pay respect to the great library [LeakCanary](https://github.com/square/leakcanary), ui-related codes are modified from leakcanary's ui part.
 
+- 1.5.0 Add context that can stop monitor in debug mode.
 - 1.4.1 Bug fix.
 - 1.4.0 Bug fix, add onBlock interceptor in context.
 - 1.3.1 Enable configuration of label and icon.
