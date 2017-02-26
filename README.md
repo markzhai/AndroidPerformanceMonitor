@@ -18,11 +18,11 @@ You may choose how to assemble them as you like.
 ```gradle
 dependencies {
     // most often used way, enable notification to notify block event
-    compile 'com.github.markzhai:blockcanary-android:1.4.1'
+    compile 'com.github.markzhai:blockcanary-android:1.5.0'
 
     // this way you only enable BlockCanary in debug package
-    // debugCompile 'com.github.markzhai:blockcanary-android:1.4.1'
-    // releaseCompile 'com.github.markzhai:blockcanary-no-op:1.4.1'
+    // debugCompile 'com.github.markzhai:blockcanary-android:1.5.0'
+    // releaseCompile 'com.github.markzhai:blockcanary-no-op:1.5.0'
 }
 ```
 
