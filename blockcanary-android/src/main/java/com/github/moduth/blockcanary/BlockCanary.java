@@ -34,7 +34,7 @@ public final class BlockCanary {
 
     private static final String TAG = "BlockCanary";
 
-    private static BlockCanary sInstance;
+    private static volatile BlockCanary sInstance;
     private BlockCanaryInternals mBlockCanaryCore;
     private boolean mMonitorStarted = false;
 
