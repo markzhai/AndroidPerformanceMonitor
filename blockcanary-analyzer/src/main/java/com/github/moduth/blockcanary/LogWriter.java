@@ -50,6 +50,7 @@ public class LogWriter {
      * @param str block info string
      * @return log file path
      */
+    // TODO: 2017/3/3 保存卡顿数据 (11) 
     public static String save(String str) {
         String path;
         synchronized (SAVE_DELETE_LOCK) {
@@ -60,6 +61,7 @@ public class LogWriter {
 
     /**
      * Delete obsolete log files, which is by default 2 days.
+     * 删除过期数据
      */
     public static void cleanObsolete() {
         HandlerThreadFactory.getWriteLogThreadHandler().post(new Runnable() {
@@ -94,7 +96,7 @@ public class LogWriter {
             }
         }
     }
-
+    /*保存卡顿log数据*/
     private static String save(String logFileName, String str) {
         String path = "";
         BufferedWriter writer = null;

@@ -21,7 +21,7 @@ import android.content.Context;
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 
 import java.util.List;
-
+/*进程工具类*/
 public class ProcessUtils {
 
     private static volatile String sProcessName;

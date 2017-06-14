@@ -27,7 +27,7 @@ import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
-
+/*性能工具类*/
 class PerformanceUtils {
     private static final String TAG = "PerformanceUtils";
 
@@ -40,7 +40,7 @@ class PerformanceUtils {
 
     /**
      * Get cpu core number
-     *
+     * 获取cpu内核数
      * @return int cpu core number
      */
     public static int getNumCores() {
@@ -66,14 +66,14 @@ class PerformanceUtils {
         }
         return sCoreNum;
     }
-
+    /*获取空闲存储空间*/
     public static long getFreeMemory() {
         ActivityManager am = (ActivityManager) BlockCanaryInternals.getContext().provideContext().getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
         return mi.availMem / 1024;
     }
-
+    /*获取总存储空间*/
     public static long getTotalMemory() {
         if (sTotalMemo == 0) {
             String str1 = "/proc/meminfo";

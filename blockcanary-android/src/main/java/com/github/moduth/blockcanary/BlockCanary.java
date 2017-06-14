@@ -38,7 +38,8 @@ public final class BlockCanary {
     private BlockCanaryInternals mBlockCanaryCore;
     private boolean mMonitorStarted = false;
 
-    private BlockCanary() {
+    // TODO: 2017/3/3 BlockCanary 构造函数 （2） 
+    private BlockCanary() {/*初始化*/
         BlockCanaryInternals.setContext(BlockCanaryContext.get());
         mBlockCanaryCore = BlockCanaryInternals.getInstance();
         mBlockCanaryCore.addBlockInterceptor(BlockCanaryContext.get());
@@ -56,8 +57,10 @@ public final class BlockCanary {
      * @param blockCanaryContext BlockCanary context
      * @return {@link BlockCanary}
      */
+    // TODO: 2017/3/3 BlockCanary （1） 
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
         BlockCanaryContext.init(context, blockCanaryContext);
+        /*设置以组件的形式DisplayActivity 是否有效*/
         setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().displayNotification());
         return get();
     }
@@ -81,6 +84,7 @@ public final class BlockCanary {
     /**
      * Start monitoring.
      */
+    // TODO: 2017/3/3 设置自定义Printer，监听Message Loop(5) 
     public void start() {
         if (!mMonitorStarted) {
             mMonitorStarted = true;
@@ -134,6 +138,7 @@ public final class BlockCanary {
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
     private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
 
+    /*在子线程中开启/禁用四大组件*/ 
     private static void setEnabledBlocking(Context appContext,
                                            Class<?> componentClass,
                                            boolean enabled) {
@@ -157,7 +162,7 @@ public final class BlockCanary {
                                    final Class<?> componentClass,
                                    final boolean enabled) {
         final Context appContext = context.getApplicationContext();
-        executeOnFileIoThread(new Runnable() {
+        executeOnFileIoThread(new Runnable() {/*在子线程中开启/禁用DisplayActivity 组件*/
             @Override
             public void run() {
                 setEnabledBlocking(appContext, componentClass, enabled);

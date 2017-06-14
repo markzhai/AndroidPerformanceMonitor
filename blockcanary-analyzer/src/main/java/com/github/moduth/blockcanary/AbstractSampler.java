@@ -27,7 +27,7 @@ abstract class AbstractSampler {
     protected AtomicBoolean mShouldSample = new AtomicBoolean(false);
     protected long mSampleInterval;
 
-    private Runnable mRunnable = new Runnable() {
+    private Runnable mRunnable = new Runnable() {/*在子线程中定时取样*/
         @Override
         public void run() {
             doSample();

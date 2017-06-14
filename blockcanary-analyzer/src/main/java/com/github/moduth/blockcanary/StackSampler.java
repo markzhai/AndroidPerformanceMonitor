@@ -41,6 +41,7 @@ class StackSampler extends AbstractSampler {
         mMaxEntryCount = maxEntryCount;
     }
 
+    // TODO: 2017/3/3 获取某个时间间隔内的线程调用栈数据 （10）
     public ArrayList<String> getThreadStackEntries(long startTime, long endTime) {
         ArrayList<String> result = new ArrayList<>();
         synchronized (sStackMap) {
@@ -58,6 +59,7 @@ class StackSampler extends AbstractSampler {
 
     @Override
     protected void doSample() {
+        /*定时取样，获取当前主线程的堆栈信息*/
         StringBuilder stringBuilder = new StringBuilder();
 
         for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {

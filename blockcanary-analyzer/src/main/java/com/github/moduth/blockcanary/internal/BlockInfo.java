@@ -30,6 +30,7 @@ import java.util.Locale;
 
 /**
  * Information to trace a block.
+ * 实体类
  */
 public class BlockInfo {
 

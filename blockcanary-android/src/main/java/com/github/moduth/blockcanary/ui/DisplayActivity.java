@@ -208,7 +208,7 @@ public class DisplayActivity extends Activity {
         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(heapDumpFile));
         startActivity(Intent.createChooser(intent, getString(R.string.block_canary_share_with)));
     }
-
+    /*更新UI*/
     private void updateUi() {
         final BlockInfoEx blockInfo = getBlock(mBlockStartTime);
         if (blockInfo == null) {
@@ -220,12 +220,13 @@ public class DisplayActivity extends Activity {
         mFailureView.setVisibility(GONE);
 
         if (blockInfo != null) {
-            renderBlockDetail(blockInfo);
+            renderBlockDetail(blockInfo);/**/
         } else {
             renderBlockList();
         }
     }
 
+    /*渲染Block List页面数据*/
     private void renderBlockList() {
         ListAdapter listAdapter = mListView.getAdapter();
         if (listAdapter instanceof BlockListAdapter) {
@@ -237,21 +238,23 @@ public class DisplayActivity extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     mBlockStartTime = mBlockInfoEntries.get(position).timeStart;
-                    updateUi();
+                    updateUi();/*更新页面UI,显示Detail页面*/
                 }
             });
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                invalidateOptionsMenu();
+                invalidateOptionsMenu();/*隐藏返回按钮*/
                 ActionBar actionBar = getActionBar();
                 if (actionBar != null) {
                     actionBar.setDisplayHomeAsUpEnabled(false);
                 }
             }
+            /*设置Title*/
             setTitle(getString(R.string.block_canary_block_list_title, getPackageName()));
             mActionButton.setText(R.string.block_canary_delete_all);
             mActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*删除卡顿Log*/
                     DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -273,6 +276,7 @@ public class DisplayActivity extends Activity {
         mActionButton.setVisibility(mBlockInfoEntries.isEmpty() ? GONE : VISIBLE);
     }
 
+    /*渲染Detail页面*/
     private void renderBlockDetail(final BlockInfoEx blockInfo) {
         ListAdapter listAdapter = mListView.getAdapter();
         final DetailAdapter adapter;
@@ -284,11 +288,11 @@ public class DisplayActivity extends Activity {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    adapter.toggleRow(position);
+                    adapter.toggleRow(position);/*展开或收缩item*/
                 }
             });
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                invalidateOptionsMenu();
+                invalidateOptionsMenu();/*显示返回按钮*/
                 ActionBar actionBar = getActionBar();
                 if (actionBar != null) {
                     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -308,15 +312,16 @@ public class DisplayActivity extends Activity {
                 }
             }
         });
-        adapter.update(blockInfo);
+        adapter.update(blockInfo);/*更新数据*/
         setTitle(getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost));
     }
 
+    /*获取卡顿数据*/
     private BlockInfoEx getBlock(String startTime) {
         if (mBlockInfoEntries == null || TextUtils.isEmpty(startTime)) {
             return null;
         }
-        for (BlockInfoEx blockInfo : mBlockInfoEntries) {
+        for (BlockInfoEx blockInfo : mBlockInfoEntries) {/*获取卡顿数据*/
             if (blockInfo.timeStart != null && startTime.equals(blockInfo.timeStart)) {
                 return blockInfo;
             }
@@ -324,6 +329,7 @@ public class DisplayActivity extends Activity {
         return null;
     }
 
+    /*自定义Adapter*/
     class BlockListAdapter extends BaseAdapter {
 
         @Override
@@ -369,6 +375,7 @@ public class DisplayActivity extends Activity {
         }
     }
 
+    /*加载卡顿数据*/
     static class LoadBlocks implements Runnable {
 
         static final List<LoadBlocks> inFlight = new ArrayList<>();
@@ -397,18 +404,18 @@ public class DisplayActivity extends Activity {
         @Override
         public void run() {
             final List<BlockInfoEx> blockInfoList = new ArrayList<>();
-            File[] files = BlockCanaryInternals.getLogFiles();
+            File[] files = BlockCanaryInternals.getLogFiles();/*获取卡顿Log数据*/
             if (files != null) {
                 for (File blockFile : files) {
                     try {
                         BlockInfoEx blockInfo = BlockInfoEx.newInstance(blockFile);
-                        if (!BlockCanaryUtils.isBlockInfoValid(blockInfo)) {
+                        if (!BlockCanaryUtils.isBlockInfoValid(blockInfo)) {/*判断卡顿Log数据是否有效*/
                             throw new BlockInfoCorruptException(blockInfo);
                         }
 
                         boolean needAddToList = true;
 
-                        if (BlockCanaryUtils.isInWhiteList(blockInfo)) {
+                        if (BlockCanaryUtils.isInWhiteList(blockInfo)) {/*判断是否在白名单*/
                             if (BlockCanaryContext.get().deleteFilesInWhiteList()) {
                                 blockFile.delete();
                                 blockFile = null;
@@ -416,13 +423,13 @@ public class DisplayActivity extends Activity {
                             needAddToList = false;
                         }
 
-                        blockInfo.concernStackString = BlockCanaryUtils.concernStackString(blockInfo);
+                        blockInfo.concernStackString = BlockCanaryUtils.concernStackString(blockInfo);/*判断是否有需要关注的堆栈信息*/
                         if (BlockCanaryContext.get().filterNonConcernStack() &&
                                 TextUtils.isEmpty(blockInfo.concernStackString)) {
                             needAddToList = false;
                         }
 
-                        if (needAddToList && blockFile != null) {
+                        if (needAddToList && blockFile != null) {/*添加到数据中*/
                             blockInfoList.add(blockInfo);
                         }
                     } catch (Exception e) {
@@ -431,6 +438,7 @@ public class DisplayActivity extends Activity {
                         Log.e(TAG, "Could not read block log file, deleted :" + blockFile, e);
                     }
                 }
+                /*数据按日期排序*/
                 Collections.sort(blockInfoList, new Comparator<BlockInfoEx>() {
                     @Override
                     public int compare(BlockInfoEx lhs, BlockInfoEx rhs) {
@@ -439,6 +447,7 @@ public class DisplayActivity extends Activity {
                     }
                 });
             }
+            /*更新UI*/
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {

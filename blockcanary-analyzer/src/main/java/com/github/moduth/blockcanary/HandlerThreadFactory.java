@@ -17,7 +17,7 @@ package com.github.moduth.blockcanary;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-
+/*Handler工厂*/
 final class HandlerThreadFactory {
 
     private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");

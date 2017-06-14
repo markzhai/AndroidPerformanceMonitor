@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
+/*文件上传类*/
 final class Uploader {
 
     private static final String TAG = "Uploader";

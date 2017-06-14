@@ -38,6 +38,7 @@ final class DisplayService implements BlockInterceptor {
 
     private static final String TAG = "DisplayService";
 
+    // TODO: 2017/3/3 弹出Notification提示出现线程卡顿 （13） 
     @Override
     public void onBlock(Context context, BlockInfo blockInfo) {
         Intent intent = new Intent(context, DisplayActivity.class);
@@ -55,7 +56,7 @@ final class DisplayService implements BlockInterceptor {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification;
-        if (SDK_INT < HONEYCOMB) {
+        if (SDK_INT < HONEYCOMB) {/*低于11的版本，通过反射setLatestEventInfo创建Notification*/
             notification = new Notification();
             notification.icon = R.drawable.block_canary_notification;
             notification.when = System.currentTimeMillis();

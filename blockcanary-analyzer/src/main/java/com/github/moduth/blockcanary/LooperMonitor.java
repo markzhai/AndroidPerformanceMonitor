@@ -17,7 +17,7 @@ package com.github.moduth.blockcanary;
 
 import android.os.SystemClock;
 import android.util.Printer;
-
+/*自定义Printer*/
 class LooperMonitor implements Printer {
 
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
@@ -43,17 +43,18 @@ class LooperMonitor implements Printer {
         mBlockThresholdMillis = blockThresholdMillis;
     }
 
+    // TODO: 2017/3/3 重新Printer的println方法，监听Message Loop,同时记录该时间间隔的调用栈及CPU占用数据（6）
     @Override
     public void println(String x) {
-        if (!mPrintingStarted) {
+        if (!mPrintingStarted) {/*记录println message 时当前时间，同时开始dump 堆栈及cpu数据*/
             mStartTimestamp = System.currentTimeMillis();
             mStartThreadTimestamp = SystemClock.currentThreadTimeMillis();
             mPrintingStarted = true;
             startDump();
-        } else {
+        } else {/*记录end time ,停止dump 堆栈及cpu数据*/
             final long endTime = System.currentTimeMillis();
             mPrintingStarted = false;
-            if (isBlock(endTime)) {
+            if (isBlock(endTime)) {/*isBlock 回调监听*/// TODO: 2017/3/3 触发线程卡顿 （7） 
                 notifyBlockEvent(endTime);
             }
             stopDump();
@@ -64,6 +65,7 @@ class LooperMonitor implements Printer {
         return endTime - mStartTimestamp > mBlockThresholdMillis;
     }
 
+    // TODO: 2017/3/3 卡顿时间超过设置:触发线程卡顿 （8） 
     private void notifyBlockEvent(final long endTime) {
         final long startTime = mStartTimestamp;
         final long startThreadTime = mStartThreadTimestamp;

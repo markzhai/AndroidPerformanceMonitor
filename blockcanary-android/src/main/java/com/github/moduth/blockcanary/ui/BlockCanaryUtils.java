@@ -44,13 +44,13 @@ final class BlockCanaryUtils {
         }
         return result;
     }
-
+    /*判断数据是否有效*/
     public static boolean isBlockInfoValid(BlockInfo blockInfo) {
         boolean isValid = !TextUtils.isEmpty(blockInfo.timeStart);
         isValid = isValid && blockInfo.timeCost >= 0;
         return isValid;
     }
-
+    /*判断是否在白名单*/
     public static boolean isInWhiteList(BlockInfo info) {
         for (String stackEntry : info.threadStackEntries) {
             if (Character.isLetter(stackEntry.charAt(0))) {
@@ -71,6 +71,7 @@ final class BlockCanaryUtils {
         return CONCERN_LIST;
     }
 
+    /*关注的堆栈信息*/
     private static String concernStackString(String line) {
         for (String concernPackage : CONCERN_LIST) {
             if (line.startsWith(concernPackage)) {
@@ -79,7 +80,7 @@ final class BlockCanaryUtils {
         }
         return null;
     }
-
+    /*堆栈数据类名*/
     private static String classSimpleName(String stackLine) {
         int index1 = stackLine.indexOf('(');
         int index2 = stackLine.indexOf(')');

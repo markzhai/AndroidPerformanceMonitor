@@ -62,7 +62,7 @@ class CpuSampler extends AbstractSampler {
 
     /**
      * Get cpu rate information
-     *
+     * 获取cpu数据
      * @return string show cpu rate information
      */
     public String getCpuRateInfo() {
@@ -78,7 +78,7 @@ class CpuSampler extends AbstractSampler {
         }
         return sb.toString();
     }
-
+    /*检测Cpu使用是否繁忙*/
     public boolean isCpuBusy(long start, long end) {
         if (end - start > mSampleInterval) {
             long s = start - mSampleInterval;
@@ -104,7 +104,7 @@ class CpuSampler extends AbstractSampler {
         BufferedReader cpuReader = null;
         BufferedReader pidReader = null;
 
-        try {
+        try {/*获取Cpu使用信息*/
             cpuReader = new BufferedReader(new InputStreamReader(
                     new FileInputStream("/proc/stat")), BUFFER_SIZE);
             String cpuRate = cpuReader.readLine();
@@ -115,6 +115,7 @@ class CpuSampler extends AbstractSampler {
             if (mPid == 0) {
                 mPid = android.os.Process.myPid();
             }
+            /*获取当前进程的Cpu使用信息*/
             pidReader = new BufferedReader(new InputStreamReader(
                     new FileInputStream("/proc/" + mPid + "/stat")), BUFFER_SIZE);
             String pidCpuRate = pidReader.readLine();
@@ -147,7 +148,7 @@ class CpuSampler extends AbstractSampler {
         mTotalLast = 0;
         mAppCpuTimeLast = 0;
     }
-
+    /*解析系统cpu及进程cpu使用信息*/
     private void parse(String cpuRate, String pidCpuRate) {
         String[] cpuInfoArray = cpuRate.split(" ");
         if (cpuInfoArray.length < 9) {
