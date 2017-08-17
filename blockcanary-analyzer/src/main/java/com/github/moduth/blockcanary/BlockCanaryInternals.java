@@ -124,7 +124,7 @@ public final class BlockCanaryInternals {
                 && Environment.getExternalStorageDirectory().canWrite()) {
             return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
-        return Environment.getDataDirectory().getAbsolutePath() + BlockCanaryInternals.getContext().providePath();
+        return getContext().provideContext().getFilesDir() + BlockCanaryInternals.getContext().providePath();
     }
 
     static File detectedBlockDirectory() {
