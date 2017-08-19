@@ -19,11 +19,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.github.moduth.blockcanary.interceptor.DefaultBlockInterceptor;
 
 import java.util.List;
 
-public class AppContext extends BlockCanaryContext {
+public class AppContext extends DefaultBlockInterceptor {
     private static final String TAG = "AppContext";
 
     @Override

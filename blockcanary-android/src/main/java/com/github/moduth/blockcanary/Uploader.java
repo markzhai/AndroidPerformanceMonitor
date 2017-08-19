@@ -17,6 +17,8 @@ package com.github.moduth.blockcanary;
 
 import android.util.Log;
 
+import com.github.moduth.blockcanary.interceptor.BlockInterceptor;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +43,8 @@ final class Uploader {
             Log.e(TAG, "zip: ", e);
         }
         File zippedFile = LogWriter.generateTempZip("BlockCanary-" + timeString);
-        BlockCanaryInternals.getContext().zip(BlockCanaryInternals.getLogFiles(), zippedFile);
+        BlockInterceptor interceptor = BlockCanaryInternals.getInstance().getInterceptor(0);
+        interceptor.zip(BlockCanaryInternals.getLogFiles(), zippedFile);
         LogWriter.deleteAll();
         return zippedFile;
     }
@@ -52,7 +55,8 @@ final class Uploader {
             public void run() {
                 final File file = zip();
                 if (file.exists()) {
-                    BlockCanaryInternals.getContext().upload(file);
+                    BlockInterceptor interceptor = BlockCanaryInternals.getInstance().getInterceptor(0);
+                    interceptor.upload(file);
                 }
             }
         });

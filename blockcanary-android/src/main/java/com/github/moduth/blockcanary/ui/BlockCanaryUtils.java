@@ -15,10 +15,10 @@ final class BlockCanaryUtils {
     private static final List<String> CONCERN_LIST = new LinkedList<>();
 
     static {
-        WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
+        WHITE_LIST.addAll(BlockCanaryInternals.getInstance().getInterceptor(0).provideWhiteList());
 
-        if (BlockCanaryInternals.getContext().concernPackages() != null) {
-            CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
+        if (BlockCanaryInternals.getInstance().getInterceptor(0).concernPackages() != null) {
+            CONCERN_LIST.addAll(BlockCanaryInternals.getInstance().getInterceptor(0).concernPackages());
         }
         if (CONCERN_LIST.isEmpty()) {
             CONCERN_LIST.add(ProcessUtils.myProcessName());

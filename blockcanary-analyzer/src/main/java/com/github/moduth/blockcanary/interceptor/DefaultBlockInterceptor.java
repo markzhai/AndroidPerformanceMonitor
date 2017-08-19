@@ -28,37 +28,12 @@ import java.util.List;
  */
 public class DefaultBlockInterceptor implements BlockInterceptor {
 
-    private static Context sApplicationContext;
-    private static DefaultBlockInterceptor sInstance = null;
-
-    public DefaultBlockInterceptor() {
-    }
-
-    static void init(Context context, DefaultBlockInterceptor blockCanaryContext) {
-        sApplicationContext = context;
-        sInstance = blockCanaryContext;
-    }
-
-    public static DefaultBlockInterceptor get() {
-        if (sInstance == null) {
-            throw new RuntimeException("BlockCanaryContext null");
-        } else {
-            return sInstance;
-        }
-    }
-
-    /**
-     * Provide application context.
-     */
-    public Context provideContext() {
-        return sApplicationContext;
-    }
-
     /**
      * Implement in your project.
      *
      * @return Qualifier which can specify this installation, like version + flavor.
      */
+    @Override
     public String provideQualifier() {
         return "unknown";
     }
@@ -68,6 +43,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return user id
      */
+    @Deprecated
     public String provideUid() {
         return "uid";
     }
@@ -77,6 +53,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return {@link String} like 2G, 3G, 4G, wifi, etc.
      */
+    @Override
     public String provideNetworkType() {
         return "unknown";
     }
@@ -87,6 +64,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return monitor last duration (in hour)
      */
+    @Override
     public int provideMonitorDuration() {
         return -1;
     }
@@ -97,6 +75,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return threshold in mills
      */
+    @Override
     public int provideBlockThreshold() {
         return 1000;
     }
@@ -111,6 +90,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return dump interval (in millis)
      */
+    @Override
     public int provideDumpInterval() {
         return provideBlockThreshold();
     }
@@ -120,6 +100,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return path of log files
      */
+    @Override
     public String providePath() {
         return "/blockcanary/";
     }
@@ -129,6 +110,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return true if need, else if not need.
      */
+    @Override
     public boolean displayNotification() {
         return true;
     }
@@ -140,6 +122,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      * @param dest files compressed
      * @return true if compression is successful
      */
+    @Override
     public boolean zip(File[] src, File dest) {
         return false;
     }
@@ -149,6 +132,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @param zippedFile zipped file
      */
+    @Override
     public void upload(File zippedFile) {
         throw new UnsupportedOperationException();
     }
@@ -159,6 +143,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return null if simply concern only package with process name.
      */
+    @Override
     public List<String> concernPackages() {
         return null;
     }
@@ -168,6 +153,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return true if filter, false it not.
      */
+    @Override
     public boolean filterNonConcernStack() {
         return false;
     }
@@ -177,6 +163,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return return null if you don't need white-list filter.
      */
+    @Override
     public List<String> provideWhiteList() {
         LinkedList<String> whiteList = new LinkedList<>();
         whiteList.add("org.chromium");
@@ -188,6 +175,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return true if delete, false it not.
      */
+    @Override
     public boolean deleteFilesInWhiteList() {
         return true;
     }
@@ -205,6 +193,7 @@ public class DefaultBlockInterceptor implements BlockInterceptor {
      *
      * @return true if stop, false otherwise
      */
+    @Override
     public boolean stopWhenDebugging() {
         return true;
     }

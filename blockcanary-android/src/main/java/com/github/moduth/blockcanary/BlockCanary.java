@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
+import com.github.moduth.blockcanary.interceptor.BlockInterceptor;
 import com.github.moduth.blockcanary.ui.DisplayActivity;
 
 import java.util.concurrent.Executor;
@@ -37,28 +38,23 @@ public final class BlockCanary {
     private static BlockCanary sInstance;
     private BlockCanaryInternals mBlockCanaryCore;
     private boolean mMonitorStarted = false;
+    BlockInterceptor mBlockInterceptor ;
 
     private BlockCanary() {
-        BlockCanaryInternals.setContext(BlockCanaryContext.get());
         mBlockCanaryCore = BlockCanaryInternals.getInstance();
-        mBlockCanaryCore.addBlockInterceptor(BlockCanaryContext.get());
-        if (!BlockCanaryContext.get().displayNotification()) {
-            return;
-        }
-        mBlockCanaryCore.addBlockInterceptor(new DisplayService());
-
     }
 
     /**
      * Install {@link BlockCanary}
      *
      * @param context            Application context
-     * @param blockCanaryContext BlockCanary context
+     * @param interceptor BlockCanary interceptor
      * @return {@link BlockCanary}
      */
-    public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
-        BlockCanaryContext.init(context, blockCanaryContext);
-        setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().displayNotification());
+    public static BlockCanary install(Context context, BlockInterceptor interceptor) {
+        BlockCanaryInternals.setContext(context.getApplicationContext());
+        get().setup(interceptor);
+        setEnabled(context, DisplayActivity.class, interceptor.displayNotification());
         return get();
     }
 
@@ -76,6 +72,18 @@ public final class BlockCanary {
             }
         }
         return sInstance;
+    }
+
+    /**
+     * setup BlockInterceptor to provide some params.
+     * @param interceptor BlockInterceptor instance
+     */
+    public void setup(BlockInterceptor interceptor) {
+        mBlockInterceptor = interceptor ;
+        mBlockCanaryCore.addBlockInterceptor(interceptor);
+        if (interceptor!= null && interceptor.displayNotification()) {
+            mBlockCanaryCore.addBlockInterceptor(new DisplayService());
+        }
     }
 
     /**
@@ -112,7 +120,7 @@ public final class BlockCanary {
      * BlockCanary.
      */
     public void recordStartTime() {
-        PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
+        PreferenceManager.getDefaultSharedPreferences(BlockCanaryInternals.getContext())
                 .edit()
                 .putLong("BlockCanary_StartTime", System.currentTimeMillis())
                 .commit();
@@ -125,10 +133,10 @@ public final class BlockCanary {
      */
     public boolean isMonitorDurationEnd() {
         long startTime =
-                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
+                PreferenceManager.getDefaultSharedPreferences(BlockCanaryInternals.getContext())
                         .getLong("BlockCanary_StartTime", 0);
         return startTime != 0 && System.currentTimeMillis() - startTime >
-                BlockCanaryContext.get().provideMonitorDuration() * 3600 * 1000;
+                get().mBlockInterceptor.provideMonitorDuration() * 3600 * 1000;
     }
 
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.

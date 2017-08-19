@@ -15,6 +15,7 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.Looper;
 
@@ -36,8 +37,13 @@ public final class BlockCanaryInternals {
     StackSampler stackSampler;
     CpuSampler cpuSampler;
 
+    /**
+     * Null object pattern
+     */
+    private static final BlockInterceptor NULL_OBJ = new DefaultBlockInterceptor();
+
     private static BlockCanaryInternals sInstance;
-    private static DefaultBlockInterceptor sContext;
+    private static Context sContext;
 
     private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
@@ -45,9 +51,9 @@ public final class BlockCanaryInternals {
 
         stackSampler = new StackSampler(
                 Looper.getMainLooper().getThread(),
-                sContext.provideDumpInterval());
+                getInterceptor(0).provideDumpInterval());
 
-        cpuSampler = new CpuSampler(sContext.provideDumpInterval());
+        cpuSampler = new CpuSampler(getInterceptor(0).provideDumpInterval());
 
         setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() {
 
@@ -59,6 +65,9 @@ public final class BlockCanaryInternals {
                         .getThreadStackEntries(realTimeStart, realTimeEnd);
                 if (!threadStackEntries.isEmpty()) {
                     BlockInfo blockInfo = BlockInfo.newInstance()
+                            .setQualifier(getInterceptor(0).provideQualifier())
+                            .setUid(getInterceptor(0).provideUid())
+                            .setNetwork(getInterceptor(0).provideNetworkType())
                             .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
                             .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
                             .setRecentCpuRate(cpuSampler.getCpuRateInfo())
@@ -68,15 +77,17 @@ public final class BlockCanaryInternals {
 
                     if (mInterceptorChain.size() != 0) {
                         for (BlockInterceptor interceptor : mInterceptorChain) {
-                            interceptor.onBlock(getContext().provideContext(), blockInfo);
+                            interceptor.onBlock(BlockCanaryInternals.getContext(), blockInfo);
                         }
                     }
                 }
             }
-        }, getContext().provideBlockThreshold(), getContext().stopWhenDebugging()));
+        }, getInterceptor(0).provideBlockThreshold(), getInterceptor(0).stopWhenDebugging()));
 
         LogWriter.cleanObsolete();
     }
+
+
 
     /**
      * Get BlockCanaryInternals singleton
@@ -99,11 +110,11 @@ public final class BlockCanaryInternals {
      *
      * @param context context
      */
-    public static void setContext(DefaultBlockInterceptor context) {
+    public static void setContext(Context context) {
         sContext = context;
     }
 
-    public static DefaultBlockInterceptor getContext() {
+    public static Context getContext() {
         return sContext;
     }
 
@@ -111,24 +122,30 @@ public final class BlockCanaryInternals {
         mInterceptorChain.add(blockInterceptor);
     }
 
+    public BlockInterceptor getInterceptor(int pos) {
+        if ( pos < 0 || mInterceptorChain.size() <= pos ) {
+            return NULL_OBJ;
+        }
+        return mInterceptorChain.get(pos) ;
+    }
+
     private void setMonitor(LooperMonitor looperPrinter) {
         monitor = looperPrinter;
     }
 
     public long getSampleDelay() {
-        return (long) (BlockCanaryInternals.getContext().provideBlockThreshold() * 0.8f);
+        return (long) (getInterceptor(0).provideBlockThreshold() * 0.8f);
     }
 
     static String getPath() {
         String state = Environment.getExternalStorageState();
-        String logPath = BlockCanaryInternals.getContext()
-                == null ? "" : BlockCanaryInternals.getContext().providePath();
+        String logPath = BlockCanaryInternals.getInstance().getInterceptor(0) == null ? "" : BlockCanaryInternals.getInstance().getInterceptor(0).providePath();
 
         if (Environment.MEDIA_MOUNTED.equals(state)
                 && Environment.getExternalStorageDirectory().canWrite()) {
             return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
-        return getContext().provideContext().getFilesDir() + BlockCanaryInternals.getContext().providePath();
+        return BlockCanaryInternals.getContext().getFilesDir() + BlockCanaryInternals.getInstance().getInterceptor(0).providePath();
     }
 
     static File detectedBlockDirectory() {

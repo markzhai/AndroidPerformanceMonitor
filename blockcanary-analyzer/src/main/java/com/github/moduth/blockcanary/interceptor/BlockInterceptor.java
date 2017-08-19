@@ -19,6 +19,55 @@ import android.content.Context;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
+import java.io.File;
+import java.util.Collection;
+
 public interface BlockInterceptor {
     void onBlock(Context context, BlockInfo blockInfo);
+
+    int provideBlockThreshold();
+
+    int provideDumpInterval();
+
+    boolean stopWhenDebugging();
+
+    String providePath();
+
+
+    /**
+     * Implement in your project.
+     *
+     * @return Qualifier which can specify this installation, like version + flavor.
+     */
+    public String provideQualifier() ;
+
+    /**
+     * Implement in your project.
+     *
+     * @return user id
+     */
+    public String provideUid()  ;
+
+    /**
+     * Network type
+     *
+     * @return {@link String} like 2G, 3G, 4G, wifi, etc.
+     */
+    public String provideNetworkType()  ;
+
+    boolean displayNotification();
+
+    int provideMonitorDuration();
+
+    boolean zip(File[] logFiles, File zippedFile);
+
+    void upload(File file);
+
+    boolean deleteFilesInWhiteList();
+
+    boolean filterNonConcernStack();
+
+    Collection<? extends String> concernPackages();
+
+    Collection<? extends String> provideWhiteList();
 }

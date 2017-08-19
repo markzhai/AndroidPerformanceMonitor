@@ -42,7 +42,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 import com.github.moduth.blockcanary.LogWriter;
 import com.github.moduth.blockcanary.R;
@@ -409,7 +408,7 @@ public class DisplayActivity extends Activity {
                         boolean needAddToList = true;
 
                         if (BlockCanaryUtils.isInWhiteList(blockInfo)) {
-                            if (BlockCanaryContext.get().deleteFilesInWhiteList()) {
+                            if (BlockCanaryInternals.getInstance().getInterceptor(0).deleteFilesInWhiteList()) {
                                 blockFile.delete();
                                 blockFile = null;
                             }
@@ -417,7 +416,7 @@ public class DisplayActivity extends Activity {
                         }
 
                         blockInfo.concernStackString = BlockCanaryUtils.concernStackString(blockInfo);
-                        if (BlockCanaryContext.get().filterNonConcernStack() &&
+                        if (BlockCanaryInternals.getInstance().getInterceptor(0).filterNonConcernStack() &&
                                 TextUtils.isEmpty(blockInfo.concernStackString)) {
                             needAddToList = false;
                         }

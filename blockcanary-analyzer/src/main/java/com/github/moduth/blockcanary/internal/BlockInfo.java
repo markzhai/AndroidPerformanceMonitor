@@ -63,7 +63,7 @@ public class BlockInfo {
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
 
-    public static String sQualifier;
+//    public static String sQualifier;
     public static String sModel;
     public static String sApiLevel = "";
     /**
@@ -105,12 +105,9 @@ public class BlockInfo {
         sCpuCoreNum = PerformanceUtils.getNumCores();
         sModel = Build.MODEL;
         sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
-        sQualifier = BlockCanaryInternals.getContext().provideQualifier();
         try {
             TelephonyManager telephonyManager = (TelephonyManager) BlockCanaryInternals
-                    .getContext()
-                    .provideContext()
-                    .getSystemService(Context.TELEPHONY_SERVICE);
+                    .getContext().getSystemService(Context.TELEPHONY_SERVICE);
             sImei = telephonyManager.getDeviceId();
         } catch (Exception exception) {
             Log.e(TAG, NEW_INSTANCE_METHOD, exception);
@@ -123,7 +120,7 @@ public class BlockInfo {
 
     public static BlockInfo newInstance() {
         BlockInfo blockInfo = new BlockInfo();
-        Context context = BlockCanaryInternals.getContext().provideContext();
+        Context context = BlockCanaryInternals.getContext();
         if (blockInfo.versionName == null || blockInfo.versionName.length() == 0) {
             try {
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -137,15 +134,29 @@ public class BlockInfo {
         blockInfo.cpuCoreNum = sCpuCoreNum;
         blockInfo.model = sModel;
         blockInfo.apiLevel = sApiLevel;
-        blockInfo.qualifier = sQualifier;
         blockInfo.imei = sImei;
-        blockInfo.uid = BlockCanaryInternals.getContext().provideUid();
         blockInfo.processName = ProcessUtils.myProcessName();
-        blockInfo.network = BlockCanaryInternals.getContext().provideNetworkType();
         blockInfo.freeMemory = String.valueOf(PerformanceUtils.getFreeMemory());
         blockInfo.totalMemory = String.valueOf(PerformanceUtils.getTotalMemory());
 
         return blockInfo;
+    }
+
+
+    public BlockInfo setQualifier(String qualifier) {
+        this.qualifier = qualifier;
+        return this;
+    }
+
+
+    public BlockInfo setUid(String uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public BlockInfo setNetwork(String network) {
+        this.network = network;
+        return this;
     }
 
     public BlockInfo setCpuBusyFlag(boolean busy) {

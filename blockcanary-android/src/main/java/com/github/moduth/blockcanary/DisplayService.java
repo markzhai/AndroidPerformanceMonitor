@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.github.moduth.blockcanary.interceptor.DefaultBlockInterceptor;
 import com.github.moduth.blockcanary.internal.BlockInfo;
 import com.github.moduth.blockcanary.ui.DisplayActivity;
 
@@ -34,7 +35,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
-final class DisplayService implements BlockInterceptor {
+final class DisplayService extends DefaultBlockInterceptor {
 
     private static final String TAG = "DisplayService";
 
