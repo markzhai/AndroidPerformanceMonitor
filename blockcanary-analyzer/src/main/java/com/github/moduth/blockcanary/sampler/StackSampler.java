@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary;
+package com.github.moduth.blockcanary.sampler;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 /**
  * Dumps thread stack.
  */
-class StackSampler extends AbstractSampler {
+public class StackSampler extends AbstractSampler {
 
     private static final int DEFAULT_MAX_ENTRY_COUNT = 100;
     private static final LinkedHashMap<Long, String> sStackMap = new LinkedHashMap<>();

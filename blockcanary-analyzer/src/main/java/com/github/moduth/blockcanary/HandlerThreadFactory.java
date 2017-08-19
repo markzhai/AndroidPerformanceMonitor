@@ -18,7 +18,7 @@ package com.github.moduth.blockcanary;
 import android.os.Handler;
 import android.os.HandlerThread;
 
-final class HandlerThreadFactory {
+public final class HandlerThreadFactory {
 
     private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
     private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writer");

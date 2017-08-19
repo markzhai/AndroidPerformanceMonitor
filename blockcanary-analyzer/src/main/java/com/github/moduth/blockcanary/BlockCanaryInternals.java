@@ -18,7 +18,11 @@ package com.github.moduth.blockcanary;
 import android.os.Environment;
 import android.os.Looper;
 
+import com.github.moduth.blockcanary.interceptor.DefaultBlockInterceptor;
+import com.github.moduth.blockcanary.interceptor.BlockInterceptor;
 import com.github.moduth.blockcanary.internal.BlockInfo;
+import com.github.moduth.blockcanary.sampler.CpuSampler;
+import com.github.moduth.blockcanary.sampler.StackSampler;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -33,7 +37,7 @@ public final class BlockCanaryInternals {
     CpuSampler cpuSampler;
 
     private static BlockCanaryInternals sInstance;
-    private static BlockCanaryContext sContext;
+    private static DefaultBlockInterceptor sContext;
 
     private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
@@ -79,7 +83,7 @@ public final class BlockCanaryInternals {
      *
      * @return BlockCanaryInternals instance
      */
-    static BlockCanaryInternals getInstance() {
+    public static BlockCanaryInternals getInstance() {
         if (sInstance == null) {
             synchronized (BlockCanaryInternals.class) {
                 if (sInstance == null) {
@@ -91,15 +95,15 @@ public final class BlockCanaryInternals {
     }
 
     /**
-     * set {@link BlockCanaryContext} implementation
+     * set {@link DefaultBlockInterceptor} implementation
      *
      * @param context context
      */
-    public static void setContext(BlockCanaryContext context) {
+    public static void setContext(DefaultBlockInterceptor context) {
         sContext = context;
     }
 
-    public static BlockCanaryContext getContext() {
+    public static DefaultBlockInterceptor getContext() {
         return sContext;
     }
 
@@ -111,7 +115,7 @@ public final class BlockCanaryInternals {
         monitor = looperPrinter;
     }
 
-    long getSampleDelay() {
+    public long getSampleDelay() {
         return (long) (BlockCanaryInternals.getContext().provideBlockThreshold() * 0.8f);
     }
 

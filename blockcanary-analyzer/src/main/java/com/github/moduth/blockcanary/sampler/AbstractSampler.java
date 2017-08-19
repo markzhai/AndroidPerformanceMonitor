@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary;
+package com.github.moduth.blockcanary.sampler;
+
+import com.github.moduth.blockcanary.BlockCanaryInternals;
+import com.github.moduth.blockcanary.HandlerThreadFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

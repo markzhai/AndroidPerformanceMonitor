@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary;
+package com.github.moduth.blockcanary.interceptor;
 
 import android.content.Context;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
-interface BlockInterceptor {
+public interface BlockInterceptor {
     void onBlock(Context context, BlockInfo blockInfo);
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary;
+package com.github.moduth.blockcanary.interceptor;
 
 import android.content.Context;
 
@@ -26,20 +26,20 @@ import java.util.List;
 /**
  * User should provide a real implementation of this class to use BlockCanary.
  */
-public class BlockCanaryContext implements BlockInterceptor {
+public class DefaultBlockInterceptor implements BlockInterceptor {
 
     private static Context sApplicationContext;
-    private static BlockCanaryContext sInstance = null;
+    private static DefaultBlockInterceptor sInstance = null;
 
-    public BlockCanaryContext() {
+    public DefaultBlockInterceptor() {
     }
 
-    static void init(Context context, BlockCanaryContext blockCanaryContext) {
+    static void init(Context context, DefaultBlockInterceptor blockCanaryContext) {
         sApplicationContext = context;
         sInstance = blockCanaryContext;
     }
 
-    public static BlockCanaryContext get() {
+    public static DefaultBlockInterceptor get() {
         if (sInstance == null) {
             throw new RuntimeException("BlockCanaryContext null");
         } else {

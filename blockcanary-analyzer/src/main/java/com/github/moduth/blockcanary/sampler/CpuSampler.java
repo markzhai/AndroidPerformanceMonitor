@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.moduth.blockcanary;
+package com.github.moduth.blockcanary.sampler;
 
 import android.util.Log;
 
@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Dumps cpu usage.
  */
-class CpuSampler extends AbstractSampler {
+public class CpuSampler extends AbstractSampler {
 
     private static final String TAG = "CpuSampler";
     private static final int BUFFER_SIZE = 1000;
