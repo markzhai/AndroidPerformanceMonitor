@@ -40,7 +40,7 @@ abstract class AbstractSampler {
     };
 
     public AbstractSampler(long sampleInterval) {
-        if (0 == sampleInterval) {
+        if ( sampleInterval <= 0 ) {
             sampleInterval = DEFAULT_SAMPLE_INTERVAL;
         }
         mSampleInterval = sampleInterval;
