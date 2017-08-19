@@ -396,7 +396,7 @@ public class DisplayActivity extends Activity {
         @Override
         public void run() {
             final List<BlockInfoEx> blockInfoList = new ArrayList<>();
-            File[] files = BlockCanaryInternals.getLogFiles();
+            File[] files = LogWriter.getLogFiles();
             if (files != null) {
                 for (File blockFile : files) {
                     try {

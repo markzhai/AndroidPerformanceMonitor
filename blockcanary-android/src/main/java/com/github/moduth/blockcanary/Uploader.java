@@ -44,7 +44,7 @@ final class Uploader {
         }
         File zippedFile = LogWriter.generateTempZip("BlockCanary-" + timeString);
         BlockInterceptor interceptor = BlockCanaryInternals.getInstance().getInterceptor(0);
-        interceptor.zip(BlockCanaryInternals.getLogFiles(), zippedFile);
+        interceptor.zip(LogWriter.getLogFiles(), zippedFile);
         LogWriter.deleteAll();
         return zippedFile;
     }

@@ -15,13 +15,16 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.os.Environment;
 import android.util.Log;
 
+import com.github.moduth.blockcanary.interceptor.BlockInterceptor;
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -66,7 +69,7 @@ public class LogWriter {
             @Override
             public void run() {
                 long now = System.currentTimeMillis();
-                File[] f = BlockCanaryInternals.getLogFiles();
+                File[] f = getLogFiles();
                 if (f != null && f.length > 0) {
                     synchronized (SAVE_DELETE_LOCK) {
                         for (File aF : f) {
@@ -83,7 +86,7 @@ public class LogWriter {
     public static void deleteAll() {
         synchronized (SAVE_DELETE_LOCK) {
             try {
-                File[] files = BlockCanaryInternals.getLogFiles();
+                File[] files = getLogFiles();
                 if (files != null && files.length > 0) {
                     for (File file : files) {
                         file.delete();
@@ -99,7 +102,7 @@ public class LogWriter {
         String path = "";
         BufferedWriter writer = null;
         try {
-            File file = BlockCanaryInternals.detectedBlockDirectory();
+            File file = detectedBlockDirectory();
             long time = System.currentTimeMillis();
             path = file.getAbsolutePath() + "/"
                     + logFileName + "-"
@@ -138,6 +141,49 @@ public class LogWriter {
     }
 
     public static File generateTempZip(String filename) {
-        return new File(BlockCanaryInternals.getPath() + "/" + filename + ".zip");
+        return new File(getPath() + "/" + filename + ".zip");
+    }
+
+
+    private static String getPath() {
+        String state = Environment.getExternalStorageState();
+        BlockInterceptor interceptor = BlockCanaryInternals.getInstance().getInterceptor(0) ;
+        String logPath =  interceptor == null ? "" : interceptor.providePath();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)
+                && Environment.getExternalStorageDirectory().canWrite()) {
+            return Environment.getExternalStorageDirectory().getPath() + logPath;
+        }
+        return BlockCanaryInternals.getContext().getFilesDir() + interceptor.providePath();
+    }
+
+    static File detectedBlockDirectory() {
+        File directory = new File(getPath());
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
+    }
+
+    public static File[] getLogFiles() {
+        File f = detectedBlockDirectory();
+        if (f.exists() && f.isDirectory()) {
+            return f.listFiles(new BlockLogFileFilter());
+        }
+        return null;
+    }
+
+    private static class BlockLogFileFilter implements FilenameFilter {
+
+        private String TYPE = ".log";
+
+        BlockLogFileFilter() {
+
+        }
+
+        @Override
+        public boolean accept(File dir, String filename) {
+            return filename.endsWith(TYPE);
+        }
     }
 }

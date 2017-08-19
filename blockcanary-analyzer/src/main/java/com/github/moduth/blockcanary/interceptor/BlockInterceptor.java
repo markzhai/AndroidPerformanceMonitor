@@ -20,54 +20,136 @@ import android.content.Context;
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 
 public interface BlockInterceptor {
+    /**
+     * Block interceptor, developer may provide their own actions.
+     */
     void onBlock(Context context, BlockInfo blockInfo);
-
-    int provideBlockThreshold();
-
-    int provideDumpInterval();
-
-    boolean stopWhenDebugging();
-
-    String providePath();
-
 
     /**
      * Implement in your project.
      *
      * @return Qualifier which can specify this installation, like version + flavor.
      */
-    public String provideQualifier() ;
+
+    String provideQualifier();
 
     /**
      * Implement in your project.
      *
      * @return user id
      */
-    public String provideUid()  ;
+    String provideUid();
 
     /**
      * Network type
      *
-     * @return {@link String} like 2G, 3G, 4G, wifi, etc.
+     * @return ;@link String} like 2G, 3G, 4G, wifi, etc.
      */
-    public String provideNetworkType()  ;
 
-    boolean displayNotification();
+    String provideNetworkType();
+
+    /**
+     * Config monitor duration, after this time BlockCanary will stop, use
+     * with ;@code BlockCanary}'s isMonitorDurationEnd
+     *
+     * @return monitor last duration (in hour)
+     */
 
     int provideMonitorDuration();
 
-    boolean zip(File[] logFiles, File zippedFile);
+    /**
+     * Config block threshold (in millis), dispatch over this duration is regarded as a BLOCK. You may set it
+     * from performance of device.
+     *
+     * @return threshold in mills
+     */
 
-    void upload(File file);
+    int provideBlockThreshold();
 
-    boolean deleteFilesInWhiteList();
+    /**
+     * Thread stack dump interval, use when block happens, BlockCanary will dump on main thread
+     * stack according to current sample cycle.
+     * <p>
+     * Because the implementation mechanism of Looper, real dump interval would be longer than
+     * the period specified here (especially when cpu is busier).
+     * </p>
+     *
+     * @return dump interval (in millis)
+     */
+
+    int provideDumpInterval();
+
+    /**
+     * Path to save log, like "/blockcanary/", will save to sdcard if can.
+     *
+     * @return path of log files
+     */
+
+    String providePath();
+
+    /**
+     * If need notification to notice block.
+     *
+     * @return true if need, else if not need.
+     */
+
+    boolean displayNotification();
+
+    /**
+     * Implement in your project, bundle files into a zip file.
+     *
+     * @param src  files before compress
+     * @param dest files compressed
+     * @return true if compression is successful
+     */
+
+    boolean zip(File[] src, File dest);
+
+    /**
+     * Implement in your project, bundled log files.
+     *
+     * @param zippedFile zipped file
+     */
+    void upload(File zippedFile);
+
+    /**
+     * Packages that developer concern, by default it uses process name,
+     * put high priority one in pre-order.
+     *
+     * @return null if simply concern only package with process name.
+     */
+
+    List<String> concernPackages();
+
+    /**
+     * Filter stack without any in concern package, used with @;code concernPackages}.
+     *
+     * @return true if filter, false it not.
+     */
 
     boolean filterNonConcernStack();
 
-    Collection<? extends String> concernPackages();
+    /**
+     * Provide white list, entry in white list will not be shown in ui list.
+     *
+     * @return return null if you don't need white-list filter.
+     */
+    List<String> provideWhiteList();
 
-    Collection<? extends String> provideWhiteList();
+    /**
+     * Whether to delete files whose stack is in white list, used with white-list.
+     *
+     * @return true if delete, false it not.
+     */
+    boolean deleteFilesInWhiteList();
+
+    /**
+     * Whether to stop monitoring when in debug mode.
+     *
+     * @return true if stop, false otherwise
+     */
+    boolean stopWhenDebugging();
 }
