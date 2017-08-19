@@ -44,7 +44,7 @@ public final class BlockCanaryInternals {
 
     private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
-    public BlockCanaryInternals() {
+    private BlockCanaryInternals() {
         stackSampler = new StackSampler(
                 Looper.getMainLooper().getThread(),
                 getInterceptor(0).provideDumpInterval());

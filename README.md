@@ -51,9 +51,9 @@ public class DemoApplication extends Application {
 }
 ```
 
-Implement your application `BlockCanaryContext` context (strongly recommend you to check all these configs)：
+Implement your application `BlockInterceptor` context (strongly recommend you to check all these configs, or you can use DefaultBlockInterceptor directly.)：
 ```java
-public class AppBlockCanaryContext extends BlockCanaryContext {
+public class AppBlockCanaryContext extends BlockInterceptor {
 
     /**
      * Implement in your project.

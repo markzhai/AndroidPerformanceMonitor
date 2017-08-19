@@ -2,6 +2,13 @@
 
 You can watch releases [on Maven](https://oss.sonatype.org/content/groups/public/com/github/markzhai/).
 
+
+## Version 1.5.1 *(2017-08-19)*
+
+1. refactor this framework;
+2. change class `BlockCanaryContext` to `DefaultBlockInterceptor`.
+
+
 ## Version 1.5 *(2017-02-26)*
 
 Debug mode stop monitor.
