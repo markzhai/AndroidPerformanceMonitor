@@ -15,6 +15,7 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 
@@ -120,9 +121,15 @@ public final class BlockCanaryInternals {
         String logPath = BlockCanaryInternals.getContext()
                 == null ? "" : BlockCanaryInternals.getContext().providePath();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)
-                && Environment.getExternalStorageDirectory().canWrite()) {
-            return Environment.getExternalStorageDirectory().getPath() + logPath;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Environment.MEDIA_MOUNTED.equals(state) ) {
+                return  BlockCanaryInternals.getContext().provideContext().getExternalFilesDir(logPath).getPath();
+            }
+        }else{
+            if (Environment.MEDIA_MOUNTED.equals(state)
+                    && Environment.getExternalStorageDirectory().canWrite()) {
+                return Environment.getExternalStorageDirectory().getPath() + logPath;
+            }
         }
         return getContext().provideContext().getFilesDir() + BlockCanaryInternals.getContext().providePath();
     }

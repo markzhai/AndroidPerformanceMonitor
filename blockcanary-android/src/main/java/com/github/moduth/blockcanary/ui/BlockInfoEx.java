@@ -38,8 +38,6 @@ final class BlockInfoEx extends BlockInfo {
                     blockInfo.model = line.split(KV)[1];
                 } else if (line.startsWith(KEY_API)) {
                     blockInfo.apiLevel = line.split(KV)[1];
-                } else if (line.startsWith(KEY_IMEI)) {
-                    blockInfo.imei = line.split(KV)[1];
                 } else if (line.startsWith(KEY_CPU_CORE)) {
                     blockInfo.cpuCoreNum = Integer.valueOf(line.split(KV)[1]);
                 } else if (line.startsWith(KEY_UID)) {

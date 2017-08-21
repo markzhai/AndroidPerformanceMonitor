@@ -46,7 +46,6 @@ public class BlockInfo {
     public static final String KEY_QUA = "qua";
     public static final String KEY_MODEL = "model";
     public static final String KEY_API = "api-level";
-    public static final String KEY_IMEI = "imei";
     public static final String KEY_UID = "uid";
     public static final String KEY_CPU_CORE = "cpu-core";
     public static final String KEY_CPU_BUSY = "cpu-busy";
@@ -70,13 +69,11 @@ public class BlockInfo {
      * The International Mobile Equipment Identity or IMEI /aɪˈmiː/ is a number,
      * usually unique, to identify 3GPP and iDEN mobile phones
      */
-    public static String sImei = "";
     public static int sCpuCoreNum = -1;
 
     public String qualifier;
     public String model;
     public String apiLevel = "";
-    public String imei = "";
     public int cpuCoreNum = -1;
 
     // Per Block Info fields
@@ -106,16 +103,6 @@ public class BlockInfo {
         sModel = Build.MODEL;
         sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
         sQualifier = BlockCanaryInternals.getContext().provideQualifier();
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) BlockCanaryInternals
-                    .getContext()
-                    .provideContext()
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            sImei = telephonyManager.getDeviceId();
-        } catch (Exception exception) {
-            Log.e(TAG, NEW_INSTANCE_METHOD, exception);
-            sImei = EMPTY_IMEI;
-        }
     }
 
     public BlockInfo() {
@@ -138,7 +125,6 @@ public class BlockInfo {
         blockInfo.model = sModel;
         blockInfo.apiLevel = sApiLevel;
         blockInfo.qualifier = sQualifier;
-        blockInfo.imei = sImei;
         blockInfo.uid = BlockCanaryInternals.getContext().provideUid();
         blockInfo.processName = ProcessUtils.myProcessName();
         blockInfo.network = BlockCanaryInternals.getContext().provideNetworkType();
@@ -176,7 +162,6 @@ public class BlockInfo {
         basicSb.append(KEY_QUA).append(KV).append(qualifier).append(separator);
         basicSb.append(KEY_VERSION_NAME).append(KV).append(versionName).append(separator);
         basicSb.append(KEY_VERSION_CODE).append(KV).append(versionCode).append(separator);
-        basicSb.append(KEY_IMEI).append(KV).append(imei).append(separator);
         basicSb.append(KEY_UID).append(KV).append(uid).append(separator);
         basicSb.append(KEY_NETWORK).append(KV).append(network).append(separator);
         basicSb.append(KEY_MODEL).append(KV).append(model).append(separator);
