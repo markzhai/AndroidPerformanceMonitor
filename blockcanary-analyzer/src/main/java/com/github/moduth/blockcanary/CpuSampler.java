@@ -15,8 +15,8 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.os.Build;
 import android.util.Log;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
 import java.io.BufferedReader;
@@ -56,8 +56,10 @@ class CpuSampler extends AbstractSampler {
 
     @Override
     public void start() {
-        super.start();
-        reset();
+        if (Build.VERSION.SDK_INT < 26) {
+            super.start();
+            reset();
+        }
     }
 
     /**
