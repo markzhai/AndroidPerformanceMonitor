@@ -106,7 +106,7 @@ public class BlockInfo {
         sQualifier = BlockCanaryInternals.getContext().provideQualifier();
     }
 
-    private BlockInfo() {
+    public BlockInfo() {
     }
 
     public static BlockInfo newInstance() {
