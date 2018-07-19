@@ -26,7 +26,7 @@ class LooperMonitor implements Printer {
     private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
     private long mStartTimestamp = 0;
     private long mStartThreadTimestamp = 0;
-    private BlockListener mBlockListener = null;
+    private BlockListener mBlockListener;
     private boolean mPrintingStarted = false;
     private final boolean mStopWhenDebugging;
 
@@ -83,21 +83,21 @@ class LooperMonitor implements Printer {
     }
 
     private void startDump() {
-        if (null != BlockCanaryInternals.getInstance().stackSampler) {
+        if (BlockCanaryInternals.getInstance().stackSampler != null) {
             BlockCanaryInternals.getInstance().stackSampler.start();
         }
 
-        if (null != BlockCanaryInternals.getInstance().cpuSampler) {
+        if (BlockCanaryInternals.getInstance().cpuSampler != null) {
             BlockCanaryInternals.getInstance().cpuSampler.start();
         }
     }
 
     private void stopDump() {
-        if (null != BlockCanaryInternals.getInstance().stackSampler) {
+        if (BlockCanaryInternals.getInstance().stackSampler != null) {
             BlockCanaryInternals.getInstance().stackSampler.stop();
         }
 
-        if (null != BlockCanaryInternals.getInstance().cpuSampler) {
+        if (BlockCanaryInternals.getInstance().cpuSampler != null) {
             BlockCanaryInternals.getInstance().cpuSampler.stop();
         }
     }

@@ -20,6 +20,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryInternals;
@@ -105,13 +106,13 @@ public class BlockInfo {
         sQualifier = BlockCanaryInternals.getContext().provideQualifier();
     }
 
-    public BlockInfo() {
+    private BlockInfo() {
     }
 
     public static BlockInfo newInstance() {
         BlockInfo blockInfo = new BlockInfo();
         Context context = BlockCanaryInternals.getContext().provideContext();
-        if (blockInfo.versionName == null || blockInfo.versionName.length() == 0) {
+        if (TextUtils.isEmpty(blockInfo.versionName)) {
             try {
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                 blockInfo.versionCode = info.versionCode;

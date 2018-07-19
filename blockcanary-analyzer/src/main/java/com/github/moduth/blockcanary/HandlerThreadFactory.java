@@ -36,7 +36,7 @@ final class HandlerThreadFactory {
     }
 
     private static class HandlerThreadWrapper {
-        private Handler handler = null;
+        private Handler handler;
 
         public HandlerThreadWrapper(String threadName) {
             HandlerThread handlerThread = new HandlerThread("BlockCanary-" + threadName);

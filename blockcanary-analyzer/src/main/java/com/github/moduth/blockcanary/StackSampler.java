@@ -61,9 +61,7 @@ class StackSampler extends AbstractSampler {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {
-            stringBuilder
-                    .append(stackTraceElement.toString())
-                    .append(BlockInfo.SEPARATOR);
+            stringBuilder.append(stackTraceElement.toString()).append(BlockInfo.SEPARATOR);
         }
 
         synchronized (sStackMap) {

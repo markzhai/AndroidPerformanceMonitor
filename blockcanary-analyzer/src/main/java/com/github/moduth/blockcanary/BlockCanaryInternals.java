@@ -40,9 +40,7 @@ public final class BlockCanaryInternals {
 
     public BlockCanaryInternals() {
 
-        stackSampler = new StackSampler(
-                Looper.getMainLooper().getThread(),
-                sContext.provideDumpInterval());
+        stackSampler = new StackSampler(Looper.getMainLooper().getThread(), sContext.provideDumpInterval());
 
         cpuSampler = new CpuSampler(sContext.provideDumpInterval());
 
@@ -118,8 +116,8 @@ public final class BlockCanaryInternals {
 
     static String getPath() {
         String state = Environment.getExternalStorageState();
-        String logPath = BlockCanaryInternals.getContext()
-                == null ? "" : BlockCanaryInternals.getContext().providePath();
+        String logPath = BlockCanaryInternals.getContext() == null ? "" :
+                BlockCanaryInternals.getContext().providePath();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (Environment.MEDIA_MOUNTED.equals(state) ) {
