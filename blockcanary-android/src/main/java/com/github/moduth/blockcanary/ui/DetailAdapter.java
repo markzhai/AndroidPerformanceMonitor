@@ -47,15 +47,13 @@ final class DetailAdapter extends BaseAdapter {
         Context context = parent.getContext();
         if (getItemViewType(position) == TOP_ROW) {
             if (convertView == null) {
-                convertView =
-                        LayoutInflater.from(context).inflate(R.layout.block_canary_ref_top_row, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.block_canary_ref_top_row, parent, false);
             }
             TextView textView = findById(convertView, R.id.__leak_canary_row_text);
             textView.setText(context.getPackageName());
         } else {
             if (convertView == null) {
-                convertView =
-                        LayoutInflater.from(context).inflate(R.layout.block_canary_ref_row, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.block_canary_ref_row, parent, false);
             }
             TextView textView = findById(convertView, R.id.__leak_canary_row_text);
 
@@ -78,9 +76,8 @@ final class DetailAdapter extends BaseAdapter {
     }
 
     private DisplayConnectorView.Type connectorViewType(int position) {
-        return (position == 1) ? DisplayConnectorView.Type.START : (
-                (position == getCount() - 1) ? DisplayConnectorView.Type.END :
-                        DisplayConnectorView.Type.NODE);
+        return (position == 1) ? DisplayConnectorView.Type.START : ((position == getCount() - 1)
+                ? DisplayConnectorView.Type.END : DisplayConnectorView.Type.NODE);
     }
 
     private String elementToHtmlString(String element, int position, boolean folding) {

@@ -53,8 +53,7 @@ abstract class AbstractSampler {
         mShouldSample.set(true);
 
         HandlerThreadFactory.getTimerThreadHandler().removeCallbacks(mRunnable);
-        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable,
-                BlockCanaryInternals.getInstance().getSampleDelay());
+        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable, BlockCanaryInternals.getInstance().getSampleDelay());
     }
 
     public void stop() {

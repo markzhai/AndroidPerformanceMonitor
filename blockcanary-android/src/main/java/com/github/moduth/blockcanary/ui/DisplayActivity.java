@@ -23,25 +23,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 import com.github.moduth.blockcanary.LogWriter;
@@ -101,9 +90,9 @@ public class DisplayActivity extends Activity {
 
         setContentView(R.layout.block_canary_display_leak);
 
-        mListView = (ListView) findViewById(R.id.__leak_canary_display_leak_list);
-        mFailureView = (TextView) findViewById(R.id.__leak_canary_display_leak_failure);
-        mActionButton = (Button) findViewById(R.id.__leak_canary_action);
+        mListView = findViewById(R.id.__leak_canary_display_leak_list);
+        mFailureView = findViewById(R.id.__leak_canary_display_leak_failure);
+        mActionButton = findViewById(R.id.__leak_canary_action);
 
         mMaxStoredBlockCount = getResources().getInteger(R.integer.block_canary_max_stored_count);
 
@@ -199,10 +188,7 @@ public class DisplayActivity extends Activity {
 
     private void shareHeapDump(BlockInfoEx blockInfo) {
         File heapDumpFile = blockInfo.logFile;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            heapDumpFile.setReadable(true, false);
-        }
+        heapDumpFile.setReadable(true, false);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("application/octet-stream");
         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(heapDumpFile));
@@ -240,12 +226,10 @@ public class DisplayActivity extends Activity {
                     updateUi();
                 }
             });
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                invalidateOptionsMenu();
-                ActionBar actionBar = getActionBar();
-                if (actionBar != null) {
-                    actionBar.setDisplayHomeAsUpEnabled(false);
-                }
+            invalidateOptionsMenu();
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
             }
             setTitle(getString(R.string.block_canary_block_list_title, getPackageName()));
             mActionButton.setText(R.string.block_canary_delete_all);
@@ -287,12 +271,10 @@ public class DisplayActivity extends Activity {
                     adapter.toggleRow(position);
                 }
             });
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                invalidateOptionsMenu();
-                ActionBar actionBar = getActionBar();
-                if (actionBar != null) {
-                    actionBar.setDisplayHomeAsUpEnabled(true);
-                }
+            invalidateOptionsMenu();
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
             }
             mActionButton.setVisibility(VISIBLE);
             mActionButton.setText(R.string.block_canary_delete);
@@ -317,7 +299,7 @@ public class DisplayActivity extends Activity {
             return null;
         }
         for (BlockInfoEx blockInfo : mBlockInfoEntries) {
-            if (blockInfo.timeStart != null && startTime.equals(blockInfo.timeStart)) {
+            if (startTime.equals(blockInfo.timeStart)) {
                 return blockInfo;
             }
         }
@@ -347,8 +329,8 @@ public class DisplayActivity extends Activity {
                 convertView = LayoutInflater.from(DisplayActivity.this)
                         .inflate(R.layout.block_canary_block_row, parent, false);
             }
-            TextView titleView = (TextView) convertView.findViewById(R.id.__leak_canary_row_text);
-            TextView timeView = (TextView) convertView.findViewById(R.id.__leak_canary_row_time);
+            TextView titleView = convertView.findViewById(R.id.__leak_canary_row_text);
+            TextView timeView = convertView.findViewById(R.id.__leak_canary_row_time);
             BlockInfoEx blockInfo = getItem(position);
 
             String index;
