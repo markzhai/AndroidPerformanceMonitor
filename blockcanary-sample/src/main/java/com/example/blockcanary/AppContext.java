@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.github.moduth.blockcanary.internal.NetUtils;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class AppContext extends BlockCanaryContext {
 
     @Override
     public String provideNetworkType() {
-        return "4G";
+        return NetUtils.getNetworkType(DemoApplication.getAppContext()) ;
     }
 
     @Override
