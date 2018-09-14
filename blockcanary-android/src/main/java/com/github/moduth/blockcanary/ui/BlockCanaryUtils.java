@@ -15,7 +15,9 @@ final class BlockCanaryUtils {
     private static final List<String> CONCERN_LIST = new LinkedList<>();
 
     static {
-        WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
+        if (BlockCanaryInternals.getContext().provideWhiteList() != null) {
+            WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
+        }
 
         if (BlockCanaryInternals.getContext().concernPackages() != null) {
             CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
