@@ -66,10 +66,6 @@ public class BlockInfo {
     public static String sQualifier;
     public static String sModel;
     public static String sApiLevel = "";
-    /**
-     * The International Mobile Equipment Identity or IMEI /aɪˈmiː/ is a number,
-     * usually unique, to identify 3GPP and iDEN mobile phones
-     */
     public static int sCpuCoreNum = -1;
 
     public String qualifier;
@@ -97,7 +93,6 @@ public class BlockInfo {
     private StringBuilder cpuSb = new StringBuilder();
     private StringBuilder timeSb = new StringBuilder();
     private StringBuilder stackSb = new StringBuilder();
-    private static final String EMPTY_IMEI = "empty_imei";
 
     static {
         sCpuCoreNum = PerformanceUtils.getNumCores();
