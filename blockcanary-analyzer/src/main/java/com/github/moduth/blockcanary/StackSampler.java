@@ -31,6 +31,14 @@ class StackSampler extends AbstractSampler {
     private int mMaxEntryCount = DEFAULT_MAX_ENTRY_COUNT;
     private Thread mCurrentThread;
 
+    public  StackTraceElement[] getTraceElements() {
+        synchronized (sStackMap) {
+            return traceElements;
+        }
+    }
+
+    private static  StackTraceElement[] traceElements;
+
     public StackSampler(Thread thread, long sampleIntervalMillis) {
         this(thread, DEFAULT_MAX_ENTRY_COUNT, sampleIntervalMillis);
     }
@@ -59,9 +67,11 @@ class StackSampler extends AbstractSampler {
     @Override
     protected void doSample() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {
-            stringBuilder.append(stackTraceElement.toString()).append(BlockInfo.SEPARATOR);
+        traceElements = mCurrentThread.getStackTrace();
+        for (StackTraceElement stackTraceElement : traceElements) {
+            stringBuilder
+                    .append(stackTraceElement.toString())
+                    .append(BlockInfo.SEPARATOR);
         }
 
         synchronized (sStackMap) {

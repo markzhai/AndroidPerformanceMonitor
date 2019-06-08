@@ -88,6 +88,7 @@ public class BlockInfo {
     public boolean cpuBusy;
     public String cpuRateInfo;
     public ArrayList<String> threadStackEntries = new ArrayList<>();
+    public StackTraceElement[] stackTraceElements ;
 
     private StringBuilder basicSb = new StringBuilder();
     private StringBuilder cpuSb = new StringBuilder();
@@ -142,6 +143,11 @@ public class BlockInfo {
 
     public BlockInfo setThreadStackEntries(ArrayList<String> threadStackEntries) {
         this.threadStackEntries = threadStackEntries;
+        return this;
+    }
+
+    public BlockInfo setStackTraceElements(StackTraceElement[] stackTraceElements) {
+        this.stackTraceElements = stackTraceElements;
         return this;
     }
 
@@ -200,5 +206,23 @@ public class BlockInfo {
 
     public String toString() {
         return String.valueOf(basicSb) + timeSb + cpuSb + stackSb;
+    }
+
+    public Exception buildException(){
+        StringBuilder sb = new StringBuilder("threadTimeCost time cost:")
+                .append(threadTimeCost)
+                .append("ms,real time cost:")
+                .append(timeCost)
+                .append("ms");
+        if(timeCost - threadTimeCost > 300){
+            sb.append(",thread waiting a long time!!!");
+        }
+        if(cpuBusy){
+            sb.append(",cpu is busy !!!");
+        }
+        Exception exception = new BlockcanaryException(sb.toString());
+        exception.setStackTrace(stackTraceElements);
+        return exception;
+
     }
 }
