@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':blockcanary-analyzer')
-    //compile 'com.github.markzhai:blockcanary-analyzer:1.5.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':blockcanary-analyzer')
+    //implementation 'com.github.markzhai:blockcanary-analyzer:1.5.0'
 }

@@ -4,9 +4,10 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:3.4.1'
     }
 }
 
@@ -14,11 +15,14 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+        }
     }
     ext {
-        LIBRARY_COMPILE_SDK_VERSION = 23
-        LIBRARY_BUILD_TOOLS_VERSION = "23.0.3"
-        LIBRARY_MIN_SDK_VERSION = 9
-        LIBRARY_TARGET_SDK_VERSION = 22
+        LIBRARY_COMPILE_SDK_VERSION = 28
+        LIBRARY_BUILD_TOOLS_VERSION = "28.0.3"
+        LIBRARY_MIN_SDK_VERSION = 16
+        LIBRARY_TARGET_SDK_VERSION = 28
     }
 }
