@@ -4,9 +4,12 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        //添加神策分析 android-gradle-plugin 依赖
+        classpath 'com.sensorsdata.analytics.android:android-gradle-plugin2:3.1.0'
     }
 }
 
@@ -14,11 +17,11 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
     ext {
-        LIBRARY_COMPILE_SDK_VERSION = 23
-        LIBRARY_BUILD_TOOLS_VERSION = "23.0.3"
-        LIBRARY_MIN_SDK_VERSION = 9
-        LIBRARY_TARGET_SDK_VERSION = 22
+        LIBRARY_COMPILE_SDK_VERSION = 28
+        LIBRARY_MIN_SDK_VERSION = 15
+        LIBRARY_TARGET_SDK_VERSION = 28
     }
 }

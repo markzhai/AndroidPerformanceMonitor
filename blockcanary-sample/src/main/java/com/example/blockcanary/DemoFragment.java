@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.sensorsdata.analytics.android.sdk.SensorsDataTrackViewOnClick;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -68,12 +70,13 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @SensorsDataTrackViewOnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button1:
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Log.e(DEMO_FRAGMENT, "onClick of R.id.button1: ", e);
