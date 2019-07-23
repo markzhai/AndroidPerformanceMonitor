@@ -15,9 +15,7 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-        }
+        google()
     }
     ext {
         LIBRARY_COMPILE_SDK_VERSION = 28
