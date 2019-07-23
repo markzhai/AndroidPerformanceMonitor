@@ -96,7 +96,7 @@ public final class BlockCanary {
             mMonitorStarted = false;
             Looper.getMainLooper().setMessageLogging(null);
             mBlockCanaryCore.stackSampler.stop();
-            mBlockCanaryCore.cpuSampler.stop();
+            //mBlockCanaryCore.cpuSampler.stop();
         }
     }
 

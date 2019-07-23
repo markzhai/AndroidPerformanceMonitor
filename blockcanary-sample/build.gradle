@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
+//添加 com.sensorsdata.analytics.android 插件
+apply plugin: 'com.sensorsdata.analytics.android'
 
 android {
     compileSdkVersion LIBRARY_COMPILE_SDK_VERSION
-    buildToolsVersion LIBRARY_BUILD_TOOLS_VERSION
 
     defaultConfig {
         applicationId "com.example.blockcanary"
-        minSdkVersion LIBRARY_MIN_SDK_VERSION
+        minSdkVersion 15
         targetSdkVersion LIBRARY_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
@@ -24,6 +25,7 @@ dependencies {
     debugCompile project(':blockcanary-android')
     releaseCompile project(':blockcanary-android-no-op')
 
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:appcompat-v7:28.0.0'
+    compile 'com.android.support:design:28.0.0'
+    compile 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.2.0'
 }

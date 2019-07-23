@@ -2,6 +2,15 @@
 <manifest package="com.example.blockcanary"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--使用可视化操作命名功能需配置悬浮窗权限(选配)-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
@@ -18,8 +27,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="debugmode"
+                    android:scheme="sa8a9ab067" />
+            </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.sensorsdata.analytics.android.EnableLogging"
+            android:value="true" />
     </application>
 
 </manifest>

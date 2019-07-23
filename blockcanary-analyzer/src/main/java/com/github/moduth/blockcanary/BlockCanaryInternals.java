@@ -30,7 +30,7 @@ public final class BlockCanaryInternals {
 
     LooperMonitor monitor;
     StackSampler stackSampler;
-    CpuSampler cpuSampler;
+    //CpuSampler cpuSampler;
 
     private static BlockCanaryInternals sInstance;
     private static BlockCanaryContext sContext;
@@ -43,7 +43,7 @@ public final class BlockCanaryInternals {
                 Looper.getMainLooper().getThread(),
                 sContext.provideDumpInterval());
 
-        cpuSampler = new CpuSampler(sContext.provideDumpInterval());
+        //cpuSampler = new CpuSampler(sContext.provideDumpInterval());
 
         setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() {
 
@@ -56,8 +56,8 @@ public final class BlockCanaryInternals {
                 if (!threadStackEntries.isEmpty()) {
                     BlockInfo blockInfo = BlockInfo.newInstance()
                             .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
-                            .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
-                            .setRecentCpuRate(cpuSampler.getCpuRateInfo())
+                            //.setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
+                            //.setRecentCpuRate(cpuSampler.getCpuRateInfo())
                             .setThreadStackEntries(threadStackEntries)
                             .flushString();
                     LogWriter.save(blockInfo.toString());
