@@ -33,14 +33,6 @@ public class DemoActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, DemoFragment.newInstance())
                 .commit();
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTipDialog();
-            }
-        });
     }
 
     private void showTipDialog() {
@@ -65,8 +57,8 @@ public class DemoActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showTipDialog();
             return true;
         }
 
