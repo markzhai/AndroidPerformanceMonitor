@@ -20,9 +20,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.support.v4.app.NotificationCompat;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 import com.github.moduth.blockcanary.ui.DisplayActivity;
@@ -49,32 +47,17 @@ final class DisplayService implements BlockInterceptor {
 
         if(notificationManager != null) {
             Notification notification;
-            Notification.Builder builder;
-            if(VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.block_canary_notification)
-                        .setWhen(System.currentTimeMillis())
-                        .setContentTitle(contentTitle)
-                        .setContentText(contentText)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setDefaults(Notification.DEFAULT_SOUND);
-            } else {
-                builder = new Notification.Builder(context)
-                        .setSmallIcon(R.drawable.block_canary_notification)
-                        .setWhen(System.currentTimeMillis())
-                        .setContentTitle(contentTitle)
-                        .setContentText(contentText)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setDefaults(Notification.DEFAULT_SOUND);
-            }
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.block_canary_notification)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle(contentTitle)
+                    .setContentText(contentText)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-            if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN) {
-                notification = builder.getNotification();
-            } else {
-                notification = builder.build();
-            }
+            notification = builder.build();
             notificationManager.notify(0xDEAFBEEF, notification);
         }
     }

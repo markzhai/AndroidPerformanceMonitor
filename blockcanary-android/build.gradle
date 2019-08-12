@@ -23,4 +23,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api project(':blockcanary-analyzer')
     //implementation 'com.github.markzhai:blockcanary-analyzer:1.5.0'
+    implementation 'com.android.support:support-compat:28.0.0'
 }
