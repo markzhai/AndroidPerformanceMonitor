@@ -21,9 +21,7 @@ import android.util.Printer;
 
 class LooperMonitor implements Printer {
 
-    private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
-
-    private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
+    private long mBlockThresholdMillis;
     private long mStartTimestamp = 0;
     private long mStartThreadTimestamp = 0;
     private BlockListener mBlockListener;

@@ -291,7 +291,7 @@ public class DisplayActivity extends Activity {
             }
         });
         adapter.update(blockInfo);
-        setTitle(getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost));
+        setTitle(getString(R.string.block_canary_class_has_blocked, Long.toString(blockInfo.timeCost)));
     }
 
     private BlockInfoEx getBlock(String startTime) {
@@ -342,7 +342,7 @@ public class DisplayActivity extends Activity {
 
             String keyStackString = BlockCanaryUtils.concernStackString(blockInfo);
             String title = index + keyStackString + " " +
-                    getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
+                    getString(R.string.block_canary_class_has_blocked, Long.toString(blockInfo.timeCost));
             titleView.setText(title);
             String time = DateUtils.formatDateTime(DisplayActivity.this,
                     blockInfo.logFile.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);

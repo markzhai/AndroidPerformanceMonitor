@@ -16,7 +16,7 @@
 package com.github.moduth.blockcanary.ui;
 
 import android.content.Context;
-import android.text.Html;
+import android.support.v4.text.HtmlCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +63,7 @@ final class DetailAdapter extends BaseAdapter {
             if (isThreadStackEntry && !mFoldings[position]) {
                 htmlString += " <font color='#919191'>" + "blocked" + "</font>";
             }
-            textView.setText(Html.fromHtml(htmlString));
+            textView.setText(HtmlCompat.fromHtml(htmlString, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
             DisplayConnectorView connectorView = findById(convertView, R.id.__leak_canary_row_connector);
             connectorView.setType(connectorViewType(position));
