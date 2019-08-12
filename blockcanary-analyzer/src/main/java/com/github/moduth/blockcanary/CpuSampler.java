@@ -56,7 +56,7 @@ class CpuSampler extends AbstractSampler {
 
     @Override
     public void start() {
-        if (Build.VERSION.SDK_INT < 26) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             super.start();
             reset();
         }

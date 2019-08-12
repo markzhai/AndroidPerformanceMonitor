@@ -27,7 +27,7 @@ abstract class AbstractSampler {
     protected AtomicBoolean mShouldSample = new AtomicBoolean(false);
     protected long mSampleInterval;
 
-    private Runnable mRunnable = new Runnable() {
+    private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             doSample();

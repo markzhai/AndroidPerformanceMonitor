@@ -28,8 +28,8 @@ class StackSampler extends AbstractSampler {
     private static final int DEFAULT_MAX_ENTRY_COUNT = 100;
     private static final LinkedHashMap<Long, String> sStackMap = new LinkedHashMap<>();
 
-    private int mMaxEntryCount = DEFAULT_MAX_ENTRY_COUNT;
-    private Thread mCurrentThread;
+    private final int mMaxEntryCount;
+    private final Thread mCurrentThread;
 
     public  StackTraceElement[] getTraceElements() {
         synchronized (sStackMap) {

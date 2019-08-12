@@ -20,6 +20,7 @@ import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -39,7 +40,7 @@ public final class BlockCanary {
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
     private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
     private static BlockCanary sInstance;
-    private BlockCanaryInternals mBlockCanaryCore;
+    private final BlockCanaryInternals mBlockCanaryCore;
     private boolean mMonitorStarted = false;
 
     private BlockCanary() {
@@ -119,7 +120,9 @@ public final class BlockCanary {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(DisplayService.CHANNEL_ID, "Block Canary", importance);
+            channel.enableLights(true);
             channel.setDescription("Block Canary");
+            channel.setLightColor(Color.RED);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);

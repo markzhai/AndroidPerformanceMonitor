@@ -53,7 +53,6 @@ public final class DisplayConnectorView extends View {
         type = Type.NODE;
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();

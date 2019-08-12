@@ -63,10 +63,10 @@ public class BlockInfo {
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
 
-    public static String sQualifier;
-    public static String sModel;
-    public static String sApiLevel = "";
-    public static int sCpuCoreNum = -1;
+    public static final String sQualifier;
+    public static final String sModel;
+    public static final String sApiLevel;
+    public static final int sCpuCoreNum;
 
     public String qualifier;
     public String model;
@@ -90,10 +90,10 @@ public class BlockInfo {
     public ArrayList<String> threadStackEntries = new ArrayList<>();
     public StackTraceElement[] stackTraceElements ;
 
-    private StringBuilder basicSb = new StringBuilder();
-    private StringBuilder cpuSb = new StringBuilder();
-    private StringBuilder timeSb = new StringBuilder();
-    private StringBuilder stackSb = new StringBuilder();
+    private final StringBuilder basicSb = new StringBuilder();
+    private final StringBuilder cpuSb = new StringBuilder();
+    private final StringBuilder timeSb = new StringBuilder();
+    private final StringBuilder stackSb = new StringBuilder();
 
     static {
         sCpuCoreNum = PerformanceUtils.getNumCores();

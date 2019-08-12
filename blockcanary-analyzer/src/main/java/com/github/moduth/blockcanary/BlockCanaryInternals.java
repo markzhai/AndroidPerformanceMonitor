@@ -36,7 +36,7 @@ public final class BlockCanaryInternals {
     private static BlockCanaryInternals sInstance;
     private static BlockCanaryContext sContext;
 
-    private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
+    private final List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
     public BlockCanaryInternals() {
 
@@ -151,7 +151,7 @@ public final class BlockCanaryInternals {
 
     private static class BlockLogFileFilter implements FilenameFilter {
 
-        private String TYPE = ".log";
+        private final String TYPE = ".log";
 
         BlockLogFileFilter() {
 

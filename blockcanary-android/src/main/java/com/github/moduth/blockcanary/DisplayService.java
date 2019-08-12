@@ -21,19 +21,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
 import com.github.moduth.blockcanary.ui.DisplayActivity;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 final class DisplayService implements BlockInterceptor {
 
@@ -45,7 +37,7 @@ final class DisplayService implements BlockInterceptor {
         Intent intent = new Intent(context, DisplayActivity.class);
         intent.putExtra("show_latest", blockInfo.timeStart);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         String contentTitle = context.getString(R.string.block_canary_class_has_blocked, blockInfo.timeStart);
         String contentText = context.getString(R.string.block_canary_notification_message);
         show(context, contentTitle, contentText, pendingIntent);
@@ -57,46 +49,31 @@ final class DisplayService implements BlockInterceptor {
 
         if(notificationManager != null) {
             Notification notification;
-            if (SDK_INT < HONEYCOMB) {
-                notification = new Notification();
-                notification.icon = R.drawable.block_canary_notification;
-                notification.when = System.currentTimeMillis();
-                notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                notification.defaults = Notification.DEFAULT_SOUND;
-                try {
-                    Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
-                    deprecatedMethod.invoke(notification, context, contentTitle, contentText, pendingIntent);
-                } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    Log.w(TAG, "Method not found", e);
-                }
+            Notification.Builder builder;
+            if(VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder = new Notification.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.block_canary_notification)
+                        .setWhen(System.currentTimeMillis())
+                        .setContentTitle(contentTitle)
+                        .setContentText(contentText)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults(Notification.DEFAULT_SOUND);
             } else {
-                Notification.Builder builder;
-                if(SDK_INT >= Build.VERSION_CODES.O) {
-                    builder = new Notification.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.block_canary_notification)
-                            .setWhen(System.currentTimeMillis())
-                            .setContentTitle(contentTitle)
-                            .setContentText(contentText)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setDefaults(Notification.DEFAULT_SOUND);
-                } else {
-                    builder = new Notification.Builder(context)
-                            .setSmallIcon(R.drawable.block_canary_notification)
-                            .setWhen(System.currentTimeMillis())
-                            .setContentTitle(contentTitle)
-                            .setContentText(contentText)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setDefaults(Notification.DEFAULT_SOUND);
-                }
+                builder = new Notification.Builder(context)
+                        .setSmallIcon(R.drawable.block_canary_notification)
+                        .setWhen(System.currentTimeMillis())
+                        .setContentTitle(contentTitle)
+                        .setContentText(contentText)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults(Notification.DEFAULT_SOUND);
+            }
 
-                if (SDK_INT < JELLY_BEAN) {
-                    notification = builder.getNotification();
-                } else {
-                    notification = builder.build();
-                }
+            if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN) {
+                notification = builder.getNotification();
+            } else {
+                notification = builder.build();
             }
             notificationManager.notify(0xDEAFBEEF, notification);
         }

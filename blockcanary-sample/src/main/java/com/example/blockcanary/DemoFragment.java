@@ -49,9 +49,9 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button button1 = (Button) view.findViewById(R.id.button1);
-        Button button2 = (Button) view.findViewById(R.id.button2);
-        Button button3 = (Button) view.findViewById(R.id.button3);
+        Button button1 = view.findViewById(R.id.button1);
+        Button button2 = view.findViewById(R.id.button2);
+        Button button3 = view.findViewById(R.id.button3);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);

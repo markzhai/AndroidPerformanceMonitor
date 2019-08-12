@@ -57,7 +57,7 @@ public class DisplayActivity extends Activity {
 
     private static final String TAG = "DisplayActivity";
     private static final String SHOW_BLOCK_EXTRA = "show_latest";
-    public static final String SHOW_BLOCK_EXTRA_KEY = "BlockStartTime";
+    private static final String SHOW_BLOCK_EXTRA_KEY = "BlockStartTime";
 
     // empty until it's been first loaded.
     private List<BlockInfoEx> mBlockInfoEntries = new ArrayList<>();
