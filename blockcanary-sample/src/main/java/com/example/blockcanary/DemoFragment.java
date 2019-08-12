@@ -52,10 +52,12 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
         Button button1 = view.findViewById(R.id.button1);
         Button button2 = view.findViewById(R.id.button2);
         Button button3 = view.findViewById(R.id.button3);
+        Button button4 = view.findViewById(R.id.button4);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
+        button4.setOnClickListener(this);
     }
 
     @Override
@@ -87,6 +89,9 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
             case R.id.button3:
                 double result = compute();
                 System.out.println(result);
+                break;
+            case R.id.button4:
+                System.out.println("not implemented");
                 break;
             default:
                 break;
