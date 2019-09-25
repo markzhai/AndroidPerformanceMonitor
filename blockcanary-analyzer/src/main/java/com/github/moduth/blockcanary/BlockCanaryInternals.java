@@ -15,6 +15,7 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
 
@@ -35,13 +36,11 @@ public final class BlockCanaryInternals {
     private static BlockCanaryInternals sInstance;
     private static BlockCanaryContext sContext;
 
-    private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
+    private final List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
     public BlockCanaryInternals() {
 
-        stackSampler = new StackSampler(
-                Looper.getMainLooper().getThread(),
-                sContext.provideDumpInterval());
+        stackSampler = new StackSampler(Looper.getMainLooper().getThread(), sContext.provideDumpInterval());
 
         cpuSampler = new CpuSampler(sContext.provideDumpInterval());
 
@@ -59,6 +58,7 @@ public final class BlockCanaryInternals {
                             .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
                             .setRecentCpuRate(cpuSampler.getCpuRateInfo())
                             .setThreadStackEntries(threadStackEntries)
+                            .setStackTraceElements(stackSampler.getTraceElements())
                             .flushString();
                     LogWriter.save(blockInfo.toString());
 
@@ -117,12 +117,18 @@ public final class BlockCanaryInternals {
 
     static String getPath() {
         String state = Environment.getExternalStorageState();
-        String logPath = BlockCanaryInternals.getContext()
-                == null ? "" : BlockCanaryInternals.getContext().providePath();
+        String logPath = BlockCanaryInternals.getContext() == null ? "" :
+                BlockCanaryInternals.getContext().providePath();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)
-                && Environment.getExternalStorageDirectory().canWrite()) {
-            return Environment.getExternalStorageDirectory().getPath() + logPath;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Environment.MEDIA_MOUNTED.equals(state) ) {
+                return  BlockCanaryInternals.getContext().provideContext().getExternalFilesDir(logPath).getPath();
+            }
+        }else{
+            if (Environment.MEDIA_MOUNTED.equals(state)
+                    && Environment.getExternalStorageDirectory().canWrite()) {
+                return Environment.getExternalStorageDirectory().getPath() + logPath;
+            }
         }
         return getContext().provideContext().getFilesDir() + BlockCanaryInternals.getContext().providePath();
     }
@@ -145,7 +151,7 @@ public final class BlockCanaryInternals {
 
     private static class BlockLogFileFilter implements FilenameFilter {
 
-        private String TYPE = ".log";
+        private final String TYPE = ".log";
 
         BlockLogFileFilter() {
 

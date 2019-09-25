@@ -28,8 +28,16 @@ class StackSampler extends AbstractSampler {
     private static final int DEFAULT_MAX_ENTRY_COUNT = 100;
     private static final LinkedHashMap<Long, String> sStackMap = new LinkedHashMap<>();
 
-    private int mMaxEntryCount = DEFAULT_MAX_ENTRY_COUNT;
-    private Thread mCurrentThread;
+    private final int mMaxEntryCount;
+    private final Thread mCurrentThread;
+
+    public  StackTraceElement[] getTraceElements() {
+        synchronized (sStackMap) {
+            return traceElements;
+        }
+    }
+
+    private static  StackTraceElement[] traceElements;
 
     public StackSampler(Thread thread, long sampleIntervalMillis) {
         this(thread, DEFAULT_MAX_ENTRY_COUNT, sampleIntervalMillis);
@@ -59,8 +67,8 @@ class StackSampler extends AbstractSampler {
     @Override
     protected void doSample() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {
+        traceElements = mCurrentThread.getStackTrace();
+        for (StackTraceElement stackTraceElement : traceElements) {
             stringBuilder
                     .append(stackTraceElement.toString())
                     .append(BlockInfo.SEPARATOR);

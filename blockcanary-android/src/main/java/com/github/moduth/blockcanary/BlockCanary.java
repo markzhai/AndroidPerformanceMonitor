@@ -15,11 +15,15 @@
  */
 package com.github.moduth.blockcanary;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import com.github.moduth.blockcanary.ui.DisplayActivity;
 
@@ -33,9 +37,10 @@ import static android.content.pm.PackageManager.DONT_KILL_APP;
 public final class BlockCanary {
 
     private static final String TAG = "BlockCanary";
-
+    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
+    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
     private static BlockCanary sInstance;
-    private BlockCanaryInternals mBlockCanaryCore;
+    private final BlockCanaryInternals mBlockCanaryCore;
     private boolean mMonitorStarted = false;
 
     private BlockCanary() {
@@ -57,6 +62,7 @@ public final class BlockCanary {
      * @return {@link BlockCanary}
      */
     public static BlockCanary install(Context context, BlockCanaryContext blockCanaryContext) {
+        createNotificationChannel(context);
         BlockCanaryContext.init(context, blockCanaryContext);
         setEnabled(context, DisplayActivity.class, BlockCanaryContext.get().displayNotification());
         return get();
@@ -76,6 +82,52 @@ public final class BlockCanary {
             }
         }
         return sInstance;
+    }
+
+    private static void setEnabledBlocking(Context appContext,
+                                           Class<?> componentClass,
+                                           boolean enabled) {
+        ComponentName component = new ComponentName(appContext, componentClass);
+        PackageManager packageManager = appContext.getPackageManager();
+        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        // Blocks on IPC.
+        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
+    }
+
+    private static void executeOnFileIoThread(Runnable runnable) {
+        fileIoExecutor.execute(runnable);
+    }
+
+    private static Executor newSingleThreadExecutor(String threadName) {
+        return Executors.newSingleThreadExecutor(new SingleThreadFactory(threadName));
+    }
+
+    private static void setEnabled(Context context,
+                                   final Class<?> componentClass,
+                                   final boolean enabled) {
+        final Context appContext = context.getApplicationContext();
+        executeOnFileIoThread(new Runnable() {
+            @Override
+            public void run() {
+                setEnabledBlocking(appContext, componentClass, enabled);
+            }
+        });
+    }
+
+    private static void createNotificationChannel(Context context) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(DisplayService.CHANNEL_ID, "Block Canary", importance);
+            channel.enableLights(true);
+            channel.setDescription("Block Canary");
+            channel.setLightColor(Color.RED);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            if(notificationManager != null) notificationManager.createNotificationChannel(channel);
+        }
     }
 
     /**
@@ -99,6 +151,7 @@ public final class BlockCanary {
             mBlockCanaryCore.cpuSampler.stop();
         }
     }
+    // end of lines copied from LeakCanary
 
     /**
      * Zip and upload log files, will user context's zip and log implementation.
@@ -129,39 +182,5 @@ public final class BlockCanary {
                         .getLong("BlockCanary_StartTime", 0);
         return startTime != 0 && System.currentTimeMillis() - startTime >
                 BlockCanaryContext.get().provideMonitorDuration() * 3600 * 1000;
-    }
-
-    // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
-    private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
-
-    private static void setEnabledBlocking(Context appContext,
-                                           Class<?> componentClass,
-                                           boolean enabled) {
-        ComponentName component = new ComponentName(appContext, componentClass);
-        PackageManager packageManager = appContext.getPackageManager();
-        int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
-        // Blocks on IPC.
-        packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
-    }
-    // end of lines copied from LeakCanary
-
-    private static void executeOnFileIoThread(Runnable runnable) {
-        fileIoExecutor.execute(runnable);
-    }
-
-    private static Executor newSingleThreadExecutor(String threadName) {
-        return Executors.newSingleThreadExecutor(new SingleThreadFactory(threadName));
-    }
-
-    private static void setEnabled(Context context,
-                                   final Class<?> componentClass,
-                                   final boolean enabled) {
-        final Context appContext = context.getApplicationContext();
-        executeOnFileIoThread(new Runnable() {
-            @Override
-            public void run() {
-                setEnabledBlocking(appContext, componentClass, enabled);
-            }
-        });
     }
 }

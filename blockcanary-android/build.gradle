@@ -3,7 +3,6 @@ apply from: 'gradle-mvn-push.gradle'
 
 android {
     compileSdkVersion LIBRARY_COMPILE_SDK_VERSION
-    buildToolsVersion LIBRARY_BUILD_TOOLS_VERSION
 
     defaultConfig {
         minSdkVersion LIBRARY_MIN_SDK_VERSION
@@ -14,13 +13,18 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        checkAllWarnings true
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-//    compile project(':blockcanary-analyzer')
-    compile 'com.github.markzhai:blockcanary-analyzer:1.5.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':blockcanary-analyzer')
+    //implementation 'com.github.markzhai:blockcanary-analyzer:1.5.0'
+    implementation 'androidx.core:core:1.1.0'
+    implementation "androidx.preference:preference:1.1.0"
 }

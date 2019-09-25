@@ -15,9 +15,11 @@
  */
 package com.example.blockcanary;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,20 +49,17 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button button1 = (Button) view.findViewById(R.id.button1);
-        Button button2 = (Button) view.findViewById(R.id.button2);
-        Button button3 = (Button) view.findViewById(R.id.button3);
+        Button button1 = view.findViewById(R.id.button1);
+        Button button2 = view.findViewById(R.id.button2);
+        Button button3 = view.findViewById(R.id.button3);
+        Button button4 = view.findViewById(R.id.button4);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+        button4.setOnClickListener(this);
     }
 
     @Override
@@ -80,13 +79,18 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.button2:
-                for (int i = 0; i < 100; ++i) {
-                    readFile();
+                for (int i = 0; i < 200; ++i) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                        readFile();
+                    }
                 }
                 break;
             case R.id.button3:
                 double result = compute();
                 System.out.println(result);
+                break;
+            case R.id.button4:
+                System.out.println("not implemented");
                 break;
             default:
                 break;
@@ -95,13 +99,14 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
 
     private static double compute() {
         double result = 0;
-        for (int i = 0; i < 1000000; ++i) {
+        for (int i = 0; i < 4000000; ++i) {
             result += Math.acos(Math.cos(i));
             result -= Math.asin(Math.sin(i));
         }
         return result;
     }
 
+    @Deprecated
     private static void readFile() {
         FileInputStream reader = null;
         try {

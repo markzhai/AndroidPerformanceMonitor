@@ -15,11 +15,14 @@
  */
 package com.example.blockcanary;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.github.moduth.blockcanary.internal.BlockInfo;
+import com.github.moduth.blockcanary.internal.NetUtils;
 
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class AppContext extends BlockCanaryContext {
 
     @Override
     public String provideNetworkType() {
-        return "4G";
+        return NetUtils.getNetworkType(DemoApplication.getAppContext()) ;
     }
 
     @Override
@@ -81,5 +84,15 @@ public class AppContext extends BlockCanaryContext {
     @Override
     public boolean stopWhenDebugging() {
         return true;
+    }
+
+    @Override
+    public void onBlock(Context context, BlockInfo blockInfo) {
+        super.onBlock(context, blockInfo);
+        Exception e = blockInfo.buildException();
+        if(e != null){
+            e.printStackTrace();
+        }
+        Log.e("block",blockInfo.toString());
     }
 }

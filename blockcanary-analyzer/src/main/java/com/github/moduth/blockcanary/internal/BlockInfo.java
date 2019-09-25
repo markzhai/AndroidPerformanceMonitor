@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryInternals;
@@ -46,7 +46,6 @@ public class BlockInfo {
     public static final String KEY_QUA = "qua";
     public static final String KEY_MODEL = "model";
     public static final String KEY_API = "api-level";
-    public static final String KEY_IMEI = "imei";
     public static final String KEY_UID = "uid";
     public static final String KEY_CPU_CORE = "cpu-core";
     public static final String KEY_CPU_BUSY = "cpu-busy";
@@ -63,20 +62,14 @@ public class BlockInfo {
     public static final String KEY_TOTAL_MEMORY = "totalMemory";
     public static final String KEY_FREE_MEMORY = "freeMemory";
 
-    public static String sQualifier;
-    public static String sModel;
-    public static String sApiLevel = "";
-    /**
-     * The International Mobile Equipment Identity or IMEI /aɪˈmiː/ is a number,
-     * usually unique, to identify 3GPP and iDEN mobile phones
-     */
-    public static String sImei = "";
-    public static int sCpuCoreNum = -1;
+    public static final String sQualifier;
+    public static final String sModel;
+    public static final String sApiLevel;
+    public static final int sCpuCoreNum;
 
     public String qualifier;
     public String model;
     public String apiLevel = "";
-    public String imei = "";
     public int cpuCoreNum = -1;
 
     // Per Block Info fields
@@ -94,28 +87,18 @@ public class BlockInfo {
     public boolean cpuBusy;
     public String cpuRateInfo;
     public ArrayList<String> threadStackEntries = new ArrayList<>();
+    public StackTraceElement[] stackTraceElements ;
 
-    private StringBuilder basicSb = new StringBuilder();
-    private StringBuilder cpuSb = new StringBuilder();
-    private StringBuilder timeSb = new StringBuilder();
-    private StringBuilder stackSb = new StringBuilder();
-    private static final String EMPTY_IMEI = "empty_imei";
+    private final StringBuilder basicSb = new StringBuilder();
+    private final StringBuilder cpuSb = new StringBuilder();
+    private final StringBuilder timeSb = new StringBuilder();
+    private final StringBuilder stackSb = new StringBuilder();
 
     static {
         sCpuCoreNum = PerformanceUtils.getNumCores();
         sModel = Build.MODEL;
         sApiLevel = Build.VERSION.SDK_INT + " " + VERSION.RELEASE;
         sQualifier = BlockCanaryInternals.getContext().provideQualifier();
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) BlockCanaryInternals
-                    .getContext()
-                    .provideContext()
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            sImei = telephonyManager.getDeviceId();
-        } catch (Exception exception) {
-            Log.e(TAG, NEW_INSTANCE_METHOD, exception);
-            sImei = EMPTY_IMEI;
-        }
     }
 
     public BlockInfo() {
@@ -124,7 +107,7 @@ public class BlockInfo {
     public static BlockInfo newInstance() {
         BlockInfo blockInfo = new BlockInfo();
         Context context = BlockCanaryInternals.getContext().provideContext();
-        if (blockInfo.versionName == null || blockInfo.versionName.length() == 0) {
+        if (TextUtils.isEmpty(blockInfo.versionName)) {
             try {
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                 blockInfo.versionCode = info.versionCode;
@@ -138,7 +121,6 @@ public class BlockInfo {
         blockInfo.model = sModel;
         blockInfo.apiLevel = sApiLevel;
         blockInfo.qualifier = sQualifier;
-        blockInfo.imei = sImei;
         blockInfo.uid = BlockCanaryInternals.getContext().provideUid();
         blockInfo.processName = ProcessUtils.myProcessName();
         blockInfo.network = BlockCanaryInternals.getContext().provideNetworkType();
@@ -163,6 +145,11 @@ public class BlockInfo {
         return this;
     }
 
+    public BlockInfo setStackTraceElements(StackTraceElement[] stackTraceElements) {
+        this.stackTraceElements = stackTraceElements;
+        return this;
+    }
+
     public BlockInfo setMainThreadTimeCost(long realTimeStart, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
         timeCost = realTimeEnd - realTimeStart;
         threadTimeCost = threadTimeEnd - threadTimeStart;
@@ -176,7 +163,6 @@ public class BlockInfo {
         basicSb.append(KEY_QUA).append(KV).append(qualifier).append(separator);
         basicSb.append(KEY_VERSION_NAME).append(KV).append(versionName).append(separator);
         basicSb.append(KEY_VERSION_CODE).append(KV).append(versionCode).append(separator);
-        basicSb.append(KEY_IMEI).append(KV).append(imei).append(separator);
         basicSb.append(KEY_UID).append(KV).append(uid).append(separator);
         basicSb.append(KEY_NETWORK).append(KV).append(network).append(separator);
         basicSb.append(KEY_MODEL).append(KV).append(model).append(separator);
@@ -219,5 +205,23 @@ public class BlockInfo {
 
     public String toString() {
         return String.valueOf(basicSb) + timeSb + cpuSb + stackSb;
+    }
+
+    public Exception buildException(){
+        StringBuilder sb = new StringBuilder("threadTimeCost time cost:")
+                .append(threadTimeCost)
+                .append("ms,real time cost:")
+                .append(timeCost)
+                .append("ms");
+        if(timeCost - threadTimeCost > 300){
+            sb.append(",thread waiting a long time!!!");
+        }
+        if(cpuBusy){
+            sb.append(",cpu is busy !!!");
+        }
+        Exception exception = new BlockcanaryException(sb.toString());
+        exception.setStackTrace(stackTraceElements);
+        return exception;
+
     }
 }

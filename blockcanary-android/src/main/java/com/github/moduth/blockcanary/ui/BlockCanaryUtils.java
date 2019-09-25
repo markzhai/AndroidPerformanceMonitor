@@ -11,17 +11,19 @@ import java.util.List;
 
 final class BlockCanaryUtils {
 
-    private static final List<String> WHITE_LIST = new LinkedList<>();
-    private static final List<String> CONCERN_LIST = new LinkedList<>();
+    private static final List<String> sWhiteList = new LinkedList<>();
+    private static final List<String> sConcernList = new LinkedList<>();
 
     static {
-        WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
+        if (BlockCanaryInternals.getContext().provideWhiteList() != null) {
+            sWhiteList.addAll(BlockCanaryInternals.getContext().provideWhiteList());
+        }
 
         if (BlockCanaryInternals.getContext().concernPackages() != null) {
-            CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
+            sConcernList.addAll(BlockCanaryInternals.getContext().concernPackages());
         }
-        if (CONCERN_LIST.isEmpty()) {
-            CONCERN_LIST.add(ProcessUtils.myProcessName());
+        if (sConcernList.isEmpty()) {
+            sConcernList.add(ProcessUtils.myProcessName());
         }
     }
 
@@ -56,7 +58,7 @@ final class BlockCanaryUtils {
             if (Character.isLetter(stackEntry.charAt(0))) {
                 String[] lines = stackEntry.split(BlockInfo.SEPARATOR);
                 for (String line : lines) {
-                    for (String whiteListEntry : WHITE_LIST) {
+                    for (String whiteListEntry : sWhiteList) {
                         if (line.startsWith(whiteListEntry)) {
                             return true;
                         }
@@ -68,11 +70,11 @@ final class BlockCanaryUtils {
     }
 
     public static List<String> getConcernPackages() {
-        return CONCERN_LIST;
+        return sConcernList;
     }
 
     private static String concernStackString(String line) {
-        for (String concernPackage : CONCERN_LIST) {
+        for (String concernPackage : sConcernList) {
             if (line.startsWith(concernPackage)) {
                 return classSimpleName(line);
             }

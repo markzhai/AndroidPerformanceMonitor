@@ -27,7 +27,7 @@ abstract class AbstractSampler {
     protected AtomicBoolean mShouldSample = new AtomicBoolean(false);
     protected long mSampleInterval;
 
-    private Runnable mRunnable = new Runnable() {
+    private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             doSample();
@@ -40,7 +40,7 @@ abstract class AbstractSampler {
     };
 
     public AbstractSampler(long sampleInterval) {
-        if (0 == sampleInterval) {
+        if ( sampleInterval <= 0 ) {
             sampleInterval = DEFAULT_SAMPLE_INTERVAL;
         }
         mSampleInterval = sampleInterval;
@@ -53,8 +53,7 @@ abstract class AbstractSampler {
         mShouldSample.set(true);
 
         HandlerThreadFactory.getTimerThreadHandler().removeCallbacks(mRunnable);
-        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable,
-                BlockCanaryInternals.getInstance().getSampleDelay());
+        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable, BlockCanaryInternals.getInstance().getSampleDelay());
     }
 
     public void stop() {
