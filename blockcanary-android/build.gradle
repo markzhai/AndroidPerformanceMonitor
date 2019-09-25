@@ -13,7 +13,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     lintOptions {
@@ -25,5 +25,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':blockcanary-analyzer')
     //implementation 'com.github.markzhai:blockcanary-analyzer:1.5.0'
-    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'androidx.core:core:1.0.0'
 }

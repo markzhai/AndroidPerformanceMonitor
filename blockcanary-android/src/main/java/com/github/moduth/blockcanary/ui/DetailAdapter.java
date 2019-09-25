@@ -16,7 +16,7 @@
 package com.github.moduth.blockcanary.ui;
 
 import android.content.Context;
-import android.support.v4.text.HtmlCompat;
+import androidx.core.text.HtmlCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
