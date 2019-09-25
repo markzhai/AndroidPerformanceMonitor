@@ -79,7 +79,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.button2:
-                for (int i = 0; i < 100; ++i) {
+                for (int i = 0; i < 200; ++i) {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                         readFile();
                     }
@@ -99,7 +99,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
 
     private static double compute() {
         double result = 0;
-        for (int i = 0; i < 2000000; ++i) {
+        for (int i = 0; i < 4000000; ++i) {
             result += Math.acos(Math.cos(i));
             result -= Math.asin(Math.sin(i));
         }
