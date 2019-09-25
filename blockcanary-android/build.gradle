@@ -25,5 +25,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':blockcanary-analyzer')
     //implementation 'com.github.markzhai:blockcanary-analyzer:1.5.0'
-    implementation 'androidx.core:core:1.0.0'
+    implementation 'androidx.core:core:1.1.0'
+    implementation "androidx.preference:preference:1.1.0"
 }

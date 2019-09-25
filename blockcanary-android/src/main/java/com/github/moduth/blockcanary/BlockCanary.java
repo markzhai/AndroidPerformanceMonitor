@@ -23,7 +23,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import com.github.moduth.blockcanary.ui.DisplayActivity;
 

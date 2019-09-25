@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+@SuppressWarnings({ "deprecation", "RedundantSuppression" })
 public class NetUtils {
     /**
      * 没有网络连接
