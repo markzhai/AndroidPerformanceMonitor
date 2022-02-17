@@ -20,10 +20,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    debugCompile project(':blockcanary-android')
-    releaseCompile project(':blockcanary-android-no-op')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    debugImplementation project(':blockcanary-android')
+    releaseImplementation project(':blockcanary-android-no-op')
 
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:design:24.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
 }

@@ -15,11 +15,13 @@
  */
 package com.example.blockcanary;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
+import com.github.moduth.blockcanary.internal.BlockInfo;
 
 import java.util.List;
 
@@ -56,12 +58,12 @@ public class AppContext extends BlockCanaryContext {
 
     @Override
     public int provideBlockThreshold() {
-        return 500;
+        return 16;
     }
 
     @Override
     public boolean displayNotification() {
-        return BuildConfig.DEBUG;
+        return true;
     }
 
     @Override
@@ -81,5 +83,9 @@ public class AppContext extends BlockCanaryContext {
     @Override
     public boolean stopWhenDebugging() {
         return true;
+    }
+
+    @Override
+    public void onBlock(Context context, BlockInfo blockInfo) {
     }
 }

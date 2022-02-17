@@ -15,6 +15,7 @@
  */
 package com.github.moduth.blockcanary.internal;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
@@ -31,6 +32,7 @@ import java.util.Locale;
 /**
  * Information to trace a block.
  */
+@SuppressLint("HardwareIds")
 public class BlockInfo {
 
     private static final String TAG = "BlockInfo";
