@@ -105,8 +105,7 @@ public class LogWriter {
                     + logFileName + "-"
                     + FILE_NAME_FORMATTER.format(time) + ".log";
 
-            OutputStreamWriter out =
-                    new OutputStreamWriter(new FileOutputStream(path, true), "UTF-8");
+            OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path, true), "UTF-8");
 
             writer = new BufferedWriter(out);
 

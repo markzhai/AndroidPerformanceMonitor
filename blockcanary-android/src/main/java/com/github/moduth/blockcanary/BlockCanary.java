@@ -46,7 +46,6 @@ public final class BlockCanary {
             return;
         }
         mBlockCanaryCore.addBlockInterceptor(new DisplayService());
-
     }
 
     /**
