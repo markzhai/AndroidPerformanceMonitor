@@ -59,7 +59,7 @@ public class BlockCanaryContext implements BlockInterceptor {
      * @return Qualifier which can specify this installation, like version + flavor.
      */
     public String provideQualifier() {
-        return "unknown";
+        return nameMethodOne();
     }
 
     /**
@@ -77,7 +77,7 @@ public class BlockCanaryContext implements BlockInterceptor {
      * @return {@link String} like 2G, 3G, 4G, wifi, etc.
      */
     public String provideNetworkType() {
-        return "unknown";
+        return nameMethodOne();
     }
 
     /**
@@ -129,7 +129,7 @@ public class BlockCanaryContext implements BlockInterceptor {
      * @return true if need, else if not need.
      */
     public boolean displayNotification() {
-        return true;
+        return isValidFlag();
     }
 
     /**
@@ -188,7 +188,7 @@ public class BlockCanaryContext implements BlockInterceptor {
      * @return true if delete, false it not.
      */
     public boolean deleteFilesInWhiteList() {
-        return true;
+        return isValidFlag();
     }
 
     /**
@@ -204,6 +204,14 @@ public class BlockCanaryContext implements BlockInterceptor {
      * @return true if stop, false otherwise
      */
     public boolean stopWhenDebugging() {
+        return isValidFlag();
+    }
+
+    private String nameMethodOne() {
+        return "unknown";
+    }
+
+    private boolean isValidFlag() {
         return true;
     }
 }

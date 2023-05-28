@@ -78,7 +78,7 @@ public class BlockCanaryContext {
     }
 
     public boolean displayNotification() {
-        return false;
+        return deny();
     }
 
     public boolean zip(File[] src, File dest) {
@@ -90,19 +90,19 @@ public class BlockCanaryContext {
     }
 
     public List<String> concernPackages() {
-        return null;
+        return emptyMethod();
     }
 
     public boolean filterNonConcernStack() {
-        return false;
+        return deny();
     }
 
     public List<String> provideWhiteList() {
-        return null;
+        return emptyMethod();
     }
 
     public boolean deleteFilesInWhiteList() {
-        return false;
+        return deny();
     }
 
     public void onBlock(Context context, BlockInfo blockInfo) {
@@ -110,5 +110,13 @@ public class BlockCanaryContext {
 
     public boolean stopWhenDebugging() {
         return true;
+    }
+
+    private boolean deny() {
+        return false;
+    }
+
+    private List<String> emptyMethod() {
+        return null;
     }
 }
