@@ -20,12 +20,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-
 import com.github.moduth.blockcanary.ui.DisplayActivity;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 import static android.content.pm.PackageManager.DONT_KILL_APP;
@@ -35,7 +32,9 @@ public final class BlockCanary {
     private static final String TAG = "BlockCanary";
 
     private static BlockCanary sInstance;
+
     private BlockCanaryInternals mBlockCanaryCore;
+
     private boolean mMonitorStarted = false;
 
     private BlockCanary() {
@@ -46,7 +45,6 @@ public final class BlockCanary {
             return;
         }
         mBlockCanaryCore.addBlockInterceptor(new DisplayService());
-
     }
 
     /**
@@ -112,10 +110,7 @@ public final class BlockCanary {
      * BlockCanary.
      */
     public void recordStartTime() {
-        PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
-                .edit()
-                .putLong("BlockCanary_StartTime", System.currentTimeMillis())
-                .commit();
+        PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext()).edit().putLong("BlockCanary_StartTime", System.currentTimeMillis()).commit();
     }
 
     /**
@@ -124,27 +119,22 @@ public final class BlockCanary {
      * @return true if ended
      */
     public boolean isMonitorDurationEnd() {
-        long startTime =
-                PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext())
-                        .getLong("BlockCanary_StartTime", 0);
-        return startTime != 0 && System.currentTimeMillis() - startTime >
-                BlockCanaryContext.get().provideMonitorDuration() * 3600 * 1000;
+        long startTime = PreferenceManager.getDefaultSharedPreferences(BlockCanaryContext.get().provideContext()).getLong("BlockCanary_StartTime", 0);
+        return startTime != 0 && System.currentTimeMillis() - startTime > BlockCanaryContext.get().provideMonitorDuration() * 3600 * 1000;
     }
 
     // these lines are originally copied from LeakCanary: Copyright (C) 2015 Square, Inc.
     private static final Executor fileIoExecutor = newSingleThreadExecutor("File-IO");
 
-    private static void setEnabledBlocking(Context appContext,
-                                           Class<?> componentClass,
-                                           boolean enabled) {
+    private static void setEnabledBlocking(Context appContext, Class<?> componentClass, boolean enabled) {
         ComponentName component = new ComponentName(appContext, componentClass);
         PackageManager packageManager = appContext.getPackageManager();
         int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
         // Blocks on IPC.
         packageManager.setComponentEnabledSetting(component, newState, DONT_KILL_APP);
     }
-    // end of lines copied from LeakCanary
 
+    // end of lines copied from LeakCanary
     private static void executeOnFileIoThread(Runnable runnable) {
         fileIoExecutor.execute(runnable);
     }
@@ -153,11 +143,10 @@ public final class BlockCanary {
         return Executors.newSingleThreadExecutor(new SingleThreadFactory(threadName));
     }
 
-    private static void setEnabled(Context context,
-                                   final Class<?> componentClass,
-                                   final boolean enabled) {
+    private static void setEnabled(Context context, final Class<?> componentClass, final boolean enabled) {
         final Context appContext = context.getApplicationContext();
         executeOnFileIoThread(new Runnable() {
+
             @Override
             public void run() {
                 setEnabledBlocking(appContext, componentClass, enabled);

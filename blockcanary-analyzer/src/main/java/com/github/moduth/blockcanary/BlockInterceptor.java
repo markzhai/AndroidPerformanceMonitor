@@ -16,9 +16,9 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
 
 interface BlockInterceptor {
+
     void onBlock(Context context, BlockInfo blockInfo);
 }

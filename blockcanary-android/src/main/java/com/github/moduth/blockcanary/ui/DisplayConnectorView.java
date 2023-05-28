@@ -22,14 +22,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
-
 import static android.graphics.Bitmap.Config.ARGB_8888;
 
 public final class DisplayConnectorView extends View {
 
     private static final Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     private static final Paint rootPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     private static final Paint leakPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     private static final Paint clearPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     static {
@@ -41,15 +43,16 @@ public final class DisplayConnectorView extends View {
     }
 
     public enum Type {
+
         START, NODE, END
     }
 
     private Type type;
+
     private Bitmap cache;
 
     public DisplayConnectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         type = Type.NODE;
     }
 
@@ -58,27 +61,20 @@ public final class DisplayConnectorView extends View {
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
-
         if (cache != null && (cache.getWidth() != width || cache.getHeight() != height)) {
             cache.recycle();
             cache = null;
         }
-
         if (cache == null) {
             cache = Bitmap.createBitmap(width, height, ARGB_8888);
-
             Canvas cacheCanvas = new Canvas(cache);
-
             float halfWidth = width / 2f;
             float halfHeight = height / 2f;
             float thirdWidth = width / 3f;
-
             float strokeSize = BlockCanaryUi.dpToPixel(4f, getResources());
-
             iconPaint.setStrokeWidth(strokeSize);
             rootPaint.setStrokeWidth(strokeSize);
-
-            switch (type) {
+            switch(type) {
                 case NODE:
                     cacheCanvas.drawLine(halfWidth, 0, halfWidth, height, iconPaint);
                     cacheCanvas.drawCircle(halfWidth, halfHeight, halfWidth, iconPaint);

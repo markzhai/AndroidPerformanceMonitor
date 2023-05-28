@@ -16,9 +16,7 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +27,7 @@ import java.util.List;
 public class BlockCanaryContext implements BlockInterceptor {
 
     private static Context sApplicationContext;
+
     private static BlockCanaryContext sInstance = null;
 
     public BlockCanaryContext() {
@@ -197,7 +196,6 @@ public class BlockCanaryContext implements BlockInterceptor {
      */
     @Override
     public void onBlock(Context context, BlockInfo blockInfo) {
-
     }
 
     /**

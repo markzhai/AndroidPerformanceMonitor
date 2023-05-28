@@ -1,22 +1,20 @@
 package com.github.moduth.blockcanary.ui;
 
 import android.text.TextUtils;
-
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 import com.github.moduth.blockcanary.internal.BlockInfo;
 import com.github.moduth.blockcanary.internal.ProcessUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 
 final class BlockCanaryUtils {
 
     private static final List<String> WHITE_LIST = new LinkedList<>();
+
     private static final List<String> CONCERN_LIST = new LinkedList<>();
 
     static {
         WHITE_LIST.addAll(BlockCanaryInternals.getContext().provideWhiteList());
-
         if (BlockCanaryInternals.getContext().concernPackages() != null) {
             CONCERN_LIST.addAll(BlockCanaryInternals.getContext().concernPackages());
         }

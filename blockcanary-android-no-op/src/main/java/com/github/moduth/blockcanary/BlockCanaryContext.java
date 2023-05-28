@@ -16,9 +16,7 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.io.File;
 import java.util.List;
 
@@ -28,6 +26,7 @@ import java.util.List;
 public class BlockCanaryContext {
 
     private static Context sApplicationContext;
+
     private static BlockCanaryContext sInstance = null;
 
     public BlockCanaryContext() {
@@ -107,7 +106,6 @@ public class BlockCanaryContext {
     }
 
     public void onBlock(Context context, BlockInfo blockInfo) {
-
     }
 
     public boolean stopWhenDebugging() {

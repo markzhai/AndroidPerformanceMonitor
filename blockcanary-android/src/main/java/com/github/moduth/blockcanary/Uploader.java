@@ -16,18 +16,16 @@
 package com.github.moduth.blockcanary;
 
 import android.util.Log;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 final class Uploader {
 
     private static final String TAG = "Uploader";
-    private static final SimpleDateFormat FORMAT =
-            new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
+
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
 
     private Uploader() {
         throw new InstantiationError("Must not instantiate this class");
@@ -48,6 +46,7 @@ final class Uploader {
 
     public static void zipAndUpload() {
         HandlerThreadFactory.getWriteLogThreadHandler().post(new Runnable() {
+
             @Override
             public void run() {
                 final File file = zip();

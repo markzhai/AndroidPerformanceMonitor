@@ -21,6 +21,7 @@ import android.os.HandlerThread;
 final class HandlerThreadFactory {
 
     private static HandlerThreadWrapper sLoopThread = new HandlerThreadWrapper("loop");
+
     private static HandlerThreadWrapper sWriteLogThread = new HandlerThreadWrapper("writer");
 
     private HandlerThreadFactory() {
@@ -36,6 +37,7 @@ final class HandlerThreadFactory {
     }
 
     private static class HandlerThreadWrapper {
+
         private Handler handler = null;
 
         public HandlerThreadWrapper(String threadName) {

@@ -17,9 +17,7 @@ package com.github.moduth.blockcanary;
 
 import android.os.Environment;
 import android.os.Looper;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -29,39 +27,29 @@ import java.util.List;
 public final class BlockCanaryInternals {
 
     LooperMonitor monitor;
+
     StackSampler stackSampler;
+
     CpuSampler cpuSampler;
 
     private static BlockCanaryInternals sInstance;
+
     private static BlockCanaryContext sContext;
 
     private List<BlockInterceptor> mInterceptorChain = new LinkedList<>();
 
     public BlockCanaryInternals() {
-
-        stackSampler = new StackSampler(
-                Looper.getMainLooper().getThread(),
-                sContext.provideDumpInterval());
-
+        stackSampler = new StackSampler(Looper.getMainLooper().getThread(), sContext.provideDumpInterval());
         cpuSampler = new CpuSampler(sContext.provideDumpInterval());
-
         setMonitor(new LooperMonitor(new LooperMonitor.BlockListener() {
 
             @Override
-            public void onBlockEvent(long realTimeStart, long realTimeEnd,
-                                     long threadTimeStart, long threadTimeEnd) {
+            public void onBlockEvent(long realTimeStart, long realTimeEnd, long threadTimeStart, long threadTimeEnd) {
                 // Get recent thread-stack entries and cpu usage
-                ArrayList<String> threadStackEntries = stackSampler
-                        .getThreadStackEntries(realTimeStart, realTimeEnd);
+                ArrayList<String> threadStackEntries = stackSampler.getThreadStackEntries(realTimeStart, realTimeEnd);
                 if (!threadStackEntries.isEmpty()) {
-                    BlockInfo blockInfo = BlockInfo.newInstance()
-                            .setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)
-                            .setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd))
-                            .setRecentCpuRate(cpuSampler.getCpuRateInfo())
-                            .setThreadStackEntries(threadStackEntries)
-                            .flushString();
+                    BlockInfo blockInfo = BlockInfo.newInstance().setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd).setCpuBusyFlag(cpuSampler.isCpuBusy(realTimeStart, realTimeEnd)).setRecentCpuRate(cpuSampler.getCpuRateInfo()).setThreadStackEntries(threadStackEntries).flushString();
                     LogWriter.save(blockInfo.toString());
-
                     if (mInterceptorChain.size() != 0) {
                         for (BlockInterceptor interceptor : mInterceptorChain) {
                             interceptor.onBlock(getContext().provideContext(), blockInfo);
@@ -70,7 +58,6 @@ public final class BlockCanaryInternals {
                 }
             }
         }, getContext().provideBlockThreshold(), getContext().stopWhenDebugging()));
-
         LogWriter.cleanObsolete();
     }
 
@@ -117,11 +104,8 @@ public final class BlockCanaryInternals {
 
     static String getPath() {
         String state = Environment.getExternalStorageState();
-        String logPath = BlockCanaryInternals.getContext()
-                == null ? "" : BlockCanaryInternals.getContext().providePath();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)
-                && Environment.getExternalStorageDirectory().canWrite()) {
+        String logPath = BlockCanaryInternals.getContext() == null ? "" : BlockCanaryInternals.getContext().providePath();
+        if (Environment.MEDIA_MOUNTED.equals(state) && Environment.getExternalStorageDirectory().canWrite()) {
             return Environment.getExternalStorageDirectory().getPath() + logPath;
         }
         return getContext().provideContext().getFilesDir() + BlockCanaryInternals.getContext().providePath();
@@ -148,7 +132,6 @@ public final class BlockCanaryInternals {
         private String TYPE = ".log";
 
         BlockLogFileFilter() {
-
         }
 
         @Override
