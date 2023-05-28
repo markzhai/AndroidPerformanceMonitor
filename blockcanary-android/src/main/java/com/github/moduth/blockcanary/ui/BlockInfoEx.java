@@ -1,9 +1,7 @@
 package com.github.moduth.blockcanary.ui;
 
 import android.util.Log;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +12,7 @@ final class BlockInfoEx extends BlockInfo {
     private static final String TAG = "BlockInfoEx";
 
     public File logFile;
+
     public String concernStackString;
 
     /**
@@ -25,11 +24,9 @@ final class BlockInfoEx extends BlockInfo {
     public static BlockInfoEx newInstance(File file) {
         BlockInfoEx blockInfo = new BlockInfoEx();
         blockInfo.logFile = file;
-
         BufferedReader reader = null;
         try {
             InputStreamReader in = new InputStreamReader(new FileInputStream(file), "UTF-8");
-
             reader = new BufferedReader(in);
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.startsWith(KEY_QUA)) {
@@ -72,7 +69,6 @@ final class BlockInfoEx extends BlockInfo {
                         StringBuilder cpuRateSb = new StringBuilder(split[1]);
                         cpuRateSb.append(line.split(KV)[1]).append(SEPARATOR);
                         line = reader.readLine();
-
                         // read until SEPARATOR appears
                         while (line != null) {
                             if (!line.equals("")) {
@@ -87,7 +83,6 @@ final class BlockInfoEx extends BlockInfo {
                 } else if (line.startsWith(KEY_STACK)) {
                     StringBuilder stackSb = new StringBuilder(line.split(KV)[1]);
                     line = reader.readLine();
-
                     // read until file ends
                     while (line != null) {
                         if (!line.equals("")) {

@@ -17,14 +17,13 @@ package com.github.moduth.blockcanary.internal;
 
 import android.app.ActivityManager;
 import android.content.Context;
-
 import com.github.moduth.blockcanary.BlockCanaryInternals;
-
 import java.util.List;
 
 public class ProcessUtils {
 
     private static volatile String sProcessName;
+
     private final static Object sNameLock = new Object();
 
     private ProcessUtils() {

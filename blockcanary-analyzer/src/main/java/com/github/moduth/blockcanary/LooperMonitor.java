@@ -24,17 +24,20 @@ class LooperMonitor implements Printer {
     private static final int DEFAULT_BLOCK_THRESHOLD_MILLIS = 3000;
 
     private long mBlockThresholdMillis = DEFAULT_BLOCK_THRESHOLD_MILLIS;
+
     private long mStartTimestamp = 0;
+
     private long mStartThreadTimestamp = 0;
+
     private BlockListener mBlockListener = null;
+
     private boolean mPrintingStarted = false;
+
     private final boolean mStopWhenDebugging;
 
     public interface BlockListener {
-        void onBlockEvent(long realStartTime,
-                          long realTimeEnd,
-                          long threadTimeStart,
-                          long threadTimeEnd);
+
+        void onBlockEvent(long realStartTime, long realTimeEnd, long threadTimeStart, long threadTimeEnd);
     }
 
     public LooperMonitor(BlockListener blockListener, long blockThresholdMillis, boolean stopWhenDebugging) {
@@ -75,6 +78,7 @@ class LooperMonitor implements Printer {
         final long startThreadTime = mStartThreadTimestamp;
         final long endThreadTime = SystemClock.currentThreadTimeMillis();
         HandlerThreadFactory.getWriteLogThreadHandler().post(new Runnable() {
+
             @Override
             public void run() {
                 mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);
@@ -86,7 +90,6 @@ class LooperMonitor implements Printer {
         if (null != BlockCanaryInternals.getInstance().stackSampler) {
             BlockCanaryInternals.getInstance().stackSampler.start();
         }
-
         if (null != BlockCanaryInternals.getInstance().cpuSampler) {
             BlockCanaryInternals.getInstance().cpuSampler.start();
         }
@@ -96,7 +99,6 @@ class LooperMonitor implements Printer {
         if (null != BlockCanaryInternals.getInstance().stackSampler) {
             BlockCanaryInternals.getInstance().stackSampler.stop();
         }
-
         if (null != BlockCanaryInternals.getInstance().cpuSampler) {
             BlockCanaryInternals.getInstance().cpuSampler.stop();
         }

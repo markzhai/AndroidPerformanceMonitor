@@ -16,9 +16,7 @@
 package com.github.moduth.blockcanary;
 
 import android.content.Context;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.io.File;
 import java.util.List;
 
@@ -28,6 +26,7 @@ import java.util.List;
 public class BlockCanaryContext {
 
     private static Context sApplicationContext;
+
     private static BlockCanaryContext sInstance = null;
 
     public BlockCanaryContext() {
@@ -79,7 +78,7 @@ public class BlockCanaryContext {
     }
 
     public boolean displayNotification() {
-        return false;
+        return deny();
     }
 
     public boolean zip(File[] src, File dest) {
@@ -91,26 +90,33 @@ public class BlockCanaryContext {
     }
 
     public List<String> concernPackages() {
-        return null;
+        return emptyMethod();
     }
 
     public boolean filterNonConcernStack() {
-        return false;
+        return deny();
     }
 
     public List<String> provideWhiteList() {
-        return null;
+        return emptyMethod();
     }
 
     public boolean deleteFilesInWhiteList() {
-        return false;
+        return deny();
     }
 
     public void onBlock(Context context, BlockInfo blockInfo) {
-
     }
 
     public boolean stopWhenDebugging() {
         return true;
+    }
+
+    private boolean deny() {
+        return false;
+    }
+
+    private List<String> emptyMethod() {
+        return null;
     }
 }

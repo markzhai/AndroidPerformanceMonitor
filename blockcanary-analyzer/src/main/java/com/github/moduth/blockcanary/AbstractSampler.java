@@ -25,16 +25,16 @@ abstract class AbstractSampler {
     private static final int DEFAULT_SAMPLE_INTERVAL = 300;
 
     protected AtomicBoolean mShouldSample = new AtomicBoolean(false);
+
     protected long mSampleInterval;
 
     private Runnable mRunnable = new Runnable() {
+
         @Override
         public void run() {
             doSample();
-
             if (mShouldSample.get()) {
-                HandlerThreadFactory.getTimerThreadHandler()
-                        .postDelayed(mRunnable, mSampleInterval);
+                HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable, mSampleInterval);
             }
         }
     };
@@ -51,10 +51,8 @@ abstract class AbstractSampler {
             return;
         }
         mShouldSample.set(true);
-
         HandlerThreadFactory.getTimerThreadHandler().removeCallbacks(mRunnable);
-        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable,
-                BlockCanaryInternals.getInstance().getSampleDelay());
+        HandlerThreadFactory.getTimerThreadHandler().postDelayed(mRunnable, BlockCanaryInternals.getInstance().getSampleDelay());
     }
 
     public void stop() {

@@ -41,12 +41,10 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.github.moduth.blockcanary.BlockCanaryContext;
 import com.github.moduth.blockcanary.BlockCanaryInternals;
 import com.github.moduth.blockcanary.LogWriter;
 import com.github.moduth.blockcanary.R;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +52,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_TIME;
@@ -67,16 +64,22 @@ import static android.view.View.VISIBLE;
 public class DisplayActivity extends Activity {
 
     private static final String TAG = "DisplayActivity";
+
     private static final String SHOW_BLOCK_EXTRA = "show_latest";
+
     public static final String SHOW_BLOCK_EXTRA_KEY = "BlockStartTime";
 
     // empty until it's been first loaded.
     private List<BlockInfoEx> mBlockInfoEntries = new ArrayList<>();
+
     private String mBlockStartTime;
 
     private ListView mListView;
+
     private TextView mFailureView;
+
     private Button mActionButton;
+
     private int mMaxStoredBlockCount;
 
     public static PendingIntent createPendingIntent(Context context, String blockStartTime) {
@@ -89,7 +92,6 @@ public class DisplayActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mBlockStartTime = savedInstanceState.getString(SHOW_BLOCK_EXTRA_KEY);
         } else {
@@ -98,15 +100,11 @@ public class DisplayActivity extends Activity {
                 mBlockStartTime = intent.getStringExtra(SHOW_BLOCK_EXTRA);
             }
         }
-
         setContentView(R.layout.block_canary_display_leak);
-
         mListView = (ListView) findViewById(R.id.__leak_canary_display_leak_list);
         mFailureView = (TextView) findViewById(R.id.__leak_canary_display_leak_failure);
         mActionButton = (Button) findViewById(R.id.__leak_canary_action);
-
         mMaxStoredBlockCount = getResources().getInteger(R.integer.block_canary_max_stored_count);
-
         updateUi();
     }
 
@@ -149,22 +147,22 @@ public class DisplayActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         final BlockInfoEx blockInfo = getBlock(mBlockStartTime);
         if (blockInfo != null) {
-            menu.add(R.string.block_canary_share_leak)
-                    .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            shareBlock(blockInfo);
-                            return true;
-                        }
-                    });
-            menu.add(R.string.block_canary_share_stack_dump)
-                    .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            shareHeapDump(blockInfo);
-                            return true;
-                        }
-                    });
+            menu.add(R.string.block_canary_share_leak).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    shareBlock(blockInfo);
+                    return true;
+                }
+            });
+            menu.add(R.string.block_canary_share_stack_dump).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    shareHeapDump(blockInfo);
+                    return true;
+                }
+            });
             return true;
         }
         return false;
@@ -199,7 +197,6 @@ public class DisplayActivity extends Activity {
 
     private void shareHeapDump(BlockInfoEx blockInfo) {
         File heapDumpFile = blockInfo.logFile;
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             heapDumpFile.setReadable(true, false);
         }
@@ -214,11 +211,9 @@ public class DisplayActivity extends Activity {
         if (blockInfo == null) {
             mBlockStartTime = null;
         }
-
         // Reset to defaults
         mListView.setVisibility(VISIBLE);
         mFailureView.setVisibility(GONE);
-
         if (blockInfo != null) {
             renderBlockDetail(blockInfo);
         } else {
@@ -234,6 +229,7 @@ public class DisplayActivity extends Activity {
             BlockListAdapter adapter = new BlockListAdapter();
             mListView.setAdapter(adapter);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     mBlockStartTime = mBlockInfoEntries.get(position).timeStart;
@@ -250,9 +246,11 @@ public class DisplayActivity extends Activity {
             setTitle(getString(R.string.block_canary_block_list_title, getPackageName()));
             mActionButton.setText(R.string.block_canary_delete_all);
             mActionButton.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
+
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             LogWriter.deleteAll();
@@ -260,13 +258,7 @@ public class DisplayActivity extends Activity {
                             updateUi();
                         }
                     };
-                    new AlertDialog.Builder(DisplayActivity.this)
-                            .setTitle(getString(R.string.block_canary_delete))
-                            .setMessage(getString(R.string.block_canary_delete_all_dialog_content))
-                            .setPositiveButton(getString(R.string.block_canary_yes), okListener)
-                            .setNegativeButton(getString(R.string.block_canary_no), null)
-                            .show();
-
+                    new AlertDialog.Builder(DisplayActivity.this).setTitle(getString(R.string.block_canary_delete)).setMessage(getString(R.string.block_canary_delete_all_dialog_content)).setPositiveButton(getString(R.string.block_canary_yes), okListener).setNegativeButton(getString(R.string.block_canary_no), null).show();
                 }
             });
         }
@@ -282,6 +274,7 @@ public class DisplayActivity extends Activity {
             adapter = new DetailAdapter();
             mListView.setAdapter(adapter);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     adapter.toggleRow(position);
@@ -298,6 +291,7 @@ public class DisplayActivity extends Activity {
             mActionButton.setText(R.string.block_canary_delete);
         }
         mActionButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (blockInfo != null) {
@@ -344,26 +338,21 @@ public class DisplayActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(DisplayActivity.this)
-                        .inflate(R.layout.block_canary_block_row, parent, false);
+                convertView = LayoutInflater.from(DisplayActivity.this).inflate(R.layout.block_canary_block_row, parent, false);
             }
             TextView titleView = (TextView) convertView.findViewById(R.id.__leak_canary_row_text);
             TextView timeView = (TextView) convertView.findViewById(R.id.__leak_canary_row_time);
             BlockInfoEx blockInfo = getItem(position);
-
             String index;
             if (position == 0 && mBlockInfoEntries.size() == mMaxStoredBlockCount) {
                 index = "MAX. ";
             } else {
                 index = (mBlockInfoEntries.size() - position) + ". ";
             }
-
             String keyStackString = BlockCanaryUtils.concernStackString(blockInfo);
-            String title = index + keyStackString + " " +
-                    getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
+            String title = index + keyStackString + " " + getString(R.string.block_canary_class_has_blocked, blockInfo.timeCost);
             titleView.setText(title);
-            String time = DateUtils.formatDateTime(DisplayActivity.this,
-                    blockInfo.logFile.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
+            String time = DateUtils.formatDateTime(DisplayActivity.this, blockInfo.logFile.lastModified(), FORMAT_SHOW_TIME | FORMAT_SHOW_DATE);
             timeView.setText(time);
             return convertView;
         }
@@ -372,8 +361,11 @@ public class DisplayActivity extends Activity {
     static class LoadBlocks implements Runnable {
 
         static final List<LoadBlocks> inFlight = new ArrayList<>();
+
         static final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
+
         private DisplayActivity activityOrNull;
+
         private final Handler mainHandler;
 
         LoadBlocks(DisplayActivity activity) {
@@ -405,9 +397,7 @@ public class DisplayActivity extends Activity {
                         if (!BlockCanaryUtils.isBlockInfoValid(blockInfo)) {
                             throw new BlockInfoCorruptException(blockInfo);
                         }
-
                         boolean needAddToList = true;
-
                         if (BlockCanaryUtils.isInWhiteList(blockInfo)) {
                             if (BlockCanaryContext.get().deleteFilesInWhiteList()) {
                                 blockFile.delete();
@@ -415,13 +405,10 @@ public class DisplayActivity extends Activity {
                             }
                             needAddToList = false;
                         }
-
                         blockInfo.concernStackString = BlockCanaryUtils.concernStackString(blockInfo);
-                        if (BlockCanaryContext.get().filterNonConcernStack() &&
-                                TextUtils.isEmpty(blockInfo.concernStackString)) {
+                        if (BlockCanaryContext.get().filterNonConcernStack() && TextUtils.isEmpty(blockInfo.concernStackString)) {
                             needAddToList = false;
                         }
-
                         if (needAddToList && blockFile != null) {
                             blockInfoList.add(blockInfo);
                         }
@@ -432,14 +419,15 @@ public class DisplayActivity extends Activity {
                     }
                 }
                 Collections.sort(blockInfoList, new Comparator<BlockInfoEx>() {
+
                     @Override
                     public int compare(BlockInfoEx lhs, BlockInfoEx rhs) {
-                        return Long.valueOf(rhs.logFile.lastModified())
-                                .compareTo(lhs.logFile.lastModified());
+                        return Long.valueOf(rhs.logFile.lastModified()).compareTo(lhs.logFile.lastModified());
                     }
                 });
             }
             mainHandler.post(new Runnable() {
+
                 @Override
                 public void run() {
                     inFlight.remove(LoadBlocks.this);

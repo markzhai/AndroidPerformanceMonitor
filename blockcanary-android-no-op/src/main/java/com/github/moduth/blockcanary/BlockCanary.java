@@ -24,6 +24,7 @@ import android.util.Log;
 public final class BlockCanary {
 
     private static final String TAG = "BlockCanary-no-op";
+
     private static BlockCanary sInstance = null;
 
     private BlockCanary() {

@@ -22,15 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.github.moduth.blockcanary.R;
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.util.Arrays;
 
 final class DetailAdapter extends BaseAdapter {
 
     private static final int TOP_ROW = 0;
+
     private static final int NORMAL_ROW = 1;
 
     private boolean[] mFoldings = new boolean[0];
@@ -38,8 +37,11 @@ final class DetailAdapter extends BaseAdapter {
     private BlockInfo mBlockInfo;
 
     private static final int POSITION_BASIC = 1;
+
     private static final int POSITION_TIME = 2;
+
     private static final int POSITION_CPU = 3;
+
     private static final int POSITION_THREAD_STACK = 4;
 
     @Override
@@ -47,18 +49,15 @@ final class DetailAdapter extends BaseAdapter {
         Context context = parent.getContext();
         if (getItemViewType(position) == TOP_ROW) {
             if (convertView == null) {
-                convertView =
-                        LayoutInflater.from(context).inflate(R.layout.block_canary_ref_top_row, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.block_canary_ref_top_row, parent, false);
             }
             TextView textView = findById(convertView, R.id.__leak_canary_row_text);
             textView.setText(context.getPackageName());
         } else {
             if (convertView == null) {
-                convertView =
-                        LayoutInflater.from(context).inflate(R.layout.block_canary_ref_row, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.block_canary_ref_row, parent, false);
             }
             TextView textView = findById(convertView, R.id.__leak_canary_row_text);
-
             boolean isThreadStackEntry = position == POSITION_THREAD_STACK + 1;
             String element = getItem(position);
             String htmlString = elementToHtmlString(element, position, mFoldings[position]);
@@ -66,27 +65,21 @@ final class DetailAdapter extends BaseAdapter {
                 htmlString += " <font color='#919191'>" + "blocked" + "</font>";
             }
             textView.setText(Html.fromHtml(htmlString));
-
             DisplayConnectorView connectorView = findById(convertView, R.id.__leak_canary_row_connector);
             connectorView.setType(connectorViewType(position));
-
             MoreDetailsView moreDetailsView = findById(convertView, R.id.__leak_canary_row_more);
             moreDetailsView.setFolding(mFoldings[position]);
         }
-
         return convertView;
     }
 
     private DisplayConnectorView.Type connectorViewType(int position) {
-        return (position == 1) ? DisplayConnectorView.Type.START : (
-                (position == getCount() - 1) ? DisplayConnectorView.Type.END :
-                        DisplayConnectorView.Type.NODE);
+        return (position == 1) ? DisplayConnectorView.Type.START : ((position == getCount() - 1) ? DisplayConnectorView.Type.END : DisplayConnectorView.Type.NODE);
     }
 
     private String elementToHtmlString(String element, int position, boolean folding) {
         String htmlString = element.replaceAll(BlockInfo.SEPARATOR, "<br>");
-
-        switch (position) {
+        switch(position) {
             case POSITION_BASIC:
                 if (folding) {
                     htmlString = htmlString.substring(htmlString.indexOf(BlockInfo.KEY_CPU_CORE));
@@ -155,7 +148,7 @@ final class DetailAdapter extends BaseAdapter {
         if (getItemViewType(position) == TOP_ROW) {
             return null;
         }
-        switch (position) {
+        switch(position) {
             case POSITION_BASIC:
                 return mBlockInfo.getBasicString();
             case POSITION_TIME:

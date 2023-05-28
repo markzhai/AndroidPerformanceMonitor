@@ -22,13 +22,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 import com.github.moduth.blockcanary.internal.BlockInfo;
 import com.github.moduth.blockcanary.ui.DisplayActivity;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
@@ -51,9 +48,7 @@ final class DisplayService implements BlockInterceptor {
 
     @TargetApi(HONEYCOMB)
     private void show(Context context, String contentTitle, String contentText, PendingIntent pendingIntent) {
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification;
         if (SDK_INT < HONEYCOMB) {
             notification = new Notification();
@@ -64,19 +59,11 @@ final class DisplayService implements BlockInterceptor {
             try {
                 Method deprecatedMethod = notification.getClass().getMethod("setLatestEventInfo", Context.class, CharSequence.class, CharSequence.class, PendingIntent.class);
                 deprecatedMethod.invoke(notification, context, contentTitle, contentText, pendingIntent);
-            } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
+            } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 Log.w(TAG, "Method not found", e);
             }
         } else {
-            Notification.Builder builder = new Notification.Builder(context)
-                    .setSmallIcon(R.drawable.block_canary_notification)
-                    .setWhen(System.currentTimeMillis())
-                    .setContentTitle(contentTitle)
-                    .setContentText(contentText)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setDefaults(Notification.DEFAULT_SOUND);
+            Notification.Builder builder = new Notification.Builder(context).setSmallIcon(R.drawable.block_canary_notification).setWhen(System.currentTimeMillis()).setContentTitle(contentTitle).setContentText(contentText).setAutoCancel(true).setContentIntent(pendingIntent).setDefaults(Notification.DEFAULT_SOUND);
             if (SDK_INT < JELLY_BEAN) {
                 notification = builder.getNotification();
             } else {

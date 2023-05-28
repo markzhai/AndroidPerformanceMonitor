@@ -18,9 +18,7 @@ package com.github.moduth.blockcanary.internal;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
-
 import com.github.moduth.blockcanary.BlockCanaryInternals;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -29,9 +27,11 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 class PerformanceUtils {
+
     private static final String TAG = "PerformanceUtils";
 
     private static int sCoreNum = 0;
+
     private static long sTotalMemo = 0;
 
     private PerformanceUtils() {
@@ -45,12 +45,12 @@ class PerformanceUtils {
      */
     public static int getNumCores() {
         class CpuFilter implements FileFilter {
+
             @Override
             public boolean accept(File pathname) {
                 return Pattern.matches("cpu[0-9]", pathname.getName());
             }
         }
-
         if (sCoreNum == 0) {
             try {
                 // Get directory containing CPU info
@@ -85,13 +85,11 @@ class PerformanceUtils {
                 localFileReader = new FileReader(str1);
                 BufferedReader localBufferedReader = new BufferedReader(localFileReader, 8192);
                 str2 = localBufferedReader.readLine();
-
                 if (str2 != null) {
                     arrayOfString = str2.split("\\s+");
                     initial_memory = Integer.valueOf(arrayOfString[1]);
                 }
                 localBufferedReader.close();
-
             } catch (IOException e) {
                 Log.e(TAG, "getTotalMemory exception = ", e);
             } finally {

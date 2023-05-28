@@ -16,7 +16,6 @@
 package com.github.moduth.blockcanary;
 
 import com.github.moduth.blockcanary.internal.BlockInfo;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -26,9 +25,11 @@ import java.util.LinkedHashMap;
 class StackSampler extends AbstractSampler {
 
     private static final int DEFAULT_MAX_ENTRY_COUNT = 100;
+
     private static final LinkedHashMap<Long, String> sStackMap = new LinkedHashMap<>();
 
     private int mMaxEntryCount = DEFAULT_MAX_ENTRY_COUNT;
+
     private Thread mCurrentThread;
 
     public StackSampler(Thread thread, long sampleIntervalMillis) {
@@ -46,10 +47,7 @@ class StackSampler extends AbstractSampler {
         synchronized (sStackMap) {
             for (Long entryTime : sStackMap.keySet()) {
                 if (startTime < entryTime && entryTime < endTime) {
-                    result.add(BlockInfo.TIME_FORMATTER.format(entryTime)
-                            + BlockInfo.SEPARATOR
-                            + BlockInfo.SEPARATOR
-                            + sStackMap.get(entryTime));
+                    result.add(BlockInfo.TIME_FORMATTER.format(entryTime) + BlockInfo.SEPARATOR + BlockInfo.SEPARATOR + sStackMap.get(entryTime));
                 }
             }
         }
@@ -59,13 +57,9 @@ class StackSampler extends AbstractSampler {
     @Override
     protected void doSample() {
         StringBuilder stringBuilder = new StringBuilder();
-
         for (StackTraceElement stackTraceElement : mCurrentThread.getStackTrace()) {
-            stringBuilder
-                    .append(stackTraceElement.toString())
-                    .append(BlockInfo.SEPARATOR);
+            stringBuilder.append(stackTraceElement.toString()).append(BlockInfo.SEPARATOR);
         }
-
         synchronized (sStackMap) {
             if (sStackMap.size() == mMaxEntryCount && mMaxEntryCount > 0) {
                 sStackMap.remove(sStackMap.keySet().iterator().next());
