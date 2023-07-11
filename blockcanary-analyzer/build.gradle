@@ -1,13 +1,13 @@
-apply plugin: 'com.android.library'
-apply from: 'gradle-mvn-push.gradle'
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion LIBRARY_COMPILE_SDK_VERSION
-    buildToolsVersion LIBRARY_BUILD_TOOLS_VERSION
+    compileSdk LIBRARY_COMPILE_SDK_VERSION
 
     defaultConfig {
-        minSdkVersion LIBRARY_MIN_SDK_VERSION
-        targetSdkVersion LIBRARY_TARGET_SDK_VERSION
+        minSdk LIBRARY_MIN_SDK_VERSION
+        targetSdk LIBRARY_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
     }
@@ -19,6 +19,4 @@ android {
     }
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
+dependencies {}
